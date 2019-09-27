@@ -27,20 +27,15 @@ class ImpactCrashTests: XCTestCase {
         let args = ["-output_path", tempURL.path, "-run", name, "-suppressReportCrash", "YES"]
 
         let app = try NSWorkspace.shared.launchApplication(at: testAppURL,
-                                                           options: [.withoutActivation],
+                                                           options: [.withoutActivation, .withoutAddingToRecents],
                                                            configuration: [.arguments: args])
 
-        // Waiting for these two expectations at the same time and enforcing the order seems like
-        // a good idea. But in practice it would sometimes fail, with the expectations being fulfilled in
-        // the wrong order...
+        // There appear to be a races around launching, waiting for app.isFinishedLaunching,
+        // and then waiting for app.isTerminated
         
-        let launchExpectation = keyValueObservingExpectation(for: app, keyPath: "isFinishedLaunching", expectedValue: true)
-
-        wait(for: [launchExpectation], timeout: 5.0)
-
         let terminationExpectation = keyValueObservingExpectation(for: app, keyPath: "isTerminated", expectedValue: true)
 
-        wait(for: [terminationExpectation], timeout: 5.0)
+        wait(for: [terminationExpectation], timeout: 2.0)
 
         return tempURL
     }
