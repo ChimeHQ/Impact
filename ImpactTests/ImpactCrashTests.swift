@@ -30,10 +30,17 @@ class ImpactCrashTests: XCTestCase {
                                                            options: [.withoutActivation],
                                                            configuration: [.arguments: args])
 
+        // Waiting for these two expectations at the same time and enforcing the order seems like
+        // a good idea. But in practice it would sometimes fail, with the expectations being fulfilled in
+        // the wrong order...
+        
         let launchExpectation = keyValueObservingExpectation(for: app, keyPath: "isFinishedLaunching", expectedValue: true)
+
+        wait(for: [launchExpectation], timeout: 5.0)
+
         let terminationExpectation = keyValueObservingExpectation(for: app, keyPath: "isTerminated", expectedValue: true)
 
-        wait(for: [launchExpectation, terminationExpectation], timeout: 5.0, enforceOrder: true)
+        wait(for: [terminationExpectation], timeout: 5.0)
 
         return tempURL
     }
