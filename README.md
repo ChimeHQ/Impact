@@ -15,7 +15,7 @@ Impact is a crash reporting library for Apple platforms. It just detects and rec
 
 In-process crash reporting is just terrible. The mechanisms available for crash event detection, UNIX signals and Mach exceptions, are complex, buggy, and are not capable of capturing all kinds of failures. On top of that, the enviroment in which a crash reporter needs to run is extraordinarily hostile. It's just messy business.
 
-Apple has had all of the device-side pieces in place to produce a world-class crsah reporting system for a long time. While they have the reporting side down, the developer experience (analysis, presentation, investigative tools) leave a lot to be desired. This has kept 3rd-party reporting services essential for the vast majority of app developers. Their offerings also don't work for macOS apps outside the App Store, which is disappointing.
+Apple has had all of the device-side pieces in place to produce a world-class crash reporting system for a long time. While they have the reporting side down, the developer experience (analysis, presentation, investigative tools) leave a lot to be desired. This has kept 3rd-party reporting services essential for the vast majority of app developers. Their offerings also don't work for macOS apps outside the App Store, which is disappointing.
 
 My sincere hope is that Apple addresses these limitations so we can all stop this foolishness once and for all.
 
