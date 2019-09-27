@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - '*'
-      - '!/README'
+      - '!/README.md'
 
 jobs:
   test:
