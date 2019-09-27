@@ -1,0 +1,28 @@
+//
+//  Impact.xcconfig
+//  Impact
+//
+//  Created by Matt Massicotte on 2019-09-17.
+//  Copyright © 2019 Chime Systems Inc. All rights reserved.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+#include "xcconfigs/UniversalFramework_Framework.xcconfig"
+
+PRODUCT_NAME = Impact
+PRODUCT_BUNDLE_IDENTIFIER = com.chimehq.Impact
+PRODUCT_MODULE_NAME = Impact
+CURRENT_PROJECT_VERSION = 1
+DYLIB_CURRENT_VERSION = 1
+MARKETING_VERSION = 0.1
+
+INFOPLIST_FILE = Impact/Info.plist
+
+MACOSX_DEPLOYMENT_TARGET = 10.13
+IPHONEOS_DEPLOYMENT_TARGET = 12.0
+TVOS_DEPLOYMENT_TARGET = 12.0
+
+// one day?
+//WATCHOS_DEPLOYMENT_TARGET = 4.0
