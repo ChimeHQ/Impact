@@ -132,21 +132,21 @@ static ImpactResult ImpactSignalLog(ImpactState* state, siginfo_t* info) {
     return ImpactResultSuccess;
 }
 
-static void ImpactSignalHandlerEntranceAdjustState(ImpactState* state) {
-    if (ImpactInvalidPtr(state)) {
+static void ImpactSignalHandlerEntranceAdjustState(ImpactState* state, ImpactCrashState *currentState) {
+    if (ImpactInvalidPtr(state) || ImpactInvalidPtr(currentState)) {
         return;
     }
 
-    ImpactCrashState currentState = atomic_load(&state->mutableState.crashState);
-    switch (currentState) {
+    *currentState = atomic_load(&state->mutableState.crashState);
+    switch (*currentState) {
         case ImpactCrashStateInitialized:
-            ImpactStateTransition(state, currentState, ImpactCrashStateFirstSignal);
+            ImpactStateTransition(state, *currentState, ImpactCrashStateFirstSignal);
             break;
         case ImpactCrashStateFirstMachExceptionReplied:
-            ImpactStateTransition(state, currentState, ImpactCrashStateFirstSignalAfterMachExceptionReplied);
+            ImpactStateTransition(state, *currentState, ImpactCrashStateFirstSignalAfterMachExceptionReplied);
             break;
         default:
-            ImpactStateInvalid(currentState);
+            ImpactStateInvalid(*currentState);
             break;
     }
 }
@@ -181,7 +181,8 @@ static void ImpactSignalHandler(int signal, siginfo_t* info, ucontext_t* uap) {
         return;
     }
 
-    ImpactSignalHandlerEntranceAdjustState(state);
+    ImpactCrashState currentState = ImpactCrashStateUninitialized;
+    ImpactSignalHandlerEntranceAdjustState(state, &currentState);
 
     // Attempt to put back whatever handlers were in place when we started. It is
     // important to give previous handlers a chance to run, particularly if we fail
@@ -203,7 +204,11 @@ static void ImpactSignalHandler(int signal, siginfo_t* info, ucontext_t* uap) {
     }
 
     ImpactSignalLog(state, info);
-    ImpactCrashHandler(state, uap->uc_mcontext);
+
+    // we only trigger the crash handler on our first invocation
+    if (currentState == ImpactCrashStateInitialized) {
+        ImpactCrashHandler(state, uap->uc_mcontext);
+    }
 
     ImpactSignalHandlerExitAdjustState(state);
 

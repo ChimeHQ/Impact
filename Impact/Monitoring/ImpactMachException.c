@@ -11,6 +11,7 @@
 #include "ImpactLog.h"
 #include "ImpactSignal.h"
 #include "ImpactState.h"
+#include "ImpactCrashHandler.h"
 
 #include <mach/task.h>
 #include <mach/mach_port.h>
@@ -345,6 +346,8 @@ static ImpactResult ImpactMachExceptionProcess(ImpactState* state, const ImpactM
         ImpactDebugLog("[Log:%s] unable to log exception %d\n", __func__, result);
         return result;
     }
+
+    result = ImpactCrashHandler(state, NULL);
 
     result = ImpactMachExceptionForward(state, request, forwarded);
     if (result != ImpactResultSuccess) {

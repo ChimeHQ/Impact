@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		C925034B233D126A00022334 /* ImpactState.c in Sources */ = {isa = PBXBuildFile; fileRef = C925034A233D126A00022334 /* ImpactState.c */; };
+		C9250358233E9E9A00022334 /* ImpactThread.h in Headers */ = {isa = PBXBuildFile; fileRef = C9250356233E9E9A00022334 /* ImpactThread.h */; };
+		C9250359233E9E9A00022334 /* ImpactThread.c in Sources */ = {isa = PBXBuildFile; fileRef = C9250357233E9E9A00022334 /* ImpactThread.c */; };
 		C9A4138E2331007600059F5D /* Impact.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9A413842331007600059F5D /* Impact.framework */; };
 		C9A413952331007600059F5D /* Impact.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A413872331007600059F5D /* Impact.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9A413A6233103A500059F5D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A413A5233103A500059F5D /* AppDelegate.swift */; };
@@ -82,6 +84,8 @@
 
 /* Begin PBXFileReference section */
 		C925034A233D126A00022334 /* ImpactState.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ImpactState.c; sourceTree = "<group>"; };
+		C9250356233E9E9A00022334 /* ImpactThread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImpactThread.h; sourceTree = "<group>"; };
+		C9250357233E9E9A00022334 /* ImpactThread.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ImpactThread.c; sourceTree = "<group>"; };
 		C9474F0D2335056C00E736D9 /* ImpactDebug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImpactDebug.h; sourceTree = "<group>"; };
 		C9474F0E23356DFB00E736D9 /* ImpactUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImpactUtility.h; sourceTree = "<group>"; };
 		C9A413842331007600059F5D /* Impact.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Impact.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -183,6 +187,8 @@
 				C9A413D923324E8B00059F5D /* Utility */,
 				C9A413E0233251BB00059F5D /* ImpactState.h */,
 				C925034A233D126A00022334 /* ImpactState.c */,
+				C9250356233E9E9A00022334 /* ImpactThread.h */,
+				C9250357233E9E9A00022334 /* ImpactThread.c */,
 			);
 			path = Impact;
 			sourceTree = "<group>";
@@ -268,6 +274,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9A413F423338EB100059F5D /* ImpactCPU.h in Headers */,
+				C9250358233E9E9A00022334 /* ImpactThread.h in Headers */,
 				C9A413F82333983500059F5D /* ImpactMachException.h in Headers */,
 				C9A413952331007600059F5D /* Impact.h in Headers */,
 				C9A413F123338DF000059F5D /* ImpactCrashHandler.h in Headers */,
@@ -417,6 +424,7 @@
 				C925034B233D126A00022334 /* ImpactState.c in Sources */,
 				C9A413F523338EB100059F5D /* ImpactCPU.c in Sources */,
 				C9A413F023338DF000059F5D /* ImpactCrashHandler.c in Sources */,
+				C9250359233E9E9A00022334 /* ImpactThread.c in Sources */,
 				C9A413F92333983500059F5D /* ImpactMachException.c in Sources */,
 				C9A413D82332481300059F5D /* ImpactSignal.c in Sources */,
 			);
