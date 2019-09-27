@@ -2,7 +2,7 @@
 
 # Impact
 
-Impact is a crash reporting library for Apple platforms. It just detects and records information about crashes. Impact isn't a full crash monitoring system, but it could be the core of one. Its design goals are:
+Impact is a crash detction and recording library for Apple platforms. Impact isn't a full crash reporting system, but it could be the core of one. Its design goals are:
 
 * Improve understanding of crash reporting systems
 * Support for all Apple platforms
