@@ -1,3 +1,5 @@
+[![Github CI](https://github.com/ChimeHQ/Impact/workflows/CI/badge.svg)](https://github.com/ChimeHQ/Impact/actions)
+
 # Impact
 
 Impact is a crash reporting library for Apple platforms. It just detects and records information about crashes. Impact isn't a full crash monitoring system, but it could be the core of one. Its design goals are:
