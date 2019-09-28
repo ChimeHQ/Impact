@@ -172,7 +172,7 @@ ImpactResult ImpactMachExceptionInitialize(ImpactState* state) {
         return ImpactResultFailure;
     }
 
-    const exception_mask_t mask = EXC_MASK_BAD_ACCESS;
+    const exception_mask_t mask = EXC_MASK_BAD_ACCESS | EXC_MASK_BAD_INSTRUCTION | EXC_MASK_ARITHMETIC | EXC_MASK_SOFTWARE | EXC_MASK_BREAKPOINT | EXC_MASK_GUARD;
 
     ImpactMachExceptionHandlers* prexistingHandlers = &state->constantState.preexistingMachExceptionHandlers;
 
