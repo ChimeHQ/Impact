@@ -51,7 +51,7 @@ class ImpactCrashTests: XCTestCase {
             return
         }
 
-        XCTAssertTrue(lines.contains("hello from the signal handler"))
+        XCTAssertTrue(lines.contains(where: { $0.hasPrefix("[Signal] signal: 0x6") }))
 
         try? FileManager.default.removeItem(at: url)
     }

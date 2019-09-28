@@ -343,7 +343,9 @@ static ImpactResult ImpactMachExceptionProcess(ImpactState* state, const ImpactM
         return result;
     }
 
-    result = ImpactCrashHandler(state, NULL);
+    const thread_act_t thread = request->thread.name;
+
+    result = ImpactCrashHandler(state, thread, NULL);
 
     result = ImpactMachExceptionForward(state, request, forwarded);
     if (result != ImpactResultSuccess) {
@@ -401,6 +403,9 @@ static ImpactResult ImpactMachExceptionHandle(ImpactState* state) {
 
     ImpactMachExceptionAllRaiseRequest request = {0};
 
+    // It is not strictly necessary to populate these fields, but its
+    // not wrong to do so. And, its a convenient way to pass the needed
+    // info into the next function.
     request.raise.Head.msgh_size = sizeof(ImpactMachExceptionAllRaiseRequest);
     request.raise.Head.msgh_local_port = state->constantState.machExceptionPort;
 

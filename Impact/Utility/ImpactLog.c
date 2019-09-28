@@ -109,3 +109,7 @@ ImpactResult ImpactLogWriteKeyInteger(const ImpactLogger* log, const char* key, 
 
     return ImpactResultSuccess;
 }
+
+ImpactResult ImpactLogWriteKeyPointer(const ImpactLogger* log, const char* key, const void* ptr) {
+    return ImpactLogWriteKeyInteger(log, key, (uintptr_t)ptr);
+}

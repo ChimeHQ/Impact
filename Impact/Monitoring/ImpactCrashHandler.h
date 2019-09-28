@@ -13,6 +13,6 @@
 #include "ImpactCPU.h"
 #include "ImpactState.h"
 
-ImpactResult ImpactCrashHandler(ImpactState* state, const ImpactCPURegisters* registers);
+ImpactResult ImpactCrashHandler(ImpactState* state, thread_act_t crashedThread, const ImpactCPURegisters* registers);
 
 #endif /* CrashHandler_h */

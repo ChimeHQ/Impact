@@ -12,7 +12,7 @@
 
 #include <unistd.h>
 
-ImpactResult ImpactCrashHandler(ImpactState* state, const ImpactCPURegisters* registers) {
+ImpactResult ImpactCrashHandler(ImpactState* state, thread_act_t crashedThread, const ImpactCPURegisters* registers) {
     if (ImpactInvalidPtr(state)) {
         return ImpactResultArgumentInvalid;
     }
@@ -21,7 +21,7 @@ ImpactResult ImpactCrashHandler(ImpactState* state, const ImpactCPURegisters* re
 
     ImpactThreadList list = {0};
 
-    ImpactResult result = ImpactThreadListInitialize(&list);
+    ImpactResult result = ImpactThreadListInitialize(&list, crashedThread, registers);
     if (result != ImpactResultSuccess) {
         ImpactDebugLog("[Log:%s] unable to initialize thread list %d\n", __func__, result);
         return result;

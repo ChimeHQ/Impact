@@ -16,7 +16,11 @@
 #include <mach/vm_map.h>
 #include <mach/thread_act.h>
 
-ImpactResult ImpactThreadListInitialize(ImpactThreadList* list) {
+ImpactResult ImpactThreadListInitialize(ImpactThreadList* list, thread_act_t crashedThread, const ImpactCPURegisters* crashedThreadRegisters) {
+    if (ImpactInvalidPtr(list)) {
+        return ImpactResultArgumentInvalid;
+    }
+
     const kern_return_t kr = task_threads(mach_task_self(), &list->threads, &list->count);
     if (kr != KERN_SUCCESS) {
         ImpactDebugLog("[Log:%s] unable to get threads %d\n", __func__, kr);
@@ -24,6 +28,14 @@ ImpactResult ImpactThreadListInitialize(ImpactThreadList* list) {
     }
 
     list->threadSelf = mach_thread_self();
+
+    if (crashedThread == ImpactThreadAssumeSelfCrashed) {
+        list->crashedThread = list->threadSelf;
+    } else {
+        list->crashedThread = crashedThread;
+    }
+
+    list->crashedThreadRegisters = crashedThreadRegisters;
 
     return ImpactResultSuccess;
 }
@@ -56,6 +68,15 @@ ImpactResult ImpactThreadListDeinitialize(ImpactThreadList* list) {
 }
 
 ImpactResult ImpactThreadGetState(const ImpactThreadList* list, thread_act_t thread, ImpactCPURegisters* registers) {
+    if (ImpactInvalidPtr(list) || ImpactInvalidPtr(registers)) {
+        return ImpactResultArgumentInvalid;
+    }
+
+    if (MACH_PORT_VALID(list->crashedThread) && thread == list->crashedThread && !ImpactInvalidPtr(list->crashedThreadRegisters)) {
+        *registers = *list->crashedThreadRegisters;
+        return ImpactResultSuccess;
+    }
+
     mach_msg_type_number_t count = MACHINE_THREAD_STATE_COUNT;
     thread_state_t state = (thread_state_t)&registers->__ss;
 
@@ -69,6 +90,10 @@ ImpactResult ImpactThreadGetState(const ImpactThreadList* list, thread_act_t thr
 }
 
 static ImpactResult ImpactThreadListSuspendAllExceptForCurrent(const ImpactThreadList* list) {
+    if (ImpactInvalidPtr(list)) {
+        return ImpactResultArgumentInvalid;
+    }
+
     for (mach_msg_type_number_t i = 0; i < list->count; ++i) {
         const thread_act_t thread = list->threads[i];
 
@@ -86,6 +111,10 @@ static ImpactResult ImpactThreadListSuspendAllExceptForCurrent(const ImpactThrea
 }
 
 static ImpactResult ImpactThreadListResumeAllExceptForCurrent(const ImpactThreadList* list) {
+    if (ImpactInvalidPtr(list)) {
+        return ImpactResultArgumentInvalid;
+    }
+
     for (mach_msg_type_number_t i = 0; i < list->count; ++i) {
         const thread_act_t thread = list->threads[i];
 
@@ -103,9 +132,9 @@ static ImpactResult ImpactThreadListResumeAllExceptForCurrent(const ImpactThread
 }
 
 ImpactResult ImpactThreadLog(ImpactState* state, const ImpactThreadList* list, thread_act_t thread) {
-    ImpactLogger* log = &state->constantState.log;
-
-    ImpactLogWriteString(log, "hello from the thread logger\n");
+    if (ImpactInvalidPtr(state) || ImpactInvalidPtr(list)) {
+        return ImpactResultArgumentInvalid;
+    }
 
     ImpactCPURegisters registers = {0};
 
@@ -118,6 +147,12 @@ ImpactResult ImpactThreadLog(ImpactState* state, const ImpactThreadList* list, t
     result = ImpactCPURegistersLog(state, &registers);
     if (result != ImpactResultSuccess) {
         ImpactDebugLog("[Log:%s] failed to log thread registers %d\n", __func__, result);
+    }
+
+    if (thread == list->crashedThread && MACH_PORT_VALID(thread)) {
+        ImpactLogger* log = &state->constantState.log;
+
+        ImpactLogWriteString(log, "[Thread:Crashed]\n");
     }
 
     return ImpactResultSuccess;

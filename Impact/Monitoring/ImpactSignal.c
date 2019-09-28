@@ -10,6 +10,7 @@
 #include "ImpactLog.h"
 #include "ImpactCrashHandler.h"
 #include "ImpactUtility.h"
+#include "ImpactThread.h"
 
 #include <signal.h>
 #include <stdbool.h>
@@ -123,7 +124,12 @@ ImpactResult ImpactSignalUninstallHandlers(const ImpactState* state) {
 static ImpactResult ImpactSignalLog(ImpactState* state, siginfo_t* info) {
     ImpactLogger* log = &state->constantState.log;
 
-    ImpactLogWriteString(log, "hello from the signal handler\n");
+    ImpactLogWriteString(log, "[Signal] ");
+    ImpactLogWriteKeyInteger(log, "signal", info->si_signo);
+    ImpactLogWriteKeyInteger(log, "code", info->si_code);
+    ImpactLogWriteKeyPointer(log, "address", info->si_addr);
+    ImpactLogWriteKeyInteger(log, "errno", info->si_errno);
+    ImpactLogWriteString(log, "\n");
 
     return ImpactResultSuccess;
 }
@@ -203,9 +209,9 @@ static void ImpactSignalHandler(int signal, siginfo_t* info, ucontext_t* uap) {
 
     // we only trigger the crash handler on our first invocation
     if (currentState == ImpactCrashStateInitialized) {
-        ImpactCrashHandler(state, uap->uc_mcontext);
-    }
+        ImpactCrashHandler(state, ImpactThreadAssumeSelfCrashed, uap->uc_mcontext);
 
+    }
     ImpactSignalHandlerExitAdjustState(state);
 
     // restore errno before allowing signal to be re-raised
