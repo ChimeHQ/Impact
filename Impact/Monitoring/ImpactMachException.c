@@ -149,8 +149,6 @@ ImpactResult ImpactMachExceptionLogPreexistingHandlers(const ImpactState* state)
 }
 
 ImpactResult ImpactMachExceptionInitialize(ImpactState* state) {
-    atomic_store(&state->mutableState.machExceptionCount, 0);
-
     memset(&state->constantState.preexistingMachExceptionHandlers, 0, sizeof(ImpactMachExceptionHandlers));
 
     mach_port_t* port = &state->constantState.machExceptionPort;
@@ -229,9 +227,7 @@ ImpactResult ImpactMachExceptionRestorePreexisting(const ImpactState* state) {
 static ImpactResult ImpactMachExceptionLog(ImpactState* state, const ImpactMachExceptionRaiseRequest* request) {
     ImpactLogger* log = &state->constantState.log;
 
-    ImpactLogWriteString(log, "hello from the mach exception handler: ");
-    ImpactLogWriteInteger(log, atomic_load(&state->mutableState.machExceptionCount));
-    ImpactLogWriteString(log, "\n");
+    ImpactLogWriteString(log, "hello from the mach exception handler\n");
 
     thread_t thread = request->thread.name;
 

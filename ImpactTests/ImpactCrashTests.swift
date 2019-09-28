@@ -51,7 +51,7 @@ class ImpactCrashTests: XCTestCase {
             return
         }
 
-        XCTAssertTrue(lines.contains("hello from the signal handler: 0x0"))
+        XCTAssertTrue(lines.contains("hello from the signal handler"))
 
         try? FileManager.default.removeItem(at: url)
     }
@@ -67,7 +67,7 @@ class ImpactCrashTests: XCTestCase {
             return
         }
 
-        XCTAssertTrue(lines.contains("hello from the mach exception handler: 0x0"))
+        XCTAssertTrue(lines.contains("hello from the mach exception handler"))
 
         try? FileManager.default.removeItem(at: url)
     }

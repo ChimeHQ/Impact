@@ -61,10 +61,6 @@ typedef struct {
 } ImpactConstantState;
 
 typedef struct {
-    atomic_uint signalCount;
-
-    atomic_uint machExceptionCount;
-
     _Atomic ImpactCrashState crashState;
 } ImpactMutableState;
 

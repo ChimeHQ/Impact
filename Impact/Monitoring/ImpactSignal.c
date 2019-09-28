@@ -27,8 +27,6 @@ static const int ImpactHandledSignals[ImpactSignalCount] = {
 static void ImpactSignalHandler(int signal, siginfo_t* info, ucontext_t* uap);
 
 ImpactResult ImpactSignalInitialize(ImpactState* state) {
-    atomic_store(&state->mutableState.signalCount, 0);
-
     sigset_t set = {0};
 
     sigemptyset(&set);
@@ -125,9 +123,7 @@ ImpactResult ImpactSignalUninstallHandlers(const ImpactState* state) {
 static ImpactResult ImpactSignalLog(ImpactState* state, siginfo_t* info) {
     ImpactLogger* log = &state->constantState.log;
 
-    ImpactLogWriteString(log, "hello from the signal handler: ");
-    ImpactLogWriteInteger(log, atomic_load(&state->mutableState.signalCount));
-    ImpactLogWriteString(log, "\n");
+    ImpactLogWriteString(log, "hello from the signal handler\n");
 
     return ImpactResultSuccess;
 }
