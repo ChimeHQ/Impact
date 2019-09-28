@@ -33,7 +33,7 @@ Impact is a work-in-progress. At the moment, it only upports macOS. iOS and tvOS
 | -------------------|:---------:|
 | UNIX signals | ✅ |
 | Mach Exceptions | ✅ |
-| Basic Thread details | - |
+| Basic Thread details | ✅ |
 | Binary image information | - |
 | Frame pointer-based stack traces | - |
 | Compact Unwind support | - |
