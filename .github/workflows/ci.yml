@@ -3,8 +3,8 @@ name: CI
 on:
   push:
     paths:
-      - '*'
-      - '!/README.md'
+    - '*'
+    - '!/README.md'
 
 jobs:
   test:
