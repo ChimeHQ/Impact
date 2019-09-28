@@ -52,6 +52,7 @@ class ImpactCrashTests: XCTestCase {
         }
 
         XCTAssertTrue(lines.contains(where: { $0.hasPrefix("[Signal] signal: 0x6") }))
+        XCTAssertTrue(lines.contains("[Thread:Crashed]"))
 
         try? FileManager.default.removeItem(at: url)
     }
@@ -68,7 +69,8 @@ class ImpactCrashTests: XCTestCase {
         }
 
         XCTAssertTrue(lines.contains("hello from the mach exception handler"))
-
+        XCTAssertTrue(lines.contains("[Thread:Crashed]"))
+        
         try? FileManager.default.removeItem(at: url)
     }
 }

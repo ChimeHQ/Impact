@@ -164,11 +164,6 @@ ImpactResult ImpactThreadListLog(ImpactState* state, const ImpactThreadList* lis
     for (mach_msg_type_number_t i = 0; i < list->count; ++i) {
         const thread_act_t thread = list->threads[i];
 
-        if (thread == list->threadSelf) {
-            // what's a good strategy for logging the current thread?
-            continue;
-        }
-
         result = ImpactThreadLog(state, list, thread);
         if (result != ImpactResultSuccess) {
             ImpactDebugLog("[Log:%s] failed to log thread %d %d\n", __func__, i, result);
