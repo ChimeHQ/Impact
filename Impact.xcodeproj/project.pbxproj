@@ -10,6 +10,7 @@
 		C925034B233D126A00022334 /* ImpactState.c in Sources */ = {isa = PBXBuildFile; fileRef = C925034A233D126A00022334 /* ImpactState.c */; };
 		C9250358233E9E9A00022334 /* ImpactThread.h in Headers */ = {isa = PBXBuildFile; fileRef = C9250356233E9E9A00022334 /* ImpactThread.h */; };
 		C9250359233E9E9A00022334 /* ImpactThread.c in Sources */ = {isa = PBXBuildFile; fileRef = C9250357233E9E9A00022334 /* ImpactThread.c */; };
+		C925035B233EE76900022334 /* ImpactLogTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C925035A233EE76900022334 /* ImpactLogTests.m */; };
 		C9A4138E2331007600059F5D /* Impact.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9A413842331007600059F5D /* Impact.framework */; };
 		C9A413952331007600059F5D /* Impact.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A413872331007600059F5D /* Impact.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9A413A6233103A500059F5D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A413A5233103A500059F5D /* AppDelegate.swift */; };
@@ -86,6 +87,7 @@
 		C925034A233D126A00022334 /* ImpactState.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ImpactState.c; sourceTree = "<group>"; };
 		C9250356233E9E9A00022334 /* ImpactThread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImpactThread.h; sourceTree = "<group>"; };
 		C9250357233E9E9A00022334 /* ImpactThread.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ImpactThread.c; sourceTree = "<group>"; };
+		C925035A233EE76900022334 /* ImpactLogTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImpactLogTests.m; sourceTree = "<group>"; };
 		C9474F0D2335056C00E736D9 /* ImpactDebug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImpactDebug.h; sourceTree = "<group>"; };
 		C9474F0E23356DFB00E736D9 /* ImpactUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImpactUtility.h; sourceTree = "<group>"; };
 		C9A413842331007600059F5D /* Impact.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Impact.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -199,6 +201,7 @@
 				C9A413942331007600059F5D /* Info.plist */,
 				C9A413C42331B73200059F5D /* ImpactCrashTests.swift */,
 				C9A413C32331B73100059F5D /* ImpactTests-Bridging-Header.h */,
+				C925035A233EE76900022334 /* ImpactLogTests.m */,
 			);
 			path = ImpactTests;
 			sourceTree = "<group>";
@@ -434,6 +437,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C925035B233EE76900022334 /* ImpactLogTests.m in Sources */,
 				C9A413C52331B73200059F5D /* ImpactCrashTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

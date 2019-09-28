@@ -9,6 +9,7 @@
 #include "ImpactThread.h"
 #include "ImpactUtility.h"
 #include "ImpactLog.h"
+#include "ImpactCPU.h"
 
 #include <mach/mach_init.h>
 #include <mach/mach_port.h>
@@ -54,6 +55,19 @@ ImpactResult ImpactThreadListDeinitialize(ImpactThreadList* list) {
     return ImpactResultSuccess;
 }
 
+ImpactResult ImpactThreadGetState(const ImpactThreadList* list, thread_act_t thread, ImpactCPURegisters* registers) {
+    mach_msg_type_number_t count = MACHINE_THREAD_STATE_COUNT;
+    thread_state_t state = (thread_state_t)&registers->__ss;
+
+    const kern_return_t kr = thread_get_state(thread, MACHINE_THREAD_STATE, state, &count);
+    if (kr != KERN_SUCCESS) {
+        ImpactDebugLog("[Log:%s] unable to read thread state %d\n", __func__, kr);
+        return ImpactResultFailure;
+    }
+
+    return ImpactResultSuccess;
+}
+
 static ImpactResult ImpactThreadListSuspendAllExceptForCurrent(const ImpactThreadList* list) {
     for (mach_msg_type_number_t i = 0; i < list->count; ++i) {
         const thread_act_t thread = list->threads[i];
@@ -88,10 +102,23 @@ static ImpactResult ImpactThreadListResumeAllExceptForCurrent(const ImpactThread
     return ImpactResultSuccess;
 }
 
-ImpactResult ImpactThreadLog(ImpactState* state, thread_act_t thread) {
+ImpactResult ImpactThreadLog(ImpactState* state, const ImpactThreadList* list, thread_act_t thread) {
     ImpactLogger* log = &state->constantState.log;
 
     ImpactLogWriteString(log, "hello from the thread logger\n");
+
+    ImpactCPURegisters registers = {0};
+
+    ImpactResult result = ImpactThreadGetState(list, thread, &registers);
+    if (result != ImpactResultSuccess) {
+        ImpactDebugLog("[Log:%s] failed to get thread state %d\n", __func__, result);
+        return result;
+    }
+
+    result = ImpactCPURegistersLog(state, &registers);
+    if (result != ImpactResultSuccess) {
+        ImpactDebugLog("[Log:%s] failed to log thread registers %d\n", __func__, result);
+    }
 
     return ImpactResultSuccess;
 }
@@ -107,7 +134,7 @@ ImpactResult ImpactThreadListLog(ImpactState* state, const ImpactThreadList* lis
             continue;
         }
 
-        result = ImpactThreadLog(state, thread);
+        result = ImpactThreadLog(state, list, thread);
         if (result != ImpactResultSuccess) {
             ImpactDebugLog("[Log:%s] failed to log thread %d %d\n", __func__, i, result);
         }

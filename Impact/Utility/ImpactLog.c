@@ -100,3 +100,12 @@ ImpactResult ImpactLogWriteInteger(const ImpactLogger* log, uintptr_t number) {
 
     return ImpactLogWriteData(log, ptr, length);
 }
+
+ImpactResult ImpactLogWriteKeyInteger(const ImpactLogger* log, const char* key, uintptr_t number) {
+    ImpactLogWriteString(log, key);
+    ImpactLogWriteString(log, ": ");
+    ImpactLogWriteInteger(log, number);
+    ImpactLogWriteString(log, ", ");
+
+    return ImpactResultSuccess;
+}

@@ -12,8 +12,10 @@
 #include <sys/types.h>
 
 #include "ImpactResult.h"
+#include "ImpactState.h"
 
 typedef _STRUCT_MCONTEXT ImpactCPURegisters;
 
+ImpactResult ImpactCPURegistersLog(ImpactState* state, const ImpactCPURegisters* registers);
 
 #endif /* ImpactCPU_h */

@@ -28,6 +28,8 @@ ImpactResult ImpactLogWriteData(const ImpactLogger* log, const char* data, size_
 ImpactResult ImpactLogWriteString(const ImpactLogger* log, const char* string);
 ImpactResult ImpactLogWriteInteger(const ImpactLogger* log, uintptr_t number);
 
+ImpactResult ImpactLogWriteKeyInteger(const ImpactLogger* log, const char* key, uintptr_t number);
+
 __END_DECLS
 _Pragma("clang assume_nonnull end")
 
