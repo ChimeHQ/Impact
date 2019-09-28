@@ -75,7 +75,7 @@ typedef union {
 #pragma pack(pop)
 #endif
 
-static exception_behavior_t ImpactMachExceptionBehavior = (EXCEPTION_DEFAULT | MACH_EXCEPTION_CODES);
+static const exception_behavior_t ImpactMachExceptionBehavior = (EXCEPTION_DEFAULT | MACH_EXCEPTION_CODES);
 
 typedef struct {
     exception_mask_t mask;
