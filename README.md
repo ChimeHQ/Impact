@@ -25,9 +25,11 @@ Also, crash reporting is just a fun and facinating problem. It tends to be very 
 
 ## Can I Use Impact in my App?
 
-Yes you could, but Impact isn't ready yet. You also must keep in mind that it **only** captures information about crash events. It does not have any facilities for transmitting those events back to you, translating those events into human-readable versions, or processing them into groups.
+Probably not a great idea at this point.
 
-Impact is a work-in-progress. At the moment, it only upports macOS. iOS and tvOS are on the way, but not before more of the core functionality is built. I'm unsure if watchOS is technically possible to support. Here's the high-level plan:
+First, you must keep in mind that it **only** captures information about crash events. It does not have any facilities for transmitting those events back to you or translating them into human-readable versions.
+
+Second, Impact is still a work-in-progress. At the moment, it only upports macOS. iOS and tvOS are on the way, but not before more of the core functionality is built. Here's the high-level plan:
 
 | Feature            | Supported |
 | -------------------|:---------:|
