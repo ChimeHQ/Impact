@@ -16,3 +16,4 @@ FOUNDATION_EXPORT const unsigned char ImpactVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <Impact/PublicHeader.h>
 #import <Impact/ImpactMonitor.h>
+#import <Impact/ImpactMonitoredApplication.h>
