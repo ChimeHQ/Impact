@@ -15,7 +15,7 @@
 
 ImpactResult ImpactLogInitialize(ImpactState* state, const char* _Nonnull path) {
     if (ImpactInvalidPtr(state) || ImpactInvalidPtr(path)) {
-        return ImpactResultArgumentNull;
+        return ImpactResultPointerInvalid;
     }
 
     int fd = open(path, O_WRONLY | O_APPEND | O_CREAT | O_TRUNC, 0666);
@@ -30,7 +30,7 @@ ImpactResult ImpactLogInitialize(ImpactState* state, const char* _Nonnull path) 
 
 ImpactResult ImpactLogDeinitialize(ImpactLogger* _Nonnull log) {
     if (ImpactInvalidPtr(log)) {
-        return ImpactResultArgumentNull;
+        return ImpactResultPointerInvalid;
     }
 
     return ImpactResultFailure;

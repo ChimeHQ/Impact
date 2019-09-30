@@ -12,8 +12,8 @@
 typedef enum {
     ImpactResultSuccess = 0,
     ImpactResultFailure,
-    ImpactResultArgumentNull,
-    ImpactResultArgumentInvalid
+    ImpactResultPointerInvalid,
+    ImpactResultArgumentInvalid,
 } ImpactResult;
 
 #endif /* ImpactResult_h */

@@ -10,6 +10,7 @@
 #include "ImpactUtility.h"
 #include "ImpactLog.h"
 #include "ImpactCPU.h"
+#include "ImpactUnwind.h"
 
 #include <mach/mach_init.h>
 #include <mach/mach_port.h>
@@ -77,10 +78,10 @@ ImpactResult ImpactThreadGetState(const ImpactThreadList* list, thread_act_t thr
         return ImpactResultSuccess;
     }
 
-    mach_msg_type_number_t count = MACHINE_THREAD_STATE_COUNT;
+    mach_msg_type_number_t count = ImpactCPUThreadStateCount;
     thread_state_t state = (thread_state_t)&registers->__ss;
 
-    const kern_return_t kr = thread_get_state(thread, MACHINE_THREAD_STATE, state, &count);
+    const kern_return_t kr = thread_get_state(thread, ImpactCPUThreadStateFlavor, state, &count);
     if (kr != KERN_SUCCESS) {
         ImpactDebugLog("[Log:%s] unable to read thread state %d\n", __func__, kr);
         return ImpactResultFailure;
@@ -131,6 +132,76 @@ static ImpactResult ImpactThreadListResumeAllExceptForCurrent(const ImpactThread
     return ImpactResultSuccess;
 }
 
+static ImpactResult ImpactThreadLogFrame(ImpactState* state, const ImpactCPURegisters* registers) {
+    if (ImpactInvalidPtr(state) || ImpactInvalidPtr(registers)) {
+        return ImpactResultArgumentInvalid;
+    }
+
+    ImpactLogger* log = &state->constantState.log;
+
+    ImpactLogWriteString(log, "[Thread:Frame] ");
+
+    uintptr_t value = 0;
+    ImpactResult result;
+
+    result = ImpactCPUGetRegister(registers, ImpactCPURegisterInstructionPointer, &value);
+    if (result != ImpactResultSuccess) {
+        return result;
+    }
+
+    ImpactLogWriteKeyInteger(log, "ip", value);
+
+    result = ImpactCPUGetRegister(registers, ImpactCPURegisterStackPointer, &value);
+    if (result != ImpactResultSuccess) {
+        return result;
+    }
+
+    ImpactLogWriteKeyInteger(log, "sp", value);
+
+    result = ImpactCPUGetRegister(registers, ImpactCPURegisterFramePointer, &value);
+    if (result != ImpactResultSuccess) {
+        return result;
+    }
+
+    ImpactLogWriteKeyInteger(log, "fp", value);
+
+    ImpactLogWriteString(log, "\n");
+
+    return ImpactResultSuccess;
+
+}
+
+static ImpactResult ImpactThreadLogStacktrace(ImpactState* state, const ImpactCPURegisters* registers) {
+    if (ImpactInvalidPtr(state) || ImpactInvalidPtr(registers)) {
+        return ImpactResultArgumentInvalid;
+    }
+
+    ImpactCPURegisters unwindRegisters = *registers;
+
+    // for now, impose a limit on how many frames we write out
+    for (uint32_t i = 0; i < 512; ++i) {
+        ImpactResult result = ImpactThreadLogFrame(state, &unwindRegisters);
+        if (result != ImpactResultSuccess) {
+            ImpactDebugLog("[Log:%s] failed to write frame %x\n", __func__, result);
+        }
+
+        bool finished = true;
+        result = ImpactUnwindStepRegisters(&unwindRegisters, &finished);
+        if (result != ImpactResultSuccess) {
+            ImpactDebugLog("[Log:%s] failed to step registers %x\n", __func__, result);
+            return result;
+        }
+
+        if (finished) {
+            return ImpactResultSuccess;
+        }
+    }
+
+    ImpactDebugLog("[Log:%s] exceeded maximum number of frames\n", __func__);
+
+    return ImpactResultFailure;
+}
+
 ImpactResult ImpactThreadLog(ImpactState* state, const ImpactThreadList* list, thread_act_t thread) {
     if (ImpactInvalidPtr(state) || ImpactInvalidPtr(list)) {
         return ImpactResultArgumentInvalid;
@@ -153,6 +224,11 @@ ImpactResult ImpactThreadLog(ImpactState* state, const ImpactThreadList* list, t
         ImpactLogger* log = &state->constantState.log;
 
         ImpactLogWriteString(log, "[Thread:Crashed]\n");
+    }
+
+    result = ImpactThreadLogStacktrace(state, &registers);
+    if (result != ImpactResultSuccess) {
+        ImpactDebugLog("[Log:%s] failed to log thread stack trace %d\n", __func__, result);
     }
 
     return ImpactResultSuccess;
