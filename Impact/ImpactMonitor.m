@@ -12,6 +12,8 @@
 #include "ImpactSignal.h"
 #include "ImpactMachException.h"
 
+#include <sys/sysctl.h>
+
 ImpactState* GlobalImpactState = NULL;
 
 @implementation ImpactMonitor
@@ -34,7 +36,7 @@ ImpactState* GlobalImpactState = NULL;
     return self;
 }
 
-- (void)startWithURL:(NSURL *)url identifier:(NSString *)string {
+- (void)startWithURL:(NSURL *)url identifier:(NSUUID *)uuid {
     assert(GlobalImpactState == NULL);
 
     NSURL* parent = url.URLByDeletingLastPathComponent;
@@ -53,7 +55,7 @@ ImpactState* GlobalImpactState = NULL;
 
     ImpactResult result;
 
-    NSLog(@"trying to start with: %s", url.fileSystemRepresentation);
+    NSLog(@"[Impact] trying to start with: %s", url.fileSystemRepresentation);
     
     result = ImpactLogInitialize(GlobalImpactState, url.fileSystemRepresentation);
     if (result != ImpactResultSuccess) {
@@ -73,7 +75,67 @@ ImpactState* GlobalImpactState = NULL;
         return;
     }
 
+
+    [self logExecutableData:GlobalImpactState];
+    [self logEnvironmentDataWithId:uuid state:GlobalImpactState];
+
     atomic_store(&GlobalImpactState->mutableState.crashState, ImpactCrashStateInitialized);
+
+    ImpactDebugLog("[Log:INFO:%s] finished initialization\n", __func__);
+}
+
+- (NSString *)OSVersionString {
+    NSOperatingSystemVersion version = [[NSProcessInfo processInfo] operatingSystemVersion];
+
+    return [NSString stringWithFormat:@"%ld.%ld.%ld", version.majorVersion, version.minorVersion, version.patchVersion];
+}
+
+- (void)logExecutableData:(ImpactState *)state {
+    ImpactLogger* log = &state->constantState.log;
+
+    NSBundle *mainBundle = [NSBundle mainBundle];
+
+    ImpactLogWriteString(log, "[Application] ");
+
+    if (self.applicationIdentifier.length != 0) {
+        ImpactLogWriteKeyStringObject(log, "id", self.applicationIdentifier, false);
+    } else {
+        ImpactLogWriteKeyStringObject(log, "id", [mainBundle bundleIdentifier], false);
+    }
+
+    ImpactLogWriteKeyStringObject(log, "org_id", self.organizationIdentifier, false);
+
+    ImpactLogWriteKeyStringObject(log, "version", [mainBundle objectForInfoDictionaryKey:@"CFBundleVersion"], false);
+    ImpactLogWriteKeyStringObject(log, "short_version", [mainBundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"], true);
+}
+
+- (void)logEnvironmentDataWithId:(NSUUID *)identifier state:(ImpactState *)state {
+    ImpactLogger* log = &state->constantState.log;
+
+    ImpactLogWriteString(log, "[Environment] ");
+
+#if TARGET_OS_MAC
+    ImpactLogWriteKeyString(log, "platform", "macOS", false);
+#endif
+
+    NSString* reportId = [[[identifier UUIDString] stringByReplacingOccurrencesOfString:@"-" withString:@""] lowercaseString];
+
+    ImpactLogWriteKeyString(log, "report_id", reportId.UTF8String, false);
+    ImpactLogWriteKeyStringObject(log, "install_id", self.installIdentifier, false);
+
+    char str[256] = {0};
+    size_t size = sizeof(str);
+
+    int result = 0;
+
+    result = sysctlbyname("kern.osversion", str, &size, NULL, 0);
+    if (result == 0) {
+        ImpactLogWriteKeyString(log, "os_build", str, false);
+    } else {
+        ImpactLogWriteKeyString(log, "os_build", "<unknown>", false);
+    }
+
+    ImpactLogWriteKeyString(log, "os_version", [self OSVersionString].UTF8String, true);
 }
 
 @end

@@ -23,7 +23,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let url = URL(fileURLWithPath: path, isDirectory: false)
 
         ImpactMonitor.shared().suppressReportCrash = UserDefaults.standard.bool(forKey: "suppressReportCrash")
-        ImpactMonitor.shared().start(with: url, identifier: "abc123")
+        ImpactMonitor.shared().start(with: url, identifier: UUID())
 
         self.viewController = ViewController()
         self.window = NSWindow(contentViewController: viewController)

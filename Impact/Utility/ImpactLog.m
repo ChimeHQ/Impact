@@ -124,6 +124,10 @@ ImpactResult ImpactLogWriteKeyString(const ImpactLogger* log, const char* key, c
 }
 
 ImpactResult ImpactLogWriteKeyStringObject(const ImpactLogger* log, const char* key, NSString* string, bool last) {
+    if (string.length == 0) {
+        return ImpactLogWriteKeyString(log, key, "<none>", last);
+    }
+    
     NSString* encodedString = [[string dataUsingEncoding:NSUTF8StringEncoding] base64EncodedStringWithOptions:0];
 
     return ImpactLogWriteKeyString(log, key, encodedString.UTF8String, last);

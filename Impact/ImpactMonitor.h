@@ -14,9 +14,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (ImpactMonitor *)shared;
 
-- (void)startWithURL:(NSURL *)url identifier:(NSString *)string;
+- (void)startWithURL:(NSURL *)url identifier:(NSUUID *)uuid;
 
 @property (nonatomic) BOOL suppressReportCrash;
+
+@property (nonatomic, nullable) NSString *applicationIdentifier;
+@property (nonatomic, nullable) NSString *organizationIdentifier;
+@property (nonatomic, nullable) NSString *installIdentifier;
 
 @end
 

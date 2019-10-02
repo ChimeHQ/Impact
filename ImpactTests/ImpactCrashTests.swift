@@ -20,8 +20,12 @@ class ImpactCrashTests: XCTestCase {
         return URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
     }()
 
+    func newOutputURL() -> URL {
+        return outputDirectory.appendingPathComponent(UUID().uuidString, isDirectory: false)
+    }
+
     func launchAppAndExecute(crash name: String) throws -> URL {
-        let tempURL = outputDirectory.appendingPathComponent(UUID().uuidString, isDirectory: false)
+        let tempURL = newOutputURL()
 
         Swift.print("setting: \(tempURL.path)")
         let args = ["-output_path", tempURL.path, "-run", name, "-suppressReportCrash", "YES"]
@@ -45,6 +49,29 @@ class ImpactCrashTests: XCTestCase {
         let stringContents = String(data: contents, encoding: .utf8)!
 
         return stringContents.components(separatedBy: "\n")
+    }
+
+    func testLaunchWithoutCrash() throws {
+        let url = newOutputURL()
+
+        let args = ["-output_path", url.path]
+        let app = try NSWorkspace.shared.launchApplication(at: testAppURL,
+                                                           options: [.withoutActivation, .withoutAddingToRecents],
+                                                           configuration: [.arguments: args])
+
+
+        app.terminate()
+
+        let terminationExpectation = keyValueObservingExpectation(for: app, keyPath: "isTerminated", expectedValue: true)
+
+        wait(for: [terminationExpectation], timeout: 2.0)
+
+        let lines = readCrashData(at: url)
+
+        XCTAssertFalse(lines.contains("hello from the mach exception handler"))
+        XCTAssertFalse(lines.contains("[Thread:Crashed]"))
+        XCTAssertTrue(lines.contains(where: { $0.hasPrefix("[Application] id: Y29tLmNoaW1laHEuSW1wYWN0VGVzdE1hYw==") }))
+        XCTAssertTrue(lines.contains(where: { $0.hasPrefix("[Environment] platform: macOS") }))
     }
 
     func testCallAbort() throws {
