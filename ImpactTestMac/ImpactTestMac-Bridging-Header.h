@@ -4,3 +4,5 @@
 
 #import "InvokeAbort.h"
 #import "NullDereference.h"
+#import "UncaughtNSException.h"
+#import "NonMainThreadUncaughtNSException.h"

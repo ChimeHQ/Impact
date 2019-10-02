@@ -95,10 +95,6 @@ static ImpactResult ImpactSignalRestorePreexisting(const ImpactState* state) {
         const int signal = ImpactHandledSignals[i];
         const struct sigaction action = state->constantState.preexistingActions[i];
 
-        if (action.sa_handler == SIG_DFL) {
-            continue;
-        }
-
         int result = sigaction(signal, &action, NULL);
         if (result != 0) {
             ImpactDebugLog("[Log:%s] unable to restore signal handler %d %d\n", __func__, signal, result);
@@ -121,15 +117,19 @@ ImpactResult ImpactSignalUninstallHandlers(const ImpactState* state) {
     return ImpactSignalInstallDefaultHandlers();
 }
 
-static ImpactResult ImpactSignalLog(ImpactState* state, siginfo_t* info) {
+static ImpactResult ImpactSignalLog(ImpactState* state, int signal, siginfo_t* info) {
     ImpactLogger* log = &state->constantState.log;
 
     ImpactLogWriteString(log, "[Signal] ");
-    ImpactLogWriteKeyInteger(log, "signal", info->si_signo);
-    ImpactLogWriteKeyInteger(log, "code", info->si_code);
-    ImpactLogWriteKeyPointer(log, "address", info->si_addr);
-    ImpactLogWriteKeyInteger(log, "errno", info->si_errno);
-    ImpactLogWriteString(log, "\n");
+
+    if (ImpactInvalidPtr(info)) {
+        ImpactLogWriteKeyInteger(log, "signal", signal, true);
+    } else {
+        ImpactLogWriteKeyInteger(log, "signal", signal, false);
+        ImpactLogWriteKeyInteger(log, "code", info->si_code, false);
+        ImpactLogWriteKeyPointer(log, "address", info->si_addr, false);
+        ImpactLogWriteKeyInteger(log, "errno", info->si_errno, true);
+    }
 
     return ImpactResultSuccess;
 }
@@ -142,10 +142,13 @@ static void ImpactSignalHandlerEntranceAdjustState(ImpactState* state, ImpactCra
     *currentState = atomic_load(&state->mutableState.crashState);
     switch (*currentState) {
         case ImpactCrashStateInitialized:
-            ImpactStateTransition(state, *currentState, ImpactCrashStateFirstSignal);
+            ImpactStateTransition(state, *currentState, ImpactCrashStateSignal);
             break;
-        case ImpactCrashStateFirstMachExceptionReplied:
-            ImpactStateTransition(state, *currentState, ImpactCrashStateFirstSignalAfterMachExceptionReplied);
+        case ImpactCrashStateMachException:
+            ImpactStateTransition(state, *currentState, ImpactCrashStateSignalAfterMachException);
+            break;
+        case ImpactCrashStateMachExceptionReplied:
+            ImpactStateTransition(state, *currentState, ImpactCrashStateSignalAfterMachExceptionReplied);
             break;
         default:
             ImpactStateInvalid(*currentState);
@@ -160,11 +163,12 @@ static void ImpactSignalHandlerExitAdjustState(ImpactState* state) {
 
     ImpactCrashState currentState = atomic_load(&state->mutableState.crashState);
     switch (currentState) {
-        case ImpactCrashStateFirstSignal:
-            ImpactStateTransition(state, currentState, ImpactCrashStateFirstSignalHandled);
+        case ImpactCrashStateSignal:
+            ImpactStateTransition(state, currentState, ImpactCrashStateSignalHandled);
             break;
-        case ImpactCrashStateFirstSignalAfterMachExceptionReplied:
-            ImpactStateTransition(state, currentState, ImpactCrashStateFirstSignalHandledAfterMachExceptionReplied);
+        case ImpactCrashStateSignalAfterMachException:
+        case ImpactCrashStateSignalAfterMachExceptionReplied:
+            ImpactStateTransition(state, currentState, ImpactCrashStateSignalHandledAfterMachException);
             break;
         default:
             ImpactStateInvalid(currentState);
@@ -183,33 +187,32 @@ static void ImpactSignalHandler(int signal, siginfo_t* info, ucontext_t* uap) {
         return;
     }
 
-    ImpactCrashState currentState = ImpactCrashStateUninitialized;
-    ImpactSignalHandlerEntranceAdjustState(state, &currentState);
-
     // Attempt to put back whatever handlers were in place when we started. It is
     // important to give previous handlers a chance to run, particularly if we fail
     // at some point. This is why we do this early.
 
-//    ImpactResult result = ImpactSignalUninstallHandlers(state);
-//    if (result != ImpactResultSuccess) {
-//        ImpactDebugLog("[Log:%s] failed to uninstall handlers %d\n", __func__, result);
-//    }
+    ImpactResult result = ImpactSignalUninstallHandlers(state);
+    if (result != ImpactResultSuccess) {
+        ImpactDebugLog("[Log:%s] failed to uninstall handlers %d\n", __func__, result);
+    }
 
     // At this point, any signal, including the current, could be
     // reraised and our handler would not be invoked. This protects us
     // from a crash loop within the handler.
 
-    // Has something gone wrong with the function invocation? For example,
-    // was our handler reinstalled without SA_SIGINFO?
-    if (ImpactInvalidPtr(info) || ImpactInvalidPtr(uap)) {
-        return;
-    }
+    // log signal first, before adjusting state. Helpful to have this in the log.
+    ImpactSignalLog(state, signal, info);
 
-    ImpactSignalLog(state, info);
+    ImpactCrashState currentState = ImpactCrashStateUninitialized;
+    ImpactSignalHandlerEntranceAdjustState(state, &currentState);
 
     // we only trigger the crash handler on our first invocation
     if (currentState == ImpactCrashStateInitialized) {
-        ImpactCrashHandler(state, ImpactThreadAssumeSelfCrashed, uap->uc_mcontext);
+        if (ImpactInvalidPtr(uap)) {
+            ImpactDebugLog("[Log:Error] %suap pointer invalid\n", __func__);
+        } else {
+            ImpactCrashHandler(state, ImpactThreadAssumeSelfCrashed, uap->uc_mcontext);
+        }
 
     }
     ImpactSignalHandlerExitAdjustState(state);

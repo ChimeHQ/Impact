@@ -101,15 +101,30 @@ ImpactResult ImpactLogWriteInteger(const ImpactLogger* log, uintptr_t number) {
     return ImpactLogWriteData(log, ptr, length);
 }
 
-ImpactResult ImpactLogWriteKeyInteger(const ImpactLogger* log, const char* key, uintptr_t number) {
+ImpactResult ImpactLogWriteKeyInteger(const ImpactLogger* log, const char* key, uintptr_t number, bool last) {
     ImpactLogWriteString(log, key);
     ImpactLogWriteString(log, ": ");
     ImpactLogWriteInteger(log, number);
-    ImpactLogWriteString(log, ", ");
+    ImpactLogWriteString(log, last ? "\n" : ", ");
 
     return ImpactResultSuccess;
 }
 
-ImpactResult ImpactLogWriteKeyPointer(const ImpactLogger* log, const char* key, const void* ptr) {
-    return ImpactLogWriteKeyInteger(log, key, (uintptr_t)ptr);
+ImpactResult ImpactLogWriteKeyPointer(const ImpactLogger* log, const char* key, const void* ptr, bool last) {
+    return ImpactLogWriteKeyInteger(log, key, (uintptr_t)ptr, last);
+}
+
+ImpactResult ImpactLogWriteKeyString(const ImpactLogger* log, const char* key, const char* string, bool last) {
+    ImpactLogWriteString(log, key);
+    ImpactLogWriteString(log, ": ");
+    ImpactLogWriteString(log, string);
+    ImpactLogWriteString(log, last ? "\n" : ", ");
+
+    return ImpactResultSuccess;
+}
+
+ImpactResult ImpactLogWriteKeyStringObject(const ImpactLogger* log, const char* key, NSString* string, bool last) {
+    NSString* encodedString = [[string dataUsingEncoding:NSUTF8StringEncoding] base64EncodedStringWithOptions:0];
+
+    return ImpactLogWriteKeyString(log, key, encodedString.UTF8String, last);
 }

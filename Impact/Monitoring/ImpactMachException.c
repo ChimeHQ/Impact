@@ -134,7 +134,7 @@ ImpactResult ImpactMachExceptionLogPreexistingHandlers(const ImpactState* state)
 
         const ImpactResult result = ImpactMachExceptionGetHandler(state, i, &handler);
         if (result != ImpactResultSuccess) {
-            ImpactDebugLog("[Log:%s] unable to read preexisting handler %d\n", __func__, result);
+            ImpactDebugLog("[Log:WARN:%s] unable to read preexisting handler %d\n", __func__, result);
             continue;
         }
 
@@ -142,7 +142,7 @@ ImpactResult ImpactMachExceptionLogPreexistingHandlers(const ImpactState* state)
             continue;
         }
 
-        ImpactDebugLog("[Log:%s] preexisting handler %d - %x, %x\n", __func__, i, handler.mask, handler.behavior);
+        ImpactDebugLog("[Log:INFO:%s] preexisting handler %d - %x, %x\n", __func__, i, handler.mask, handler.behavior);
     }
 
     return ImpactResultSuccess;
@@ -266,7 +266,7 @@ static ImpactResult ImpactMachExceptionForward(const ImpactState* state, const I
         handlerCount++;
 
         if ((forwardedMasks & handler.mask) != 0) {
-            ImpactDebugLog("[Log:%s] duplicate forwarding mask found %x\n", __func__, handler.mask);
+            ImpactDebugLog("[Log:WARN:%s] duplicate forwarding mask found %x\n", __func__, handler.mask);
             continue;
         }
 
@@ -274,7 +274,7 @@ static ImpactResult ImpactMachExceptionForward(const ImpactState* state, const I
 
         result = ImpactMachExceptionSendToHandler(request, &handler);
         if (result != ImpactResultSuccess) {
-            ImpactDebugLog("[Log:%s] failed forwarding to %x\n", __func__, handler.mask);
+            ImpactDebugLog("[Log:WARN:%s] failed forwarding to %x\n", __func__, handler.mask);
             failCount++;
         }
     }
@@ -297,7 +297,7 @@ static ImpactResult ImpactMachExceptionReply(const ImpactMachExceptionRaiseReque
     reply.NDR = request->NDR;
     reply.RetCode = code;
 
-    ImpactDebugLog("[Log:%s] sending reply message %d\n", __func__, reply.Head.msgh_id);
+    ImpactDebugLog("[Log:INFO:%s] sending reply message %d\n", __func__, reply.Head.msgh_id);
 
     const mach_msg_return_t mr = mach_msg(&reply.Head,
                                           MACH_SEND_MSG,
@@ -307,7 +307,7 @@ static ImpactResult ImpactMachExceptionReply(const ImpactMachExceptionRaiseReque
                                           MACH_MSG_TIMEOUT_NONE,
                                           MACH_PORT_NULL);
     if (mr != MACH_MSG_SUCCESS) {
-        ImpactDebugLog("[Log:%s] failed to reply to exception %x\n", __func__, mr);
+        ImpactDebugLog("[Log:ERROR:%s] failed to reply to exception %x\n", __func__, mr);
         return ImpactResultFailure;
     }
 
@@ -319,7 +319,7 @@ static ImpactResult ImpactMachExceptionReadException(ImpactMachExceptionAllRaise
         return ImpactResultArgumentInvalid;
     }
 
-    ImpactDebugLog("[Log:%s] waiting on exception %x\n", __func__, request->raise.Head.msgh_size);
+    ImpactDebugLog("[Log:INFO:%s] waiting on exception %x\n", __func__, request->raise.Head.msgh_size);
 
     const mach_msg_return_t mr = mach_msg(&request->raise.Head,
                                           MACH_RCV_MSG | MACH_RCV_LARGE,
@@ -329,7 +329,7 @@ static ImpactResult ImpactMachExceptionReadException(ImpactMachExceptionAllRaise
                                           MACH_MSG_TIMEOUT_NONE,
                                           MACH_PORT_NULL);
     if (mr != MACH_MSG_SUCCESS) {
-        ImpactDebugLog("[Log:%s] unable to read exception %x %x\n", __func__, mr, request->raise.Head.msgh_size);
+        ImpactDebugLog("[Log:ERROR:%s] unable to read exception %x %x\n", __func__, mr, request->raise.Head.msgh_size);
         return ImpactResultFailure;
     }
 
@@ -339,7 +339,7 @@ static ImpactResult ImpactMachExceptionReadException(ImpactMachExceptionAllRaise
 static ImpactResult ImpactMachExceptionProcess(ImpactState* state, const ImpactMachExceptionRaiseRequest* request, bool* forwarded) {
     ImpactResult result = ImpactMachExceptionLog(state, request);
     if (result != ImpactResultSuccess) {
-        ImpactDebugLog("[Log:%s] unable to log exception %d\n", __func__, result);
+        ImpactDebugLog("[Log:ERROR:%s] unable to log exception %d\n", __func__, result);
         return result;
     }
 
@@ -349,7 +349,7 @@ static ImpactResult ImpactMachExceptionProcess(ImpactState* state, const ImpactM
 
     result = ImpactMachExceptionForward(state, request, forwarded);
     if (result != ImpactResultSuccess) {
-        ImpactDebugLog("[Log:%s] failed to forward exception %d\n", __func__, result);
+        ImpactDebugLog("[Log:WARN:%s] failed to forward exception %d\n", __func__, result);
     }
 
     return result;
@@ -360,15 +360,19 @@ static void ImpactMachExceptionHandlerEntranceAdjustState(ImpactState* state, Im
 
     switch (*currentState) {
         case ImpactCrashStateInitialized:
-            ImpactStateTransition(state, *currentState, ImpactCrashStateFirstMachException);
+            ImpactStateTransition(state, *currentState, ImpactCrashStateMachException);
             break;
-        case ImpactCrashStateFirstSignalHandled:
-            ImpactStateTransition(state, *currentState, ImpactCrashStateFirstMachExceptionAfterSignalHandled);
+        case ImpactCrashStateSignal:
+            ImpactStateTransition(state, *currentState, ImpactCrashStateMachExceptionAfterSignal);
             break;
-        case ImpactCrashStateFirstMachExceptionReplied:
+        case ImpactCrashStateSignalHandled:
+            ImpactStateTransition(state, *currentState, ImpactCrashStateMachExceptionAfterSignalHandled);
+            break;
+        case ImpactCrashStateMachExceptionReplied:
             ImpactStateTransition(state, *currentState, ImpactCrashStateSecondMachException);
             break;
-        case ImpactCrashStateFirstSignalHandledAfterMachExceptionReplied:
+        case ImpactCrashStateSignalAfterMachException:
+        case ImpactCrashStateSignalAfterMachExceptionReplied:
             ImpactStateTransition(state, *currentState, ImpactCrashStateSecondMachException);
             break;
         default:
@@ -380,11 +384,12 @@ static void ImpactMachExceptionHandlerEntranceAdjustState(ImpactState* state, Im
 static void ImpactMachExceptionHandlerExitAdjustState(ImpactState* state) {
     const ImpactCrashState currentState = atomic_load(&state->mutableState.crashState);
     switch (currentState) {
-        case ImpactCrashStateFirstMachException:
-            ImpactStateTransition(state, currentState, ImpactCrashStateFirstMachExceptionReplied);
+        case ImpactCrashStateMachException:
+            ImpactStateTransition(state, currentState, ImpactCrashStateMachExceptionReplied);
             break;
-        case ImpactCrashStateFirstMachExceptionAfterSignalHandled:
-            ImpactStateTransition(state, currentState, ImpactCrashStateFirstMachExceptionRepliedAfterSignalHandled);
+        case ImpactCrashStateMachExceptionAfterSignal:
+        case ImpactCrashStateMachExceptionAfterSignalHandled:
+            ImpactStateTransition(state, currentState, ImpactCrashStateMachExceptionReplied);
             break;
         case ImpactCrashStateSecondMachException:
             ImpactStateTransition(state, currentState, ImpactCrashStateSecondMachExceptionReplied);
@@ -417,15 +422,20 @@ static ImpactResult ImpactMachExceptionHandle(ImpactState* state) {
     ImpactCrashState currentState = ImpactCrashStateUninitialized;
     ImpactMachExceptionHandlerEntranceAdjustState(state, &currentState);
 
+    result = ImpactSignalUninstallHandlers(state);
+    if (result != ImpactResultSuccess) {
+        ImpactDebugLog("[Log:ERROR:%s] failed to restore signal handlers %d\n", __func__, result);
+    }
+
     if (currentState == ImpactCrashStateInitialized) {
         bool forwarded = false;
         result = ImpactMachExceptionProcess(state, &request.raise, &forwarded);
         if (result != ImpactResultSuccess) {
-            ImpactDebugLog("[Log:%s] failed to process exception %d\n", __func__, result);
+            ImpactDebugLog("[Log:WARN:%s] failed to process exception %d\n", __func__, result);
         }
 
         if (forwarded) {
-            ImpactDebugLog("[Log:%s] forwarded message to preexisting handler\n", __func__);
+            ImpactDebugLog("[Log:INFO:%s] forwarded message to preexisting handler\n", __func__);
             return result;
         }
     }
@@ -437,11 +447,11 @@ static ImpactResult ImpactMachExceptionHandle(ImpactState* state) {
     // In all these cases, we tell the kernel that we were unable to handle this
     // exception, and it should continue the termination process.
 
-    ImpactDebugLog("[Log:%s] replying directly with KERN_FAILURE\n", __func__);
+    ImpactDebugLog("[Log:INFO:%s] replying directly with KERN_FAILURE\n", __func__);
 
     result = ImpactMachExceptionReply(&request.raise, KERN_FAILURE);
     if (result != ImpactResultSuccess) {
-        ImpactDebugLog("[Log:%s] direct reply failed %d\n", __func__, result);
+        ImpactDebugLog("[Log:ERROR:%s] direct reply failed %d\n", __func__, result);
         return result;
     }
 
@@ -461,7 +471,7 @@ static void* ImpactMachExceptionServer(void* ctx) {
         }
     }
 
-    ImpactDebugLog("[Log:%s] exception handling thread exiting\n", __func__);
+    ImpactDebugLog("[Log:INFO:%s] exception handling thread exiting\n", __func__);
 
     return NULL;
 }

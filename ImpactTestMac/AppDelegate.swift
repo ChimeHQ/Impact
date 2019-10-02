@@ -15,6 +15,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var viewController: ViewController!
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        UserDefaults.standard.register(defaults: [
+            "NSApplicationCrashOnExceptions": true,
+        ])
+
         let path = UserDefaults.standard.string(forKey: "output_path") ?? "/tmp/impact";
         let url = URL(fileURLWithPath: path, isDirectory: false)
 
@@ -49,6 +53,10 @@ extension AppDelegate {
             return InvokeAbort()
         case "nullDereference"?:
             return NullDereference()
+        case "uncaughtNSException"?:
+            return UncaughtNSException()
+        case "nonMainThreadUncaughtNSException"?:
+            return NonMainThreadUncaughtNSException()
         default:
             return nil
         }

@@ -34,16 +34,19 @@ typedef struct {
 typedef enum {
     ImpactCrashStateUninitialized = 0,
     ImpactCrashStateInitialized,
-    ImpactCrashStateFirstMachException,
-    ImpactCrashStateFirstMachExceptionAfterSignalHandled,
-    ImpactCrashStateFirstMachExceptionReplied,
-    ImpactCrashStateFirstMachExceptionRepliedAfterSignalHandled,
-    ImpactCrashStateFirstSignal,
-    ImpactCrashStateFirstSignalHandled,
-    ImpactCrashStateFirstSignalAfterMachExceptionReplied,
-    ImpactCrashStateFirstSignalHandledAfterMachExceptionReplied,
+    ImpactCrashStateMachException,
+    ImpactCrashStateMachExceptionReplied,
+    ImpactCrashStateSignal,
+    ImpactCrashStateSignalHandled,
+    ImpactCrashStateSignalAfterMachException,
+    ImpactCrashStateSignalHandledAfterMachException,
+    ImpactCrashStateSignalAfterMachExceptionReplied,
+    ImpactCrashStateMachExceptionAfterSignal,
+    ImpactCrashStateMachExceptionAfterSignalHandled,
     ImpactCrashStateSecondMachException,
     ImpactCrashStateSecondMachExceptionReplied,
+    ImpactCrashStateSecondSignal,
+    ImpactCrashStateSecondSignalHandled
 } ImpactCrashState;
 
 typedef struct {

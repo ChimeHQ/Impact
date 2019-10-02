@@ -7,6 +7,7 @@
 //
 
 #import "ImpactMonitoredApplication.h"
+#import "ImpactRuntimeException.h"
 
 @implementation ImpactMonitoredApplication
 
@@ -23,10 +24,9 @@
 }
 
 - (void)reportException:(NSException *)exception {
-    // Here, we'll be able to write the NSException details out to a file
+    ImpactRuntimeExceptionLogNSException(exception);
 
     [super reportException:exception];
 }
-
 
 @end

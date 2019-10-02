@@ -149,23 +149,21 @@ static ImpactResult ImpactThreadLogFrame(ImpactState* state, const ImpactCPURegi
         return result;
     }
 
-    ImpactLogWriteKeyInteger(log, "ip", value);
+    ImpactLogWriteKeyInteger(log, "ip", value, false);
 
     result = ImpactCPUGetRegister(registers, ImpactCPURegisterStackPointer, &value);
     if (result != ImpactResultSuccess) {
         return result;
     }
 
-    ImpactLogWriteKeyInteger(log, "sp", value);
+    ImpactLogWriteKeyInteger(log, "sp", value, false);
 
     result = ImpactCPUGetRegister(registers, ImpactCPURegisterFramePointer, &value);
     if (result != ImpactResultSuccess) {
         return result;
     }
 
-    ImpactLogWriteKeyInteger(log, "fp", value);
-
-    ImpactLogWriteString(log, "\n");
+    ImpactLogWriteKeyInteger(log, "fp", value, true);
 
     return ImpactResultSuccess;
 
@@ -217,7 +215,7 @@ ImpactResult ImpactThreadLog(ImpactState* state, const ImpactThreadList* list, t
 
     result = ImpactCPURegistersLog(state, &registers);
     if (result != ImpactResultSuccess) {
-        ImpactDebugLog("[Log:%s] failed to log thread registers %d\n", __func__, result);
+        ImpactDebugLog("[Log:%s] failed to log thread state %d\n", __func__, result);
     }
 
     if (thread == list->crashedThread && MACH_PORT_VALID(thread)) {

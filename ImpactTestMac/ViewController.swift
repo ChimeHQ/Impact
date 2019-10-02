@@ -17,6 +17,8 @@ class ViewController: NSViewController {
         self.crashInvocations = [
             InvokeAbort(),
             NullDereference(),
+            UncaughtNSException(),
+            NonMainThreadUncaughtNSException(),
         ]
 
         super.init(nibName: nil, bundle: nil)

@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C91112592342986C00E72530 /* ImpactRuntimeException.h in Headers */ = {isa = PBXBuildFile; fileRef = C91112572342986C00E72530 /* ImpactRuntimeException.h */; };
+		C911125A2342986C00E72530 /* ImpactRuntimeException.mm in Sources */ = {isa = PBXBuildFile; fileRef = C91112582342986C00E72530 /* ImpactRuntimeException.mm */; };
+		C911125D2342E51700E72530 /* UncaughtNSException.m in Sources */ = {isa = PBXBuildFile; fileRef = C911125C2342E51700E72530 /* UncaughtNSException.m */; };
+		C911126023442DD600E72530 /* NonMainThreadUncaughtNSException.m in Sources */ = {isa = PBXBuildFile; fileRef = C911125F23442DD600E72530 /* NonMainThreadUncaughtNSException.m */; };
 		C925034B233D126A00022334 /* ImpactState.c in Sources */ = {isa = PBXBuildFile; fileRef = C925034A233D126A00022334 /* ImpactState.c */; };
 		C9250358233E9E9A00022334 /* ImpactThread.h in Headers */ = {isa = PBXBuildFile; fileRef = C9250356233E9E9A00022334 /* ImpactThread.h */; };
 		C9250359233E9E9A00022334 /* ImpactThread.c in Sources */ = {isa = PBXBuildFile; fileRef = C9250357233E9E9A00022334 /* ImpactThread.c */; };
@@ -29,7 +33,7 @@
 		C9A413D72332481300059F5D /* ImpactSignal.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A413D52332481300059F5D /* ImpactSignal.h */; };
 		C9A413D82332481300059F5D /* ImpactSignal.c in Sources */ = {isa = PBXBuildFile; fileRef = C9A413D62332481300059F5D /* ImpactSignal.c */; };
 		C9A413DC23324E9E00059F5D /* ImpactLog.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A413DA23324E9E00059F5D /* ImpactLog.h */; };
-		C9A413DD23324E9E00059F5D /* ImpactLog.c in Sources */ = {isa = PBXBuildFile; fileRef = C9A413DB23324E9E00059F5D /* ImpactLog.c */; };
+		C9A413DD23324E9E00059F5D /* ImpactLog.m in Sources */ = {isa = PBXBuildFile; fileRef = C9A413DB23324E9E00059F5D /* ImpactLog.m */; };
 		C9A413E2233251BB00059F5D /* ImpactState.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A413E0233251BB00059F5D /* ImpactState.h */; };
 		C9A413E52333061F00059F5D /* Impact.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9A413842331007600059F5D /* Impact.framework */; };
 		C9A413E62333061F00059F5D /* Impact.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C9A413842331007600059F5D /* Impact.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -88,6 +92,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C91112572342986C00E72530 /* ImpactRuntimeException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImpactRuntimeException.h; sourceTree = "<group>"; };
+		C91112582342986C00E72530 /* ImpactRuntimeException.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ImpactRuntimeException.mm; sourceTree = "<group>"; };
+		C911125B2342E51700E72530 /* UncaughtNSException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UncaughtNSException.h; sourceTree = "<group>"; };
+		C911125C2342E51700E72530 /* UncaughtNSException.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UncaughtNSException.m; sourceTree = "<group>"; };
+		C911125E23442DD600E72530 /* NonMainThreadUncaughtNSException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NonMainThreadUncaughtNSException.h; sourceTree = "<group>"; };
+		C911125F23442DD600E72530 /* NonMainThreadUncaughtNSException.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NonMainThreadUncaughtNSException.m; sourceTree = "<group>"; };
 		C925034A233D126A00022334 /* ImpactState.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ImpactState.c; sourceTree = "<group>"; };
 		C9250356233E9E9A00022334 /* ImpactThread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImpactThread.h; sourceTree = "<group>"; };
 		C9250357233E9E9A00022334 /* ImpactThread.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ImpactThread.c; sourceTree = "<group>"; };
@@ -123,7 +133,7 @@
 		C9A413D52332481300059F5D /* ImpactSignal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImpactSignal.h; sourceTree = "<group>"; };
 		C9A413D62332481300059F5D /* ImpactSignal.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ImpactSignal.c; sourceTree = "<group>"; };
 		C9A413DA23324E9E00059F5D /* ImpactLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImpactLog.h; sourceTree = "<group>"; };
-		C9A413DB23324E9E00059F5D /* ImpactLog.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ImpactLog.c; sourceTree = "<group>"; };
+		C9A413DB23324E9E00059F5D /* ImpactLog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImpactLog.m; sourceTree = "<group>"; };
 		C9A413DE23324F0100059F5D /* ImpactResult.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImpactResult.h; sourceTree = "<group>"; };
 		C9A413DF23324FF200059F5D /* ImpactPointer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImpactPointer.h; sourceTree = "<group>"; };
 		C9A413E0233251BB00059F5D /* ImpactState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImpactState.h; sourceTree = "<group>"; };
@@ -248,6 +258,10 @@
 				C9A413CB233243CF00059F5D /* CrashInvocation.m */,
 				C9A413CD2332440C00059F5D /* InvokeAbort.h */,
 				C9A413CE2332440C00059F5D /* InvokeAbort.m */,
+				C911125B2342E51700E72530 /* UncaughtNSException.h */,
+				C911125C2342E51700E72530 /* UncaughtNSException.m */,
+				C911125E23442DD600E72530 /* NonMainThreadUncaughtNSException.h */,
+				C911125F23442DD600E72530 /* NonMainThreadUncaughtNSException.m */,
 			);
 			path = Crashes;
 			sourceTree = "<group>";
@@ -263,6 +277,8 @@
 				C9A413EF23338DF000059F5D /* ImpactCrashHandler.h */,
 				C9250365234244CD00022334 /* ImpactMonitoredApplication.h */,
 				C9250366234244CD00022334 /* ImpactMonitoredApplication.m */,
+				C91112572342986C00E72530 /* ImpactRuntimeException.h */,
+				C91112582342986C00E72530 /* ImpactRuntimeException.mm */,
 			);
 			path = Monitoring;
 			sourceTree = "<group>";
@@ -271,7 +287,7 @@
 			isa = PBXGroup;
 			children = (
 				C9A413DA23324E9E00059F5D /* ImpactLog.h */,
-				C9A413DB23324E9E00059F5D /* ImpactLog.c */,
+				C9A413DB23324E9E00059F5D /* ImpactLog.m */,
 				C9A413DE23324F0100059F5D /* ImpactResult.h */,
 				C9A413DF23324FF200059F5D /* ImpactPointer.h */,
 				C9A413F223338EB100059F5D /* ImpactCPU.h */,
@@ -299,6 +315,7 @@
 				C9A413F423338EB100059F5D /* ImpactCPU.h in Headers */,
 				C9250367234244CD00022334 /* ImpactMonitoredApplication.h in Headers */,
 				C9250358233E9E9A00022334 /* ImpactThread.h in Headers */,
+				C91112592342986C00E72530 /* ImpactRuntimeException.h in Headers */,
 				C9A413F82333983500059F5D /* ImpactMachException.h in Headers */,
 				C9A413952331007600059F5D /* Impact.h in Headers */,
 				C9A413F123338DF000059F5D /* ImpactCrashHandler.h in Headers */,
@@ -446,7 +463,7 @@
 			files = (
 				C9250368234244CD00022334 /* ImpactMonitoredApplication.m in Sources */,
 				C9A413D32332458400059F5D /* ImpactMonitor.m in Sources */,
-				C9A413DD23324E9E00059F5D /* ImpactLog.c in Sources */,
+				C9A413DD23324E9E00059F5D /* ImpactLog.m in Sources */,
 				C925034B233D126A00022334 /* ImpactState.c in Sources */,
 				C9A413F523338EB100059F5D /* ImpactCPU.c in Sources */,
 				C9A413F023338DF000059F5D /* ImpactCrashHandler.c in Sources */,
@@ -454,6 +471,7 @@
 				C9A413F92333983500059F5D /* ImpactMachException.c in Sources */,
 				C9250360233FDDB400022334 /* ImpactUnwind.c in Sources */,
 				C9A413D82332481300059F5D /* ImpactSignal.c in Sources */,
+				C911125A2342986C00E72530 /* ImpactRuntimeException.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -470,7 +488,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C911126023442DD600E72530 /* NonMainThreadUncaughtNSException.m in Sources */,
 				C9A414012333C4D800059F5D /* NullDereference.m in Sources */,
+				C911125D2342E51700E72530 /* UncaughtNSException.m in Sources */,
 				C9A413CF2332440C00059F5D /* InvokeAbort.m in Sources */,
 				C9A413CC233243CF00059F5D /* CrashInvocation.m in Sources */,
 				C9A413C22331045600059F5D /* ViewController.swift in Sources */,

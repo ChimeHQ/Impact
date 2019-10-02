@@ -40,16 +40,16 @@ class ImpactCrashTests: XCTestCase {
         return tempURL
     }
 
+    func readCrashData(at url: URL) -> [String] {
+        let contents = try! Data(contentsOf: url)
+        let stringContents = String(data: contents, encoding: .utf8)!
+
+        return stringContents.components(separatedBy: "\n")
+    }
+
     func testCallAbort() throws {
         let url = try launchAppAndExecute(crash: "invokeAbort")
-
-        let contents = try Data(contentsOf: url)
-        let stringContents = String(data: contents, encoding: .utf8)
-
-        guard let lines = stringContents?.components(separatedBy: "\n") else {
-            XCTFail()
-            return
-        }
+        let lines = readCrashData(at: url)
 
         XCTAssertTrue(lines.contains(where: { $0.hasPrefix("[Signal] signal: 0x6") }))
         XCTAssertTrue(lines.contains("[Thread:Crashed]"))
@@ -59,18 +59,31 @@ class ImpactCrashTests: XCTestCase {
 
     func testNullDereference() throws {
         let url = try launchAppAndExecute(crash: "nullDereference")
-
-        let contents = try Data(contentsOf: url)
-        let stringContents = String(data: contents, encoding: .utf8)
-
-        guard let lines = stringContents?.components(separatedBy: "\n") else {
-            XCTFail()
-            return
-        }
+        let lines = readCrashData(at: url)
 
         XCTAssertTrue(lines.contains("hello from the mach exception handler"))
         XCTAssertTrue(lines.contains("[Thread:Crashed]"))
         
+        try? FileManager.default.removeItem(at: url)
+    }
+
+    func testUncaughtNSException() throws {
+        let url = try launchAppAndExecute(crash: "uncaughtNSException")
+        let lines = readCrashData(at: url)
+
+        XCTAssertTrue(lines.contains("hello from the mach exception handler"))
+        XCTAssertTrue(lines.contains("[Exception] type: objc, name: QW5FeGNlcHRpb24=, message: c29tZXRoaW5nIGJhZCBoYXBwZW5lZA=="))
+
+        try? FileManager.default.removeItem(at: url)
+    }
+
+    func testNonMainThreadUncaughtNSException() throws {
+        let url = try launchAppAndExecute(crash: "nonMainThreadUncaughtNSException")
+        let lines = readCrashData(at: url)
+
+        XCTAssertTrue(lines.contains("hello from the mach exception handler"))
+        XCTAssertTrue(lines.contains("[Exception] type: objc, name: QW5FeGNlcHRpb24=, message: c29tZXRoaW5nIGJhZCBoYXBwZW5lZA=="))
+
         try? FileManager.default.removeItem(at: url)
     }
 }
