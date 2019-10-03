@@ -11,6 +11,7 @@
 #include "ImpactLog.h"
 #include "ImpactSignal.h"
 #include "ImpactMachException.h"
+#include "ImpactBinaryImage.h"
 
 #include <sys/sysctl.h>
 
@@ -63,21 +64,24 @@ ImpactState* GlobalImpactState = NULL;
         return;
     }
 
+    [self logExecutableData:GlobalImpactState];
+    [self logEnvironmentDataWithId:uuid state:GlobalImpactState];
+
     result = ImpactSignalInitialize(GlobalImpactState);
     if (result != ImpactResultSuccess) {
         NSLog(@"[Impact] Unable to initialize signal %d", result);
-        return;
     }
 
     result = ImpactMachExceptionInitialize(GlobalImpactState);
     if (result != ImpactResultSuccess) {
         NSLog(@"[Impact] Unable to initialize mach exceptions %d", result);
-        return;
     }
 
-
-    [self logExecutableData:GlobalImpactState];
-    [self logEnvironmentDataWithId:uuid state:GlobalImpactState];
+    result = ImpactBinaryImageInitialize(GlobalImpactState);
+    if (result != ImpactResultSuccess) {
+        NSLog(@"[Impact] Unable to initialize binary images %d", result);
+        return;
+    }
 
     atomic_store(&GlobalImpactState->mutableState.crashState, ImpactCrashStateInitialized);
 

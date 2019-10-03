@@ -36,7 +36,7 @@ Second, Impact is still a work-in-progress. At the moment, it only upports macOS
 | UNIX signals | ✅ |
 | Mach Exceptions | ✅ |
 | Basic Thread details | ✅ |
-| Binary image information | - |
+| Binary image information | ✅ |
 | Frame pointer-based stack traces | ✅ |
 | Compact Unwind support | - |
 | Basic DWARF CFI support | - |

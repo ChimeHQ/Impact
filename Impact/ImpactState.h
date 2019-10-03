@@ -14,6 +14,7 @@
 #include <signal.h>
 #include <stdatomic.h>
 #include <mach/exc.h>
+#include <mach-o/dyld_images.h>
 #include <stdbool.h>
 
 typedef struct {
@@ -58,6 +59,9 @@ typedef struct {
     // mach exception
     ImpactMachExceptionHandlers preexistingMachExceptionHandlers;
     mach_port_t machExceptionPort;
+
+    // binary images
+    struct task_dyld_info dyldInfo;
 
     // general configuration
     bool suppressReportCrash;

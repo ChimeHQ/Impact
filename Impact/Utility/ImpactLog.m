@@ -101,6 +101,19 @@ ImpactResult ImpactLogWriteInteger(const ImpactLogger* log, uintptr_t number) {
     return ImpactLogWriteData(log, ptr, length);
 }
 
+ImpactResult ImpactLogWriteHexData(const ImpactLogger* log, const uint8_t* data, size_t length) {
+    char buffer[2] = {0};
+
+    for (size_t i = 0; i < length; ++i) {
+        buffer[1] = ImpactLogValueToHexChar(data[i]);
+        buffer[0] = ImpactLogValueToHexChar(data[i] >> 4);
+
+        ImpactLogWriteData(log, buffer, 2);
+    }
+
+    return ImpactResultSuccess;
+}
+
 ImpactResult ImpactLogWriteKeyInteger(const ImpactLogger* log, const char* key, uintptr_t number, bool last) {
     ImpactLogWriteString(log, key);
     ImpactLogWriteString(log, ": ");
@@ -127,8 +140,18 @@ ImpactResult ImpactLogWriteKeyStringObject(const ImpactLogger* log, const char* 
     if (string.length == 0) {
         return ImpactLogWriteKeyString(log, key, "<none>", last);
     }
-    
+
     NSString* encodedString = [[string dataUsingEncoding:NSUTF8StringEncoding] base64EncodedStringWithOptions:0];
 
     return ImpactLogWriteKeyString(log, key, encodedString.UTF8String, last);
+}
+
+ImpactResult ImpactLogWriteKeyHexData(const ImpactLogger* log, const char* key, const uint8_t* _Nullable data, size_t length, bool last) {
+    ImpactLogWriteString(log, key);
+    ImpactLogWriteString(log, ": ");
+    ImpactLogWriteHexData(log, data, length);
+    ImpactLogWriteString(log, last ? "\n" : ", ");
+
+    return ImpactResultSuccess;
+
 }

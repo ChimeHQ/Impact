@@ -40,6 +40,8 @@ ImpactResult ImpactLogWriteKeyString(const ImpactLogger* log, const char* key, c
 ImpactResult ImpactLogWriteKeyStringObject(const ImpactLogger* log, const char* key, NSString* string, bool last);
 #endif
 
+ImpactResult ImpactLogWriteKeyHexData(const ImpactLogger* log, const char* key, const uint8_t* _Nullable data, size_t length, bool last);
+
 __END_DECLS
 _Pragma("clang assume_nonnull end")
 
