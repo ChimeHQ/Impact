@@ -9,6 +9,7 @@
 #include "ImpactCompactUnwind.h"
 #include "ImpactUtility.h"
 #include "ImpactUnwind.h"
+#include "ImpactDWARF.h"
 
 #include <mach-o/compact_unwind_encoding.h>
 
@@ -85,7 +86,40 @@ static ImpactResult ImpactCompactUnwindStepRBPFrame(ImpactCPURegisters* register
 }
 
 static ImpactResult ImpactCompactUnwindStepDWARFFrame(ImpactCompactUnwindTarget target, ImpactCPURegisters* registers, compact_unwind_encoding_t encoding) {
-    return ImpactResultFailure;
+    if (ImpactInvalidPtr(registers)) {
+        return ImpactResultPointerInvalid;
+    }
+
+    const uint32_t fdeOffset = encoding & UNWIND_X86_64_DWARF_SECTION_OFFSET;
+
+    ImpactDebugLog("[Log:INFO:%s] looking up FDE with offset %x\n", __func__, fdeOffset);
+
+    ImpactDWARFCFIData cfiData = {0};
+
+    ImpactResult result = ImpactDWARFReadData(target.ehFrameRegion, fdeOffset, &cfiData);
+    if (result != ImpactResultSuccess) {
+        ImpactDebugLog("[Log:WARN:%s] failed to parse CFI data %d\n", __func__, result);
+        return result;
+    }
+
+    ImpactDWARFCFIState state = {0};
+
+    result = ImpactDWARFRunInstructions(&cfiData, &state);
+    if (result != ImpactResultSuccess) {
+        ImpactDebugLog("[Log:%s] failed to run CFI instructions %d\n", __func__, result);
+        return result;
+    }
+
+    uintptr_t cfaValue = 0;
+
+    result = ImpactDWARFGetCFAValue(&state, registers, &cfaValue);
+    if (result != ImpactResultSuccess) {
+        ImpactDebugLog("[Log:%s] failed to get CFA %d\n", __func__, result);
+        return result;
+    }
+
+    return ImpactResultUnimplemented;
+
 }
 
 ImpactResult ImpactCompactUnwindStepArchRegisters(ImpactCompactUnwindTarget target, ImpactCPURegisters* registers, compact_unwind_encoding_t encoding, bool* finished) {
@@ -94,9 +128,9 @@ ImpactResult ImpactCompactUnwindStepArchRegisters(ImpactCompactUnwindTarget targ
         case UNWIND_X86_64_MODE_RBP_FRAME:
             return ImpactCompactUnwindStepRBPFrame(registers, encoding, finished);
         case UNWIND_X86_64_MODE_STACK_IMMD:
-            return ImpactResultFailure;
+            return ImpactResultUnimplemented;
         case UNWIND_X86_64_MODE_STACK_IND:
-            return ImpactResultFailure;
+            return ImpactResultUnimplemented;
         case UNWIND_X86_64_MODE_DWARF:
             return ImpactCompactUnwindStepDWARFFrame(target, registers, encoding);
     }

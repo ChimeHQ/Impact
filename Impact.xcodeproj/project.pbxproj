@@ -19,6 +19,15 @@
 		C911126E234631F900E72530 /* ImpactUnwind_x86_64.c in Sources */ = {isa = PBXBuildFile; fileRef = C911126D234631F900E72530 /* ImpactUnwind_x86_64.c */; };
 		C91112712346D1CE00E72530 /* unwind in Resources */ = {isa = PBXBuildFile; fileRef = C91112702346D1CE00E72530 /* unwind */; };
 		C91112722346D26D00E72530 /* ImpactUnwind.c in Sources */ = {isa = PBXBuildFile; fileRef = C925035E233FDDB400022334 /* ImpactUnwind.c */; };
+		C91112742348B95500E72530 /* ImpactDWARFCFITests.m in Sources */ = {isa = PBXBuildFile; fileRef = C91112732348B95500E72530 /* ImpactDWARFCFITests.m */; };
+		C911127E2348B9AF00E72530 /* ImpactDataCursor.h in Headers */ = {isa = PBXBuildFile; fileRef = C91112762348B9AE00E72530 /* ImpactDataCursor.h */; };
+		C911127F2348B9AF00E72530 /* ImpactDWARF.c in Sources */ = {isa = PBXBuildFile; fileRef = C91112772348B9AE00E72530 /* ImpactDWARF.c */; };
+		C91112802348B9AF00E72530 /* ImpactDWARFDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = C91112782348B9AE00E72530 /* ImpactDWARFDefines.h */; };
+		C91112812348B9AF00E72530 /* ImpactDWARF.h in Headers */ = {isa = PBXBuildFile; fileRef = C91112792348B9AF00E72530 /* ImpactDWARF.h */; };
+		C91112822348B9AF00E72530 /* ImpactDataCursor.c in Sources */ = {isa = PBXBuildFile; fileRef = C911127A2348B9AF00E72530 /* ImpactDataCursor.c */; };
+		C91112832348B9AF00E72530 /* ImpactLEB.h in Headers */ = {isa = PBXBuildFile; fileRef = C911127B2348B9AF00E72530 /* ImpactLEB.h */; };
+		C91112842348B9AF00E72530 /* ImpactDWARFParser.c in Sources */ = {isa = PBXBuildFile; fileRef = C911127C2348B9AF00E72530 /* ImpactDWARFParser.c */; };
+		C91112852348B9AF00E72530 /* ImpactDWARFParser.h in Headers */ = {isa = PBXBuildFile; fileRef = C911127D2348B9AF00E72530 /* ImpactDWARFParser.h */; };
 		C925034B233D126A00022334 /* ImpactState.c in Sources */ = {isa = PBXBuildFile; fileRef = C925034A233D126A00022334 /* ImpactState.c */; };
 		C9250358233E9E9A00022334 /* ImpactThread.h in Headers */ = {isa = PBXBuildFile; fileRef = C9250356233E9E9A00022334 /* ImpactThread.h */; };
 		C9250359233E9E9A00022334 /* ImpactThread.c in Sources */ = {isa = PBXBuildFile; fileRef = C9250357233E9E9A00022334 /* ImpactThread.c */; };
@@ -112,6 +121,15 @@
 		C911126B234613D600E72530 /* ImpactCompactUnwindTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImpactCompactUnwindTests.m; sourceTree = "<group>"; };
 		C911126D234631F900E72530 /* ImpactUnwind_x86_64.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ImpactUnwind_x86_64.c; sourceTree = "<group>"; };
 		C91112702346D1CE00E72530 /* unwind */ = {isa = PBXFileReference; lastKnownFileType = folder; path = unwind; sourceTree = "<group>"; };
+		C91112732348B95500E72530 /* ImpactDWARFCFITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImpactDWARFCFITests.m; sourceTree = "<group>"; };
+		C91112762348B9AE00E72530 /* ImpactDataCursor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImpactDataCursor.h; sourceTree = "<group>"; };
+		C91112772348B9AE00E72530 /* ImpactDWARF.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ImpactDWARF.c; sourceTree = "<group>"; };
+		C91112782348B9AE00E72530 /* ImpactDWARFDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImpactDWARFDefines.h; sourceTree = "<group>"; };
+		C91112792348B9AF00E72530 /* ImpactDWARF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImpactDWARF.h; sourceTree = "<group>"; };
+		C911127A2348B9AF00E72530 /* ImpactDataCursor.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ImpactDataCursor.c; sourceTree = "<group>"; };
+		C911127B2348B9AF00E72530 /* ImpactLEB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImpactLEB.h; sourceTree = "<group>"; };
+		C911127C2348B9AF00E72530 /* ImpactDWARFParser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ImpactDWARFParser.c; sourceTree = "<group>"; };
+		C911127D2348B9AF00E72530 /* ImpactDWARFParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImpactDWARFParser.h; sourceTree = "<group>"; };
 		C925034A233D126A00022334 /* ImpactState.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ImpactState.c; sourceTree = "<group>"; };
 		C9250356233E9E9A00022334 /* ImpactThread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImpactThread.h; sourceTree = "<group>"; };
 		C9250357233E9E9A00022334 /* ImpactThread.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ImpactThread.c; sourceTree = "<group>"; };
@@ -196,6 +214,21 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		C91112752348B97E00E72530 /* DWARF */ = {
+			isa = PBXGroup;
+			children = (
+				C911127A2348B9AF00E72530 /* ImpactDataCursor.c */,
+				C91112762348B9AE00E72530 /* ImpactDataCursor.h */,
+				C91112772348B9AE00E72530 /* ImpactDWARF.c */,
+				C91112792348B9AF00E72530 /* ImpactDWARF.h */,
+				C91112782348B9AE00E72530 /* ImpactDWARFDefines.h */,
+				C911127C2348B9AF00E72530 /* ImpactDWARFParser.c */,
+				C911127D2348B9AF00E72530 /* ImpactDWARFParser.h */,
+				C911127B2348B9AF00E72530 /* ImpactLEB.h */,
+			);
+			path = DWARF;
+			sourceTree = "<group>";
+		};
 		C925035C233FDD9100022334 /* Unwind */ = {
 			isa = PBXGroup;
 			children = (
@@ -240,6 +273,7 @@
 				C9A413D42332477F00059F5D /* Monitoring */,
 				C925035C233FDD9100022334 /* Unwind */,
 				C9A413D923324E8B00059F5D /* Utility */,
+				C91112752348B97E00E72530 /* DWARF */,
 				C9A413E0233251BB00059F5D /* ImpactState.h */,
 				C925034A233D126A00022334 /* ImpactState.c */,
 				C9250356233E9E9A00022334 /* ImpactThread.h */,
@@ -259,6 +293,7 @@
 				C9A413C32331B73100059F5D /* ImpactTests-Bridging-Header.h */,
 				C925035A233EE76900022334 /* ImpactLogTests.m */,
 				C911126B234613D600E72530 /* ImpactCompactUnwindTests.m */,
+				C91112732348B95500E72530 /* ImpactDWARFCFITests.m */,
 			);
 			path = ImpactTests;
 			sourceTree = "<group>";
@@ -341,15 +376,20 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C91112812348B9AF00E72530 /* ImpactDWARF.h in Headers */,
+				C91112852348B9AF00E72530 /* ImpactDWARFParser.h in Headers */,
 				C9A413F423338EB100059F5D /* ImpactCPU.h in Headers */,
 				C9111269234613AE00E72530 /* ImpactCompactUnwind.h in Headers */,
 				C91112652345836A00E72530 /* ImpactBinaryImage.h in Headers */,
+				C91112832348B9AF00E72530 /* ImpactLEB.h in Headers */,
 				C9250367234244CD00022334 /* ImpactMonitoredApplication.h in Headers */,
 				C9250358233E9E9A00022334 /* ImpactThread.h in Headers */,
 				C91112592342986C00E72530 /* ImpactRuntimeException.h in Headers */,
 				C9A413F82333983500059F5D /* ImpactMachException.h in Headers */,
 				C9A413952331007600059F5D /* Impact.h in Headers */,
 				C9A413F123338DF000059F5D /* ImpactCrashHandler.h in Headers */,
+				C911127E2348B9AF00E72530 /* ImpactDataCursor.h in Headers */,
+				C91112802348B9AF00E72530 /* ImpactDWARFDefines.h in Headers */,
 				C925035F233FDDB400022334 /* ImpactUnwind.h in Headers */,
 				C9A413DC23324E9E00059F5D /* ImpactLog.h in Headers */,
 				C9A413D72332481300059F5D /* ImpactSignal.h in Headers */,
@@ -500,9 +540,12 @@
 				C925034B233D126A00022334 /* ImpactState.c in Sources */,
 				C9A413F523338EB100059F5D /* ImpactCPU.c in Sources */,
 				C911126A234613AE00E72530 /* ImpactCompactUnwind.c in Sources */,
+				C91112842348B9AF00E72530 /* ImpactDWARFParser.c in Sources */,
 				C9A413F023338DF000059F5D /* ImpactCrashHandler.c in Sources */,
 				C9250359233E9E9A00022334 /* ImpactThread.c in Sources */,
+				C91112822348B9AF00E72530 /* ImpactDataCursor.c in Sources */,
 				C9A413F92333983500059F5D /* ImpactMachException.c in Sources */,
+				C911127F2348B9AF00E72530 /* ImpactDWARF.c in Sources */,
 				C9A413D82332481300059F5D /* ImpactSignal.c in Sources */,
 				C911126E234631F900E72530 /* ImpactUnwind_x86_64.c in Sources */,
 				C91112662345836A00E72530 /* ImpactBinaryImage.c in Sources */,
@@ -517,6 +560,7 @@
 				C925035B233EE76900022334 /* ImpactLogTests.m in Sources */,
 				C9A413C52331B73200059F5D /* ImpactCrashTests.swift in Sources */,
 				C911126C234613D600E72530 /* ImpactCompactUnwindTests.m in Sources */,
+				C91112742348B95500E72530 /* ImpactDWARFCFITests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
