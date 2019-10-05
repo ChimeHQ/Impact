@@ -237,7 +237,7 @@ static ImpactResult ImpactMachExceptionLog(ImpactState* state, const ImpactMachE
 }
 
 static ImpactResult ImpactMachExceptionSendToHandler(const ImpactMachExceptionRaiseRequest* request, const ImpactMachExceptionHandler* handler) {
-    return ImpactResultFailure;
+    return ImpactResultUnimplemented;
 }
 
 static ImpactResult ImpactMachExceptionForward(const ImpactState* state, const ImpactMachExceptionRaiseRequest* request, bool* forwarded) {
