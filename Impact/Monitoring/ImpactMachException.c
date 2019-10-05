@@ -274,7 +274,7 @@ static ImpactResult ImpactMachExceptionForward(const ImpactState* state, const I
 
         result = ImpactMachExceptionSendToHandler(request, &handler);
         if (result != ImpactResultSuccess) {
-            ImpactDebugLog("[Log:WARN:%s] failed forwarding to %x\n", __func__, handler.mask);
+            ImpactDebugLog("[Log:WARN:%s] failed forwarding to %x %d\n", __func__, handler.mask, result);
             failCount++;
         }
     }
