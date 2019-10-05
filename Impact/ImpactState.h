@@ -21,7 +21,7 @@ typedef struct {
     int fd;
 } ImpactLogger;
 
-#define ImpactSignalCount (5)
+enum { ImpactSignalCount = 5 };
 
 typedef struct {
     exception_mask_t masks[EXC_TYPES_COUNT];
