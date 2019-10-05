@@ -11,8 +11,9 @@
 
 #include "ImpactResult.h"
 #include "ImpactCPU.h"
+#include "ImpactState.h"
 
 ImpactResult ImpactUnwindStepRegistersWithFramePointer(ImpactCPURegisters* registers, bool* finished);
-ImpactResult ImpactUnwindStepRegisters(ImpactCPURegisters* registers, bool* finished);
+ImpactResult ImpactUnwindStepRegisters(const ImpactState* state, ImpactCPURegisters* registers, bool* finished);
 
 #endif /* ImpactUnwind_h */

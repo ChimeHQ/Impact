@@ -8,6 +8,8 @@
 
 #include "ImpactUnwind.h"
 #include "ImpactUtility.h"
+#include "ImpactBinaryImage.h"
+#include "ImpactCompactUnwind.h"
 
 ImpactResult ImpactUnwindStepRegistersWithFramePointer(ImpactCPURegisters* registers, bool* finished) {
     if (ImpactInvalidPtr(registers) || ImpactInvalidPtr(finished)) {
@@ -59,6 +61,45 @@ ImpactResult ImpactUnwindStepRegistersWithFramePointer(ImpactCPURegisters* regis
     return ImpactResultSuccess;
 }
 
-ImpactResult ImpactUnwindStepRegisters(ImpactCPURegisters* registers, bool* finished) {
+ImpactResult ImpactUnwindStepRegisters(const ImpactState* state, ImpactCPURegisters* registers, bool* finished) {
+    uintptr_t pc = 0;
+
+    ImpactResult result = ImpactCPUGetRegister(registers, ImpactCPURegisterInstructionPointer, &pc);
+    if (result != ImpactResultSuccess) {
+        ImpactDebugLog("[Log:WARN:%s] unable to get PC %d\n", __func__, result);
+
+        return result;
+    }
+
+    ImpactMachOData imageData = {0};
+
+    result = ImpactBinaryImageFind(state, pc, &imageData);
+    if (result != ImpactResultSuccess) {
+        ImpactDebugLog("[Log:WARN:%s] unable to find binary image %d\n", __func__, result);
+
+        return result;
+    }
+
+    ImpactDebugLog("[Log:INFO:%s] found image address %p\n", __func__, (void*)imageData.loadAddress);
+
+    ImpactCompactUnwindTarget target = {0};
+
+    if (pc <= imageData.loadAddress) {
+        ImpactDebugLog("[Log:WARN:%s] pc not within image range\n", __func__);
+
+        return ImpactUnwindStepRegistersWithFramePointer(registers, finished);
+    }
+
+    target.address = pc - imageData.loadAddress;
+    target.header = (struct unwind_info_section_header*)imageData.unwindInfoRegion.address;
+    target.ehFrameRegion = imageData.ehFrameRegion;
+
+    result = ImpactCompactUnwindStepRegisters(target, registers, finished);
+    if (result == ImpactResultSuccess) {
+        return ImpactResultSuccess;
+    }
+
+    ImpactDebugLog("[Log:WARN:%s] compact unwind failed %d\n", __func__, result);
+
     return ImpactUnwindStepRegistersWithFramePointer(registers, finished);
 }

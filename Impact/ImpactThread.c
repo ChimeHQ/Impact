@@ -184,7 +184,7 @@ static ImpactResult ImpactThreadLogStacktrace(ImpactState* state, const ImpactCP
         }
 
         bool finished = true;
-        result = ImpactUnwindStepRegisters(&unwindRegisters, &finished);
+        result = ImpactUnwindStepRegisters(state, &unwindRegisters, &finished);
         if (result != ImpactResultSuccess) {
             ImpactDebugLog("[Log:%s] failed to step registers %x\n", __func__, result);
             return result;

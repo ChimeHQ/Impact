@@ -32,4 +32,18 @@ static inline void* ImpactPointerOffset(const void* ptr, uintptr_t offset) {
     return result;
 }
 
+static inline bool ImpactReadMemory(uintptr_t address, uintptr_t* value) {
+    if (ImpactInvalidPtr((void*)address)) {
+        return false;
+    }
+
+    if (ImpactInvalidPtr(value)) {
+        return false;
+    }
+
+    *value = *(uintptr_t*)address;
+
+    return true;
+}
+
 #endif /* ImpactPointer_h */
