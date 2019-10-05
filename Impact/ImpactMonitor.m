@@ -122,6 +122,10 @@ ImpactState* GlobalImpactState = NULL;
     ImpactLogWriteKeyString(log, "platform", "macOS", false);
 #endif
 
+#if defined(__x86_64__)
+    ImpactLogWriteKeyString(log, "arch", "x86_64", false);
+#endif
+    
     NSString* reportId = [[[identifier UUIDString] stringByReplacingOccurrencesOfString:@"-" withString:@""] lowercaseString];
 
     ImpactLogWriteKeyString(log, "report_id", reportId.UTF8String, false);
