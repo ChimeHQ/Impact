@@ -11,6 +11,17 @@ Impact is a crash detection and recording library for Apple platforms. It is **n
 * Simplicity
 * Fun
 
+Current feature set:
+
+* Mach Exceptions
+* UNIX signals
+* NSException within an AppKit app
+* Frame pointer-based stack unwinding
+* Scaffolding for compact unwind, but no compact unwind-based unwinding
+* Scaffolding for DWARF CFI, but no CFI-based unwinding
+
+Impact uses a text-based log format, which is currently **unstable**. It is designed to be simple, while still making both debugging and parsing possible in the face of crash-time failure.
+
 ## Isn't Crash Reporting a Solved Problem?
 
 In-process crash reporting is just terrible. The mechanisms available for crash event detection, UNIX signals and Mach exceptions, are complex, buggy, and are not capable of capturing all kinds of failures. On top of that, the enviroment in which a crash reporter needs to run is extraordinarily hostile. It's just messy business.
@@ -25,24 +36,11 @@ Also, crash reporting is just a fun and facinating problem. It tends to be very 
 
 ## Can I Use Impact in my App?
 
-Probably not a great idea at this point.
+Probably a little early at this point.
 
 First, you must keep in mind that it **only** captures information about crash events. It does not have any facilities for transmitting those events back to you or translating them into human-readable versions.
 
-Second, Impact is still a work-in-progress. At the moment, it only upports macOS. iOS and tvOS are on the way, but not before more of the core functionality is built. Here's the high-level plan:
-
-| Feature            | Supported |
-| -------------------|:---------:|
-| UNIX signals | ✅ |
-| Mach Exceptions | ✅ |
-| Basic Thread details | ✅ |
-| Binary image information | ✅ |
-| Frame pointer-based stack traces | ✅ |
-| Basic Compact Unwind support | ✅ |
-| Basic DWARF CFI support | - |
-| iOS Support | - |
-| tvOS Support | - |
-| More DWARF CFI support | - |
+Second, Impact is very much still a work-in-progress. At the moment, it only supports macOS. While it builds other platforms, there's major functionality missing.
 
 ## Relationship to Crashlytics
 
