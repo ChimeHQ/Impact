@@ -6,6 +6,9 @@
 //  Copyright © 2019 Chime Systems Inc. All rights reserved.
 //
 
+#import <TargetConditionals.h>
+
+#if TARGET_OS_OSX
 #import <Cocoa/Cocoa.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -15,3 +18,5 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+
+#endif

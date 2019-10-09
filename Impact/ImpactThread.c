@@ -78,6 +78,7 @@ ImpactResult ImpactThreadGetState(const ImpactThreadList* list, thread_act_t thr
         return ImpactResultSuccess;
     }
 
+#if IMPACT_THREADS_SUPPORTED
     mach_msg_type_number_t count = ImpactCPUThreadStateCount;
     thread_state_t state = (thread_state_t)&registers->__ss;
 
@@ -88,8 +89,12 @@ ImpactResult ImpactThreadGetState(const ImpactThreadList* list, thread_act_t thr
     }
 
     return ImpactResultSuccess;
+#else
+    return ImpactResultFailure;
+#endif
 }
 
+#if IMPACT_THREADS_SUPPORTED
 static ImpactResult ImpactThreadListSuspendAllExceptForCurrent(const ImpactThreadList* list) {
     if (ImpactInvalidPtr(list)) {
         return ImpactResultArgumentInvalid;
@@ -131,6 +136,7 @@ static ImpactResult ImpactThreadListResumeAllExceptForCurrent(const ImpactThread
 
     return ImpactResultSuccess;
 }
+#endif
 
 static ImpactResult ImpactThreadLogFrame(ImpactState* state, const ImpactCPURegisters* registers) {
     if (ImpactInvalidPtr(state) || ImpactInvalidPtr(registers)) {
@@ -166,7 +172,6 @@ static ImpactResult ImpactThreadLogFrame(ImpactState* state, const ImpactCPURegi
     ImpactLogWriteKeyInteger(log, "fp", value, true);
 
     return ImpactResultSuccess;
-
 }
 
 static ImpactResult ImpactThreadLogStacktrace(ImpactState* state, const ImpactCPURegisters* registers) {
@@ -233,7 +238,11 @@ ImpactResult ImpactThreadLog(ImpactState* state, const ImpactThreadList* list, t
 }
 
 ImpactResult ImpactThreadListLog(ImpactState* state, const ImpactThreadList* list) {
-    ImpactResult result = ImpactThreadListSuspendAllExceptForCurrent(list);
+    ImpactResult result = ImpactResultFailure;
+
+#if IMPACT_THREADS_SUPPORTED
+    result = ImpactThreadListSuspendAllExceptForCurrent(list);
+#endif
 
     for (mach_msg_type_number_t i = 0; i < list->count; ++i) {
         const thread_act_t thread = list->threads[i];
@@ -244,8 +253,9 @@ ImpactResult ImpactThreadListLog(ImpactState* state, const ImpactThreadList* lis
         }
     }
 
+#if IMPACT_THREADS_SUPPORTED
     result = ImpactThreadListResumeAllExceptForCurrent(list);
+#endif
 
     return ImpactResultSuccess;
 }
-

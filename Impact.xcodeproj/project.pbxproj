@@ -35,6 +35,9 @@
 		C925035F233FDDB400022334 /* ImpactUnwind.h in Headers */ = {isa = PBXBuildFile; fileRef = C925035D233FDDB400022334 /* ImpactUnwind.h */; };
 		C9250367234244CD00022334 /* ImpactMonitoredApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = C9250365234244CD00022334 /* ImpactMonitoredApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9250368234244CD00022334 /* ImpactMonitoredApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = C9250366234244CD00022334 /* ImpactMonitoredApplication.m */; };
+		C939C979234D753E00E2D22D /* ImpactUnwind_arm.c in Sources */ = {isa = PBXBuildFile; fileRef = C939C978234D753E00E2D22D /* ImpactUnwind_arm.c */; };
+		C939C97B234E1CA500E2D22D /* ImpactUnwind_i386.c in Sources */ = {isa = PBXBuildFile; fileRef = C939C97A234E1CA500E2D22D /* ImpactUnwind_i386.c */; };
+		C939C97D234E2D3300E2D22D /* ImpactUnwind_arm64.c in Sources */ = {isa = PBXBuildFile; fileRef = C939C97C234E2D3300E2D22D /* ImpactUnwind_arm64.c */; };
 		C99FB1D3234A642700FFABD0 /* ImpactUtility.c in Sources */ = {isa = PBXBuildFile; fileRef = C99FB1D2234A642700FFABD0 /* ImpactUtility.c */; };
 		C9A4138E2331007600059F5D /* Impact.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9A413842331007600059F5D /* Impact.framework */; };
 		C9A413952331007600059F5D /* Impact.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A413872331007600059F5D /* Impact.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -139,6 +142,9 @@
 		C925035E233FDDB400022334 /* ImpactUnwind.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ImpactUnwind.c; sourceTree = "<group>"; };
 		C9250365234244CD00022334 /* ImpactMonitoredApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImpactMonitoredApplication.h; sourceTree = "<group>"; };
 		C9250366234244CD00022334 /* ImpactMonitoredApplication.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImpactMonitoredApplication.m; sourceTree = "<group>"; };
+		C939C978234D753E00E2D22D /* ImpactUnwind_arm.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ImpactUnwind_arm.c; sourceTree = "<group>"; };
+		C939C97A234E1CA500E2D22D /* ImpactUnwind_i386.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ImpactUnwind_i386.c; sourceTree = "<group>"; };
+		C939C97C234E2D3300E2D22D /* ImpactUnwind_arm64.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ImpactUnwind_arm64.c; sourceTree = "<group>"; };
 		C9474F0D2335056C00E736D9 /* ImpactDebug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImpactDebug.h; sourceTree = "<group>"; };
 		C9474F0E23356DFB00E736D9 /* ImpactUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImpactUtility.h; sourceTree = "<group>"; };
 		C99FB1D2234A642700FFABD0 /* ImpactUtility.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ImpactUtility.c; sourceTree = "<group>"; };
@@ -239,6 +245,9 @@
 				C9111267234613AE00E72530 /* ImpactCompactUnwind.h */,
 				C9111268234613AE00E72530 /* ImpactCompactUnwind.c */,
 				C911126D234631F900E72530 /* ImpactUnwind_x86_64.c */,
+				C939C978234D753E00E2D22D /* ImpactUnwind_arm.c */,
+				C939C97A234E1CA500E2D22D /* ImpactUnwind_i386.c */,
+				C939C97C234E2D3300E2D22D /* ImpactUnwind_arm64.c */,
 			);
 			path = Unwind;
 			sourceTree = "<group>";
@@ -547,11 +556,14 @@
 				C91112842348B9AF00E72530 /* ImpactDWARFParser.c in Sources */,
 				C9A413F023338DF000059F5D /* ImpactCrashHandler.c in Sources */,
 				C9250359233E9E9A00022334 /* ImpactThread.c in Sources */,
+				C939C979234D753E00E2D22D /* ImpactUnwind_arm.c in Sources */,
+				C939C97B234E1CA500E2D22D /* ImpactUnwind_i386.c in Sources */,
 				C91112822348B9AF00E72530 /* ImpactDataCursor.c in Sources */,
 				C9A413F92333983500059F5D /* ImpactMachException.c in Sources */,
 				C911127F2348B9AF00E72530 /* ImpactDWARF.c in Sources */,
 				C9A413D82332481300059F5D /* ImpactSignal.c in Sources */,
 				C911126E234631F900E72530 /* ImpactUnwind_x86_64.c in Sources */,
+				C939C97D234E2D3300E2D22D /* ImpactUnwind_arm64.c in Sources */,
 				C91112662345836A00E72530 /* ImpactBinaryImage.c in Sources */,
 				C911125A2342986C00E72530 /* ImpactRuntimeException.mm in Sources */,
 			);
@@ -778,6 +790,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = ImpactTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -798,6 +811,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = ImpactTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

@@ -9,6 +9,8 @@
 #import "ImpactMonitoredApplication.h"
 #import "ImpactRuntimeException.h"
 
+#if TARGET_OS_OSX
+
 @implementation ImpactMonitoredApplication
 
 // AppKit is a real pain when it comes to exceptions. It wraps many calls in @try/@catch
@@ -30,3 +32,5 @@
 }
 
 @end
+
+#endif

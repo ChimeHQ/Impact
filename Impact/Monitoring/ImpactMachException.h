@@ -12,6 +12,14 @@
 #include "ImpactResult.h"
 #include "ImpactState.h"
 
+#include <TargetConditionals.h>
+
+#define IMPACT_MACH_EXCEPTION_SUPPORTED  (TARGET_OS_OSX || TARGET_OS_IOS)
+
+#if IMPACT_MACH_EXCEPTION_SUPPORTED
+
 ImpactResult ImpactMachExceptionInitialize(ImpactState* state);
+
+#endif
 
 #endif /* ImpactMachException_h */

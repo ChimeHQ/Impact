@@ -9,7 +9,7 @@
 #include "ImpactDataCursor.h"
 #include "ImpactUtility.h"
 
-ImpactResult ImpactDataCursorInitialize(ImpactDataCursor* cursor, uintptr_t address, uintptr_t limit, uint64_t offset) {
+ImpactResult ImpactDataCursorInitialize(ImpactDataCursor* cursor, uintptr_t address, uintptr_t limit, uintptr_t offset) {
     if (ImpactInvalidPtr(cursor) || ImpactInvalidPtr((void*)address)) {
         return ImpactResultPointerInvalid;
     }

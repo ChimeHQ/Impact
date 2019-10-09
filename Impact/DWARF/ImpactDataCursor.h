@@ -18,12 +18,12 @@
 typedef struct {
     uintptr_t address;
     uintptr_t limit;
-    uint64_t offset;
+    uintptr_t offset;
 } ImpactDataCursor;
 
 static const uint32_t ImpactDataCursorMaxStringLength = 4096;
 
-ImpactResult ImpactDataCursorInitialize(ImpactDataCursor* cursor, uintptr_t address, uintptr_t limit, uint64_t offset);
+ImpactResult ImpactDataCursorInitialize(ImpactDataCursor* cursor, uintptr_t address, uintptr_t limit, uintptr_t offset);
 
 const void* ImpactDataCursorCurrentPointer(const ImpactDataCursor* cursor);
 bool ImpactDataCursorIsValid(const ImpactDataCursor* cursor);

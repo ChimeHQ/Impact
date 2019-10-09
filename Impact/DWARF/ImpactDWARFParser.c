@@ -85,7 +85,7 @@ ImpactResult ImpactDWARFReadEncodedPointer(ImpactDataCursor* cursor, uint8_t enc
         readValue = *(uint64_t*)readValue;
     }
 
-    *value = readValue;
+    *value = (intptr_t)readValue;
 
     return ImpactResultSuccess;
 }
@@ -261,7 +261,7 @@ ImpactResult ImpactDWARFReadFDEAugmentation(ImpactDataCursor* cursor, ImpactDWAR
     }
 
     // manually set the offset past the augmentation data to skip it for now
-    cursor->offset = cursor->offset + fdeAugmentationLength;
+    cursor->offset = cursor->offset + (uintptr_t)fdeAugmentationLength;
 
     return ImpactResultSuccess;
 }
@@ -274,7 +274,7 @@ uintptr_t ImpactDWARFCFECIEOffsetDelta(ImpactDWARFFDE* fde) {
     //
     // second, it seems relative not to the start of the FDE, but to the start of the CIE_id entry
     bool is64Bit = ImpactDWARFCFILengthHas64BitMarker(fde->header.length);
-    uintptr_t delta = fde->header.CIE_id + (is64Bit ? 8 : 4);
+    uintptr_t delta = (uintptr_t)fde->header.CIE_id + (is64Bit ? 8 : 4);
 
     return delta;
 }

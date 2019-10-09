@@ -12,11 +12,13 @@
 #include <sys/types.h>
 #include <stdbool.h>
 #include <mach/machine/vm_types.h>
+#include <mach/vm_page_size.h>
 
 // the upper half of the address space is all kernel stuff, so
 // we cannot have a pointer to that region
 const static uintptr_t ImpactPointerMax = UINTPTR_MAX / 2;
-const static uintptr_t ImpactPointerMin = PAGE_SIZE;
+
+#define ImpactPointerMin vm_kernel_page_size
 
 static inline bool ImpactInvalidPtr(const void * const ptr) {
     return ((uintptr_t)ptr < ImpactPointerMin) || ((uintptr_t)ptr > ImpactPointerMax);

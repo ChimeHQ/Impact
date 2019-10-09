@@ -74,10 +74,12 @@ const char* ImpactPlatformName = "macOS";
         NSLog(@"[Impact] Unable to initialize signal %d", result);
     }
 
+#if IMPACT_MACH_EXCEPTION_SUPPORTED
     result = ImpactMachExceptionInitialize(GlobalImpactState);
     if (result != ImpactResultSuccess) {
         NSLog(@"[Impact] Unable to initialize mach exceptions %d", result);
     }
+#endif
 
     result = ImpactBinaryImageInitialize(GlobalImpactState);
     if (result != ImpactResultSuccess) {
@@ -93,7 +95,7 @@ const char* ImpactPlatformName = "macOS";
 - (NSString *)OSVersionString {
     NSOperatingSystemVersion version = [[NSProcessInfo processInfo] operatingSystemVersion];
 
-    return [NSString stringWithFormat:@"%ld.%ld.%ld", version.majorVersion, version.minorVersion, version.patchVersion];
+    return [NSString stringWithFormat:@"%d.%d.%d", (int)version.majorVersion, (int)version.minorVersion, (int)version.patchVersion];
 }
 
 - (void)logExecutableData:(ImpactState *)state {

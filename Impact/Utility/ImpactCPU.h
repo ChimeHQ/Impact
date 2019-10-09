@@ -54,7 +54,42 @@ static const ImpactCPURegister ImpactCPURegisterFramePointer = ImpactCPURegister
 
 static const mach_msg_type_number_t ImpactCPUThreadStateCount = x86_THREAD_STATE64_COUNT;
 static const thread_state_flavor_t ImpactCPUThreadStateFlavor = x86_THREAD_STATE64;
+#elif defined(__i386__)
+typedef enum {
+    ImpactCPURegister_i386_RIP = -1
+} ImpactCPURegister;
+
+static const ImpactCPURegister ImpactCPURegisterStackPointer = ImpactCPURegister_i386_RIP;
+static const ImpactCPURegister ImpactCPURegisterInstructionPointer = ImpactCPURegister_i386_RIP;
+static const ImpactCPURegister ImpactCPURegisterFramePointer = ImpactCPURegister_i386_RIP;
+
+static const mach_msg_type_number_t ImpactCPUThreadStateCount = x86_THREAD_STATE_COUNT;
+static const thread_state_flavor_t ImpactCPUThreadStateFlavor = x86_THREAD_STATE;
+#elif defined(__arm64__)
+typedef enum {
+    ImpactCPURegister_ARM64_RIP = -1
+} ImpactCPURegister;
+
+static const ImpactCPURegister ImpactCPURegisterStackPointer = ImpactCPURegister_ARM64_RIP;
+static const ImpactCPURegister ImpactCPURegisterInstructionPointer = ImpactCPURegister_ARM64_RIP;
+static const ImpactCPURegister ImpactCPURegisterFramePointer = ImpactCPURegister_ARM64_RIP;
+
+static const mach_msg_type_number_t ImpactCPUThreadStateCount = ARM_THREAD_STATE64_COUNT;
+static const thread_state_flavor_t ImpactCPUThreadStateFlavor = ARM_THREAD_STATE;
+
+#elif defined(__arm__) && !defined(__arm64__)
+typedef enum {
+    ImpactCPURegister_ARMv7_RIP = -1
+} ImpactCPURegister;
+
+static const ImpactCPURegister ImpactCPURegisterStackPointer = ImpactCPURegister_ARMv7_RIP;
+static const ImpactCPURegister ImpactCPURegisterInstructionPointer = ImpactCPURegister_ARMv7_RIP;
+static const ImpactCPURegister ImpactCPURegisterFramePointer = ImpactCPURegister_ARMv7_RIP;
+
+static const mach_msg_type_number_t ImpactCPUThreadStateCount = ARM_THREAD_STATE_COUNT;
+static const thread_state_flavor_t ImpactCPUThreadStateFlavor = ARM_THREAD_STATE;
 #endif
+
 
 ImpactResult ImpactCPURegistersLog(ImpactState* state, const ImpactCPURegisters* registers);
 ImpactResult ImpactCPUGetRegister(const ImpactCPURegisters* registers, ImpactCPURegister num, uintptr_t* value);

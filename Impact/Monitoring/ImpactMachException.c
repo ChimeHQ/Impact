@@ -22,6 +22,8 @@
 #include <unistd.h>
 #include <assert.h>
 
+#if IMPACT_MACH_EXCEPTION_SUPPORTED
+
 #ifdef  __MigPackStructs
 #pragma pack(push, 4)
 #endif
@@ -475,3 +477,5 @@ static void* ImpactMachExceptionServer(void* ctx) {
 
     return NULL;
 }
+
+#endif

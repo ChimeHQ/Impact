@@ -13,6 +13,10 @@
 #include "ImpactState.h"
 #include "ImpactCPU.h"
 
+#include <TargetConditionals.h>
+
+#define IMPACT_THREADS_SUPPORTED (TARGET_OS_OSX || TARGET_OS_IOS)
+
 #include <mach/task.h>
 
 typedef struct {

@@ -14,7 +14,7 @@
 
 typedef struct {
     uintptr_t address;
-    uint64_t length;
+    uintptr_t length;
 } ImpactMachODataRegion;
 
 typedef struct {
@@ -23,7 +23,7 @@ typedef struct {
     ImpactMachODataRegion ehFrameRegion;
     ImpactMachODataRegion unwindInfoRegion;
     uintptr_t loadAddress;
-    uint64_t textSize;
+    uintptr_t textSize;
 } ImpactMachOData;
 
 ImpactResult ImpactBinaryImageInitialize(ImpactState* state);
