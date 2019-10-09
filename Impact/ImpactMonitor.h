@@ -10,6 +10,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+FOUNDATION_EXTERN const char* ImpactPlatformName;
+
 @interface ImpactMonitor : NSObject
 
 + (ImpactMonitor *)shared;

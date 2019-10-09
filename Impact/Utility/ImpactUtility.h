@@ -12,4 +12,8 @@
 #include "ImpactPointer.h"
 #include "ImpactDebug.h"
 
+#include <stdbool.h>
+
+bool ImpactDebuggerAttached(void);
+
 #endif /* ImpactUtility_h */

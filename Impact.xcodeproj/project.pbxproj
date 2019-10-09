@@ -35,6 +35,7 @@
 		C925035F233FDDB400022334 /* ImpactUnwind.h in Headers */ = {isa = PBXBuildFile; fileRef = C925035D233FDDB400022334 /* ImpactUnwind.h */; };
 		C9250367234244CD00022334 /* ImpactMonitoredApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = C9250365234244CD00022334 /* ImpactMonitoredApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9250368234244CD00022334 /* ImpactMonitoredApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = C9250366234244CD00022334 /* ImpactMonitoredApplication.m */; };
+		C99FB1D3234A642700FFABD0 /* ImpactUtility.c in Sources */ = {isa = PBXBuildFile; fileRef = C99FB1D2234A642700FFABD0 /* ImpactUtility.c */; };
 		C9A4138E2331007600059F5D /* Impact.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9A413842331007600059F5D /* Impact.framework */; };
 		C9A413952331007600059F5D /* Impact.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A413872331007600059F5D /* Impact.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9A413A6233103A500059F5D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A413A5233103A500059F5D /* AppDelegate.swift */; };
@@ -140,6 +141,7 @@
 		C9250366234244CD00022334 /* ImpactMonitoredApplication.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImpactMonitoredApplication.m; sourceTree = "<group>"; };
 		C9474F0D2335056C00E736D9 /* ImpactDebug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImpactDebug.h; sourceTree = "<group>"; };
 		C9474F0E23356DFB00E736D9 /* ImpactUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImpactUtility.h; sourceTree = "<group>"; };
+		C99FB1D2234A642700FFABD0 /* ImpactUtility.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ImpactUtility.c; sourceTree = "<group>"; };
 		C9A413842331007600059F5D /* Impact.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Impact.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9A413872331007600059F5D /* Impact.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Impact.h; sourceTree = "<group>"; };
 		C9A413882331007600059F5D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -358,6 +360,7 @@
 				C9A413F323338EB100059F5D /* ImpactCPU.c */,
 				C9474F0D2335056C00E736D9 /* ImpactDebug.h */,
 				C9474F0E23356DFB00E736D9 /* ImpactUtility.h */,
+				C99FB1D2234A642700FFABD0 /* ImpactUtility.c */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -533,6 +536,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C99FB1D3234A642700FFABD0 /* ImpactUtility.c in Sources */,
 				C9250368234244CD00022334 /* ImpactMonitoredApplication.m in Sources */,
 				C9A413D32332458400059F5D /* ImpactMonitor.m in Sources */,
 				C91112722346D26D00E72530 /* ImpactUnwind.c in Sources */,

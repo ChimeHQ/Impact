@@ -12,10 +12,17 @@
 #include "ImpactSignal.h"
 #include "ImpactMachException.h"
 #include "ImpactBinaryImage.h"
+#include "ImpactUtility.h"
 
 #include <sys/sysctl.h>
 
 ImpactState* GlobalImpactState = NULL;
+
+#if TARGET_OS_MAC
+const char* ImpactPlatformName = "macOS";
+#elif
+#error("Unsupported platform")
+#endif
 
 @implementation ImpactMonitor
 
@@ -38,13 +45,8 @@ ImpactState* GlobalImpactState = NULL;
 }
 
 - (void)startWithURL:(NSURL *)url identifier:(NSUUID *)uuid {
-    assert(GlobalImpactState == NULL);
-
-    NSURL* parent = url.URLByDeletingLastPathComponent;
-
-    NSError* error = nil;
-    if (![NSFileManager.defaultManager createDirectoryAtURL:parent withIntermediateDirectories:YES attributes:nil error:&error]) {
-        NSLog(@"[Impact] Unable to create directory for log %@", error);
+    if (ImpactDebuggerAttached()) {
+        NSLog(@"[Impact] Debugger attached, monitoring disabled");
         return;
     }
 
@@ -118,9 +120,7 @@ ImpactState* GlobalImpactState = NULL;
 
     ImpactLogWriteString(log, "[Environment] ");
 
-#if TARGET_OS_MAC
-    ImpactLogWriteKeyString(log, "platform", "macOS", false);
-#endif
+    ImpactLogWriteKeyString(log, "platform", ImpactPlatformName, false);
 
 #if defined(__x86_64__)
     ImpactLogWriteKeyString(log, "arch", "x86_64", false);
