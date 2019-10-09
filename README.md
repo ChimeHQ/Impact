@@ -56,7 +56,7 @@ If you want to use the project as part of a crash reporting service (ie accept d
 
 It would be wonderful to see contributions. If you'd like to work on something, the safest bet is to open an issue or PR first. That way, we can discuss the changes before you spend too much time working.
 
-There is aboslutely no experience/knowledge requirement. Interest is all you need, I am happy to help.
+There is absolutely no experience/knowledge requirement. Interest is all you need, I am happy to help.
 
 ## Suggestions or Feedback
 
