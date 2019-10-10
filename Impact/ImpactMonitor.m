@@ -13,14 +13,22 @@
 #include "ImpactMachException.h"
 #include "ImpactBinaryImage.h"
 #include "ImpactUtility.h"
+#include "ImpactCPU.h"
 
 #include <sys/sysctl.h>
+#import <sys/utsname.h>
 
 ImpactState* GlobalImpactState = NULL;
 
-#if TARGET_OS_MAC
+#if TARGET_OS_OSX
 const char* ImpactPlatformName = "macOS";
-#elif
+#elif TARGET_OS_IOS
+const char* ImpactPlatformName = "iOS";
+#elif TARGET_OS_TV
+const char* ImpactPlatformName = "tvOS";
+#elif TARGET_OS_WATCH
+const char* ImpactPlatformName = "watchOS";
+#else
 #error("Unsupported platform")
 #endif
 
@@ -98,6 +106,29 @@ const char* ImpactPlatformName = "macOS";
     return [NSString stringWithFormat:@"%d.%d.%d", (int)version.majorVersion, (int)version.minorVersion, (int)version.patchVersion];
 }
 
+- (NSString *)hardwareModel {
+#if TARGET_OS_OSX
+    char str[128] = {0};
+    size_t size = sizeof(str);
+
+    const int result = sysctlbyname("hw.model", str, &size, NULL, 0);
+    if (result != 0) {
+        return nil;
+    }
+
+    return [NSString stringWithUTF8String:str];
+#else
+    struct utsname systemInfo = {0};
+
+    const int result = uname(&systemInfo);
+    if (result != 0) {
+        return nil;
+    }
+
+    return [NSString stringWithUTF8String:systemInfo.machine];
+#endif
+}
+
 - (void)logExecutableData:(ImpactState *)state {
     ImpactLogger* log = &state->constantState.log;
 
@@ -124,9 +155,7 @@ const char* ImpactPlatformName = "macOS";
 
     ImpactLogWriteKeyString(log, "platform", ImpactPlatformName, false);
 
-#if defined(__x86_64__)
-    ImpactLogWriteKeyString(log, "arch", "x86_64", false);
-#endif
+    ImpactLogWriteKeyString(log, "arch", ImpactCPUArchitectureName, false);
     
     NSString* reportId = [[[identifier UUIDString] stringByReplacingOccurrencesOfString:@"-" withString:@""] lowercaseString];
 
@@ -144,6 +173,8 @@ const char* ImpactPlatformName = "macOS";
     } else {
         ImpactLogWriteKeyString(log, "os_build", "<unknown>", false);
     }
+
+    ImpactLogWriteKeyStringObject(log, "model", self.hardwareModel , false);
 
     ImpactLogWriteKeyString(log, "os_version", [self OSVersionString].UTF8String, true);
 }

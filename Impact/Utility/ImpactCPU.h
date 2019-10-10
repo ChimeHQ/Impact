@@ -54,6 +54,8 @@ static const ImpactCPURegister ImpactCPURegisterFramePointer = ImpactCPURegister
 
 static const mach_msg_type_number_t ImpactCPUThreadStateCount = x86_THREAD_STATE64_COUNT;
 static const thread_state_flavor_t ImpactCPUThreadStateFlavor = x86_THREAD_STATE64;
+
+static const char* ImpactCPUArchitectureName = "x86_64";
 #elif defined(__i386__)
 typedef enum {
     ImpactCPURegister_i386_RIP = -1
@@ -65,6 +67,8 @@ static const ImpactCPURegister ImpactCPURegisterFramePointer = ImpactCPURegister
 
 static const mach_msg_type_number_t ImpactCPUThreadStateCount = x86_THREAD_STATE_COUNT;
 static const thread_state_flavor_t ImpactCPUThreadStateFlavor = x86_THREAD_STATE;
+
+static const char* ImpactCPUArchitectureName = "i386";
 #elif defined(__arm64__)
 typedef enum {
     ImpactCPURegister_ARM64_RIP = -1
@@ -77,6 +81,8 @@ static const ImpactCPURegister ImpactCPURegisterFramePointer = ImpactCPURegister
 static const mach_msg_type_number_t ImpactCPUThreadStateCount = ARM_THREAD_STATE64_COUNT;
 static const thread_state_flavor_t ImpactCPUThreadStateFlavor = ARM_THREAD_STATE;
 
+static const char* ImpactCPUArchitectureName = "arm64";
+
 #elif defined(__arm__) && !defined(__arm64__)
 typedef enum {
     ImpactCPURegister_ARMv7_RIP = -1
@@ -88,6 +94,8 @@ static const ImpactCPURegister ImpactCPURegisterFramePointer = ImpactCPURegister
 
 static const mach_msg_type_number_t ImpactCPUThreadStateCount = ARM_THREAD_STATE_COUNT;
 static const thread_state_flavor_t ImpactCPUThreadStateFlavor = ARM_THREAD_STATE;
+
+static const char* ImpactCPUArchitectureName = "armv7";
 #endif
 
 
