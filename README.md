@@ -32,7 +32,7 @@ My sincere hope is that Apple addresses these limitations so we can all stop thi
 
 But, for now, in-process reporting is a necessary component for most developers. There are many trade-offs and design decisions that dramatically affect the qualities of a reporting system. Understanding those trade-offs, and being explicit about choices that affect them is one of the goals of this project.
 
-Also, crash reporting is just a fun and facinating problem. It tends to be very commonly used and very poorly understood. I think the Apple development community could benefit a lot from a more in-depth understanding of the area.
+Also, crash reporting is just a fun and fascinating problem. It tends to be very commonly used and very poorly understood. I think the Apple development community could benefit a lot from a more in-depth understanding of the area.
 
 ## Can I Use Impact in my App?
 
@@ -40,7 +40,7 @@ Probably a little early at this point.
 
 First, you must keep in mind that it **only** captures information about crash events. It does not have any facilities for transmitting those events back to you or translating them into human-readable versions.
 
-Second, Impact is very much still a work-in-progress. At the moment, it only supports macOS. While it builds other platforms, there's major functionality missing.
+Second, Impact is very much still a work-in-progress. At the moment, it only supports macOS. While it builds for other platforms, there's major functionality missing.
 
 ## Relationship to Crashlytics
 
@@ -50,7 +50,7 @@ Impact does share many of those design philosophies. Primarily because I believe
 
 ## Incorporating Impact
 
-If you want to use the project as part of a crash reporting service (ie accept data from apps you do not write yourself), you are more than welcome. However, you **must** let the maintainers of this project know before you ship. If you just want to use Impact for your own app, go for it! You don't have to get in touch. But, it would be cool :)
+If you want to use the project as part of a crash reporting service (i.e. accept data from apps you do not write yourself), you are more than welcome. However, you **must** let the maintainers of this project know before you ship. If you just want to use Impact for your own app, go for it! You don't have to get in touch. But, it would be cool :)
 
 ## Contributing
 
