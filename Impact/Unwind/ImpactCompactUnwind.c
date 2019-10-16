@@ -11,6 +11,7 @@
 #include "ImpactUnwind.h"
 #include "ImpactState.h"
 #include "ImpactLog.h"
+#include "ImpactDWARF.h"
 
 #include <mach-o/compact_unwind_encoding.h>
 
@@ -27,14 +28,14 @@ ImpactResult ImpactCompactUnwindLookupFirstLevel(ImpactCompactUnwindTarget targe
         return ImpactResultPointerInvalid;
     }
 
-    const uintptr_t targetFunctionOffset = target.address;
+    const uintptr_t imageRelativeAddress = target.address - target.imageLoadAddress;
 
     *index = ImpactPointerOffset(target.header, target.header->indexSectionOffset);
 
     const uint32_t count = target.header->indexCount;
     const size_t size = sizeof(struct unwind_info_section_header_index_entry);
 
-    uint32_t idx = ImpactCompactUnwindSearch(*index, &targetFunctionOffset, size, count, ImpactCompactUnwindCompareIndexEntry);
+    uint32_t idx = ImpactCompactUnwindSearch(*index, &imageRelativeAddress, size, count, ImpactCompactUnwindCompareIndexEntry);
     if (idx == count) {
         // the last index is actually a limit, so we do not need to check
         // if that's actually our match
@@ -67,12 +68,14 @@ ImpactResult ImpactCompactUnwindLookupSecondLevelCompressedEntry(ImpactCompactUn
         return ImpactResultInconsistentData;
     }
 
-    if (target.address < index->functionOffset) {
+    const uintptr_t imageRelativeAddress = target.address - target.imageLoadAddress;
+
+    if (imageRelativeAddress < index->functionOffset) {
         ImpactDebugLog("[Log:WARN:%s] address not in range\n", __func__);
         return ImpactResultInconsistentData;
     }
 
-    const uintptr_t targetFunctionOffset = target.address - index->functionOffset;
+    const uintptr_t targetFunctionOffset = imageRelativeAddress - index->functionOffset;
 
     *encoding = ImpactPointerOffset(compressedHeader, compressedHeader->entryPageOffset);
 
@@ -84,7 +87,7 @@ ImpactResult ImpactCompactUnwindLookupSecondLevelCompressedEntry(ImpactCompactUn
         // we have to special-case the last entry, in case that's out match
         const CompactUnwindIndexEntry* nextIndex = index + 1;
 
-        if (target.address >= nextIndex->functionOffset) {
+        if (imageRelativeAddress >= nextIndex->functionOffset) {
             *encoding = NULL;
             ImpactDebugLog("[Log:WARN:%s] address not in within found function\n", __func__);
             return ImpactResultFailure;
@@ -189,25 +192,24 @@ ImpactResult ImpactCompactUnwindLookupEncoding(ImpactCompactUnwindTarget target,
     return ImpactResultSuccess;
 }
 
-ImpactResult ImpactCompactUnwindStepRegisters(ImpactCompactUnwindTarget target, ImpactCPURegisters* registers, bool* finished) {
+ImpactResult ImpactCompactUnwindStepRegisters(ImpactCompactUnwindTarget target, ImpactCPURegisters* registers, uint32_t* dwarfFDEOffset) {
     compact_unwind_encoding_t encoding = 0;
 
     ImpactResult result = ImpactCompactUnwindLookupEncoding(target, &encoding);
     if (result != ImpactResultSuccess) {
-        ImpactDebugLog("[Log:WARN:%s] failed to look up encoding %d\n", __func__, result);
+        ImpactDebugLog("[Log:WARN] failed to look up compact unwind encoding %d\n", result);
         return result;
     }
 
     if (encoding == 0) {
-        ImpactDebugLog("[Log:WARN:%s] no unwind info available\n", __func__);
+        ImpactDebugLog("[Log:INFO] no unwind info available\n");
 
-        // fall back to a regular FP unwind
-        return ImpactUnwindStepRegistersWithFramePointer(registers, finished);
+        return ImpactResultMissingUnwindInfo;
     }
 
-    ImpactDebugLog("[Log:INFO:%s] found encoding 0x%x\n", __func__, encoding);
+    ImpactDebugLog("[Log:INFO] found compact unwind encoding 0x%x\n", encoding);
 
-    return ImpactCompactUnwindStepArchRegisters(target, registers, encoding, finished);
+    return ImpactCompactUnwindStepArchRegisters(target, registers, encoding, dwarfFDEOffset);
 }
 
 static uint32_t ImpactCompactUnwindSearch(const void* ptr, const void* ctx, size_t elementSize, uint32_t count, bool (*comparsionFn) (const void *, const void *)) {

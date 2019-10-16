@@ -35,6 +35,10 @@
 		C925035F233FDDB400022334 /* ImpactUnwind.h in Headers */ = {isa = PBXBuildFile; fileRef = C925035D233FDDB400022334 /* ImpactUnwind.h */; };
 		C9250367234244CD00022334 /* ImpactMonitoredApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = C9250365234244CD00022334 /* ImpactMonitoredApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9250368234244CD00022334 /* ImpactMonitoredApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = C9250366234244CD00022334 /* ImpactMonitoredApplication.m */; };
+		C9359E3B23500F0A000F0572 /* CPPException.mm in Sources */ = {isa = PBXBuildFile; fileRef = C9359E3A23500F0A000F0572 /* CPPException.mm */; };
+		C9359E42235392B6000F0572 /* ImpactDWARFCFIInstructions.h in Headers */ = {isa = PBXBuildFile; fileRef = C9359E40235392B6000F0572 /* ImpactDWARFCFIInstructions.h */; };
+		C9359E43235392B6000F0572 /* ImpactDWARFCFIInstructions.c in Sources */ = {isa = PBXBuildFile; fileRef = C9359E41235392B6000F0572 /* ImpactDWARFCFIInstructions.c */; };
+		C9359E462354FFAB000F0572 /* ImpactCrashHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = C9359E452354FFAB000F0572 /* ImpactCrashHelper.m */; };
 		C939C979234D753E00E2D22D /* ImpactUnwind_arm.c in Sources */ = {isa = PBXBuildFile; fileRef = C939C978234D753E00E2D22D /* ImpactUnwind_arm.c */; };
 		C939C97B234E1CA500E2D22D /* ImpactUnwind_i386.c in Sources */ = {isa = PBXBuildFile; fileRef = C939C97A234E1CA500E2D22D /* ImpactUnwind_i386.c */; };
 		C939C97D234E2D3300E2D22D /* ImpactUnwind_arm64.c in Sources */ = {isa = PBXBuildFile; fileRef = C939C97C234E2D3300E2D22D /* ImpactUnwind_arm64.c */; };
@@ -142,6 +146,12 @@
 		C925035E233FDDB400022334 /* ImpactUnwind.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ImpactUnwind.c; sourceTree = "<group>"; };
 		C9250365234244CD00022334 /* ImpactMonitoredApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImpactMonitoredApplication.h; sourceTree = "<group>"; };
 		C9250366234244CD00022334 /* ImpactMonitoredApplication.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImpactMonitoredApplication.m; sourceTree = "<group>"; };
+		C9359E3923500F0A000F0572 /* CPPException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPPException.h; sourceTree = "<group>"; };
+		C9359E3A23500F0A000F0572 /* CPPException.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CPPException.mm; sourceTree = "<group>"; };
+		C9359E40235392B6000F0572 /* ImpactDWARFCFIInstructions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImpactDWARFCFIInstructions.h; sourceTree = "<group>"; };
+		C9359E41235392B6000F0572 /* ImpactDWARFCFIInstructions.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ImpactDWARFCFIInstructions.c; sourceTree = "<group>"; };
+		C9359E442354FFAB000F0572 /* ImpactCrashHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImpactCrashHelper.h; sourceTree = "<group>"; };
+		C9359E452354FFAB000F0572 /* ImpactCrashHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImpactCrashHelper.m; sourceTree = "<group>"; };
 		C939C978234D753E00E2D22D /* ImpactUnwind_arm.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ImpactUnwind_arm.c; sourceTree = "<group>"; };
 		C939C97A234E1CA500E2D22D /* ImpactUnwind_i386.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ImpactUnwind_i386.c; sourceTree = "<group>"; };
 		C939C97C234E2D3300E2D22D /* ImpactUnwind_arm64.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ImpactUnwind_arm64.c; sourceTree = "<group>"; };
@@ -233,6 +243,8 @@
 				C911127C2348B9AF00E72530 /* ImpactDWARFParser.c */,
 				C911127D2348B9AF00E72530 /* ImpactDWARFParser.h */,
 				C911127B2348B9AF00E72530 /* ImpactLEB.h */,
+				C9359E40235392B6000F0572 /* ImpactDWARFCFIInstructions.h */,
+				C9359E41235392B6000F0572 /* ImpactDWARFCFIInstructions.c */,
 			);
 			path = DWARF;
 			sourceTree = "<group>";
@@ -305,6 +317,8 @@
 				C925035A233EE76900022334 /* ImpactLogTests.m */,
 				C911126B234613D600E72530 /* ImpactCompactUnwindTests.m */,
 				C91112732348B95500E72530 /* ImpactDWARFCFITests.m */,
+				C9359E442354FFAB000F0572 /* ImpactCrashHelper.h */,
+				C9359E452354FFAB000F0572 /* ImpactCrashHelper.m */,
 			);
 			path = ImpactTests;
 			sourceTree = "<group>";
@@ -337,6 +351,8 @@
 				C911125C2342E51700E72530 /* UncaughtNSException.m */,
 				C911125E23442DD600E72530 /* NonMainThreadUncaughtNSException.h */,
 				C911125F23442DD600E72530 /* NonMainThreadUncaughtNSException.m */,
+				C9359E3923500F0A000F0572 /* CPPException.h */,
+				C9359E3A23500F0A000F0572 /* CPPException.mm */,
 			);
 			path = Crashes;
 			sourceTree = "<group>";
@@ -407,6 +423,7 @@
 				C9A413D72332481300059F5D /* ImpactSignal.h in Headers */,
 				C9A413D22332458400059F5D /* ImpactMonitor.h in Headers */,
 				C9A413E2233251BB00059F5D /* ImpactState.h in Headers */,
+				C9359E42235392B6000F0572 /* ImpactDWARFCFIInstructions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -477,7 +494,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastUpgradeCheck = 1120;
 				ORGANIZATIONNAME = "Chime Systems Inc";
 				TargetAttributes = {
 					C9A413832331007600059F5D = {
@@ -559,6 +576,7 @@
 				C939C979234D753E00E2D22D /* ImpactUnwind_arm.c in Sources */,
 				C939C97B234E1CA500E2D22D /* ImpactUnwind_i386.c in Sources */,
 				C91112822348B9AF00E72530 /* ImpactDataCursor.c in Sources */,
+				C9359E43235392B6000F0572 /* ImpactDWARFCFIInstructions.c in Sources */,
 				C9A413F92333983500059F5D /* ImpactMachException.c in Sources */,
 				C911127F2348B9AF00E72530 /* ImpactDWARF.c in Sources */,
 				C9A413D82332481300059F5D /* ImpactSignal.c in Sources */,
@@ -574,6 +592,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C925035B233EE76900022334 /* ImpactLogTests.m in Sources */,
+				C9359E462354FFAB000F0572 /* ImpactCrashHelper.m in Sources */,
 				C9A413C52331B73200059F5D /* ImpactCrashTests.swift in Sources */,
 				C911126C234613D600E72530 /* ImpactCompactUnwindTests.m in Sources */,
 				C91112742348B95500E72530 /* ImpactDWARFCFITests.m in Sources */,
@@ -587,6 +606,7 @@
 				C911126023442DD600E72530 /* NonMainThreadUncaughtNSException.m in Sources */,
 				C9A414012333C4D800059F5D /* NullDereference.m in Sources */,
 				C911125D2342E51700E72530 /* UncaughtNSException.m in Sources */,
+				C9359E3B23500F0A000F0572 /* CPPException.mm in Sources */,
 				C9A413CF2332440C00059F5D /* InvokeAbort.m in Sources */,
 				C9A413CC233243CF00059F5D /* CrashInvocation.m in Sources */,
 				C9A413C22331045600059F5D /* ViewController.swift in Sources */,
@@ -741,6 +761,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -831,6 +852,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ImpactTestMac/ImpactTestMac.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = ImpactTestMac/Info.plist;
@@ -853,6 +875,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ImpactTestMac/ImpactTestMac.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = ImpactTestMac/Info.plist;

@@ -6,57 +6,58 @@
 //  Copyright © 2019 Chime Systems Inc. All rights reserved.
 //
 
-#include "ImpactDataCursor.h"
-#include "ImpactDWARF.h"
+#include "ImpactDWARFParser.h"
 #include "ImpactDWARFDefines.h"
 #include "ImpactUtility.h"
 
-ImpactResult ImpactDWARFReadEncodedPointer(ImpactDataCursor* cursor, uint8_t encoding, intptr_t *value) {
-    if (ImpactInvalidPtr(cursor) || ImpactInvalidPtr(value)) {
+#if IMPACT_DWARF_CFI_SUPPORTED
+
+ImpactResult ImpactDWARFReadEncodedPointer(ImpactDataCursor* cursor, ImpactDWARFEnvironment env, uint8_t encoding, uint64_t *outValue) {
+    if (ImpactInvalidPtr(cursor) || ImpactInvalidPtr(outValue)) {
         return ImpactResultPointerInvalid;
     }
 
     if (encoding == DW_EH_PE_omit) {
-        *value = 0;
+        *outValue = 0;
         return ImpactResultSuccess;
     }
 
     ImpactResult result = ImpactResultFailure;
-    uint64_t readValue = 0;
-    const uintptr_t address = (uintptr_t)ImpactDataCursorCurrentPointer(cursor);
+    int64_t value = 0;
+    const uintptr_t currentAddress = (uintptr_t)ImpactDataCursorCurrentPointer(cursor);
 
     switch (encoding & DW_EH_PE_type_mask) {
     case DW_EH_PE_ptr:
-        result = ImpactDataCursorReadValue(cursor, sizeof(void*), &readValue);
+        result = ImpactDataCursorReadValue(cursor, env.pointerWidth, &value);
         break;
     case DW_EH_PE_uleb128:
-        result = ImpactDataCursorReadULEB128(cursor, &readValue);
+        result = ImpactDataCursorReadULEB128(cursor, (uleb128*)&value);
         break;
     case DW_EH_PE_udata2:
-        result = ImpactDataCursorReadValue(cursor, 2, &readValue);
+        result = ImpactDataCursorReadValue(cursor, 2, &value);
         break;
     case DW_EH_PE_udata4:
-        result = ImpactDataCursorReadValue(cursor, 4, &readValue);
+        result = ImpactDataCursorReadValue(cursor, 4, &value);
         break;
     case DW_EH_PE_udata8:
-        result = ImpactDataCursorReadValue(cursor, 8, &readValue);
+        result = ImpactDataCursorReadValue(cursor, 8, &value);
         break;
     case DW_EH_PE_sleb128:
-        result = ImpactDataCursorReadSLEB128(cursor, (int64_t *)&readValue);
+        result = ImpactDataCursorReadSLEB128(cursor, &value);
         break;
     case DW_EH_PE_sdata2:
-        result = ImpactDataCursorReadValue(cursor, 2, &readValue);
+        result = ImpactDataCursorReadValue(cursor, 2, &value);
         break;
     case DW_EH_PE_sdata4:
-        result = ImpactDataCursorReadValue(cursor, 4, &readValue);
+        result = ImpactDataCursorReadValue(cursor, 4, &value);
         break;
     case DW_EH_PE_sdata8:
-        result = ImpactDataCursorReadValue(cursor, 8, &readValue);
+        result = ImpactDataCursorReadValue(cursor, 8, &value);
         break;
     }
 
     if (result != ImpactResultSuccess) {
-        ImpactDebugLog("[Log:WARN:%s] unknown pointer encoding %x\n", __func__, encoding);
+        ImpactDebugLog("[Log:WARN] %s unknown pointer encoding %x\n", __func__, encoding);
 
         return result;
     }
@@ -65,27 +66,22 @@ ImpactResult ImpactDWARFReadEncodedPointer(ImpactDataCursor* cursor, uint8_t enc
     case DW_EH_PE_absptr:
         break;
     case DW_EH_PE_pcrel:
-        // so, this is strange. The documentation says this is relative to the program counter,
-        // but all implementations I can find use this to offset relative to *this* entry
-        // in the dwarf data, which seems pretty weird...
-        readValue += address;
+        // So, this is strange. This does not actually mean relative to a PC, but relative to
+        // the location of this field within the eh_frame section. I don't really know why
+        // it would be useful to encode things in such a strange way, but it's very common.
+//        value += currentAddress;
+        value += currentAddress;
         break;
     default:
-        ImpactDebugLog("[Log:WARN:%s] unknown pointer encoding %x\n", __func__, encoding);
+        ImpactDebugLog("[Log:WARN] %s unknown pointer encoding %x\n", __func__, encoding);
 
-        return ImpactResultFailure;
+        return ImpactResultInconsistentData;
     }
 
-    if (encoding & DW_EH_PE_indirect) {
-        if (ImpactInvalidPtr((void *)readValue)) {
-            ImpactDebugLog("[Log:WARN:%s] indirect value invalid %x\n", __func__, encoding);
-            return ImpactResultPointerInvalid;
-        }
+    // NOTE: DW_EH_PE_indirect is not handled here. It's expected that ImpactDWARFResolveEncodedPointer be
+    // used for that. This helps us defer, and possibly avoid memory accesses.
 
-        readValue = *(uint64_t*)readValue;
-    }
-
-    *value = (intptr_t)readValue;
+    *outValue = value;
 
     return ImpactResultSuccess;
 }
@@ -130,8 +126,6 @@ ImpactResult ImpactDWARFReadHeader(ImpactDataCursor* cursor, ImpactDWARFCFIHeade
         return result;
     }
 
-    result = ImpactResultFailure;
-
     if (ImpactDWARFCFILengthHas64BitMarker(header->length)) {
         result = ImpactDataCursorReadUint64(cursor, &header->CIE_id);
     } else {
@@ -141,7 +135,7 @@ ImpactResult ImpactDWARFReadHeader(ImpactDataCursor* cursor, ImpactDWARFCFIHeade
     return result;
 }
 
-ImpactResult ImpactDWARFReadCIEAugmentation(ImpactDataCursor* cursor, const char* augmentationString, ImpactDWARFCIEAppleAugmentationData* data) {
+ImpactResult ImpactDWARFReadCIEAugmentation(ImpactDataCursor* cursor, ImpactDWARFEnvironment env, const char* augmentationString, ImpactDWARFCIEAppleAugmentationData* data) {
     if (ImpactInvalidPtr(cursor) || ImpactInvalidPtr(augmentationString) || ImpactInvalidPtr(data)) {
         return ImpactResultPointerInvalid;
     }
@@ -168,7 +162,7 @@ ImpactResult ImpactDWARFReadCIEAugmentation(ImpactDataCursor* cursor, const char
                 return result;
             }
 
-            result = ImpactDWARFReadEncodedPointer(cursor, data->personalityEncoding, (intptr_t*)&data->personality);
+            result = ImpactDWARFReadEncodedPointer(cursor, env, data->personalityEncoding, &data->personality);
             if (result != ImpactResultSuccess) {
                 return result;
             }
@@ -191,12 +185,12 @@ ImpactResult ImpactDWARFReadCIEAugmentation(ImpactDataCursor* cursor, const char
         default:
             return ImpactResultUnexpectedData;
         }
-     }
+    }
 
     return ImpactResultSuccess;
 }
 
-ImpactResult ImpactDWARFReadCIE(ImpactDataCursor* cursor, ImpactDWARFCIE* cie) {
+ImpactResult ImpactDWARFReadCIE(ImpactDataCursor* cursor, ImpactDWARFEnvironment env, ImpactDWARFCIE* cie) {
     if (!ImpactDataCursorIsValid(cursor)) {
         return ImpactResultPointerInvalid;
     }
@@ -236,7 +230,7 @@ ImpactResult ImpactDWARFReadCIE(ImpactDataCursor* cursor, ImpactDWARFCIE* cie) {
         return result;
     }
 
-    result = ImpactDWARFReadCIEAugmentation(cursor, cie->augmentation, &cie->augmentationData);
+    result = ImpactDWARFReadCIEAugmentation(cursor, env, cie->augmentation, &cie->augmentationData);
     if (result != ImpactResultSuccess) {
         return result;
     }
@@ -279,7 +273,7 @@ uintptr_t ImpactDWARFCFECIEOffsetDelta(ImpactDWARFFDE* fde) {
     return delta;
 }
 
-ImpactResult ImpactDWARFReadCFI(ImpactDataCursor* cursor, ImpactDWARFCFIData* cfiData) {
+ImpactResult ImpactDWARFReadCFI(ImpactDataCursor* cursor, ImpactDWARFEnvironment env, ImpactDWARFCFIData* cfiData) {
     if (!ImpactDataCursorIsValid(cursor)) {
         return ImpactResultPointerInvalid ;
     }
@@ -304,23 +298,28 @@ ImpactResult ImpactDWARFReadCFI(ImpactDataCursor* cursor, ImpactDWARFCFIData* cf
         return result;
     }
 
-    result = ImpactDWARFReadCIE(&cieCursor, &cfiData->cie);
+    result = ImpactDWARFReadCIE(&cieCursor, env, &cfiData->cie);
     if (result != ImpactResultSuccess) {
         return result;
     }
 
     // now, finally, continue reading the FDE
 
-    // really don't know what's going on here. This doesn't seem to be covered by the
-    // DWARF spec...
+    // This pointer encoding business does not appear in the DWARF spec. It appears
+    // to be compiler and ABI-specific. And, since it doesn't come from a spec, it is
+    // weird.
     const uint8_t encoding = cfiData->cie.augmentationData.pointerEncoding;
 
-    result = ImpactDWARFReadEncodedPointer(cursor, encoding, (intptr_t*)&cfiData->fde.target_address);
+    result = ImpactDWARFReadEncodedPointer(cursor, env, encoding, &cfiData->fde.target_address);
     if (result != ImpactResultSuccess) {
         return result;
     }
 
-    result = ImpactDWARFReadEncodedPointer(cursor, encoding & 0x0F, (intptr_t*)&cfiData->fde.address_range);
+    // This mask needs to be applied to calculate the correct range. Because the range is stored as an encoded pointer,
+    // but isn't actually a pointer. Who makes this stuff?
+    const uint8_t rangeEncoding = encoding & DW_EH_PE_type_mask;
+
+    result = ImpactDWARFReadEncodedPointer(cursor, env, rangeEncoding, &cfiData->fde.address_range);
     if (result != ImpactResultSuccess) {
         return result;
     }
@@ -335,3 +334,5 @@ ImpactResult ImpactDWARFReadCFI(ImpactDataCursor* cursor, ImpactDWARFCFIData* cf
 
     return ImpactResultSuccess;
 }
+
+#endif

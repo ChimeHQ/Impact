@@ -14,6 +14,7 @@
 
 typedef struct {
     uintptr_t address;
+    intptr_t loadAddress;
     uintptr_t length;
 } ImpactMachODataRegion;
 
@@ -26,7 +27,25 @@ typedef struct {
     uintptr_t textSize;
 } ImpactMachOData;
 
+#if __LP64__
+typedef struct mach_header_64 ImpactMachOHeader;
+typedef struct section_64 ImpactMachOSection;
+typedef struct segment_command_64 ImpactSegmentCommand;
+typedef struct section_64 ImpactSection;
+
+#define Impact_LC_SEGMENT LC_SEGMENT_64
+#else
+typedef struct mach_header ImpactMachOHeader;
+typedef struct section ImpactMachOSection;
+typedef struct segment_command ImpactSegmentCommand;
+typedef struct section ImpactSection;
+
+#define Impact_LC_SEGMENT LC_SEGMENT
+#endif
+
 ImpactResult ImpactBinaryImageInitialize(ImpactState* state);
+
+ImpactResult ImpactBinaryImageGetData(const ImpactMachOHeader* header, ImpactMachOData* data);
 
 ImpactResult ImpactBinaryImageFind(const ImpactState* state, uintptr_t address, ImpactMachOData* data);
 

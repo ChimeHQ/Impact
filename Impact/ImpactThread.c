@@ -188,15 +188,15 @@ static ImpactResult ImpactThreadLogStacktrace(ImpactState* state, const ImpactCP
             ImpactDebugLog("[Log:%s] failed to write frame %x\n", __func__, result);
         }
 
-        bool finished = true;
-        result = ImpactUnwindStepRegisters(state, &unwindRegisters, &finished);
-        if (result != ImpactResultSuccess) {
-            ImpactDebugLog("[Log:%s] failed to step registers %x\n", __func__, result);
-            return result;
-        }
-
-        if (finished) {
-            return ImpactResultSuccess;
+        result = ImpactUnwindStepRegisters(state, &unwindRegisters);
+        switch (result) {
+            case ImpactResultEndOfStack:
+                return ImpactResultSuccess;
+            case ImpactResultSuccess:
+                break;
+            default:
+                ImpactDebugLog("[Log:WARN] failed to step registers %x\n", result);
+                return result;
         }
     }
 

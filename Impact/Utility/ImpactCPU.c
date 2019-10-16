@@ -48,6 +48,7 @@ ImpactResult ImpactCPURegistersLog(ImpactState* state, const ImpactCPURegisters*
 
 ImpactResult ImpactCPUGetRegister(const ImpactCPURegisters* registers, ImpactCPURegister num, uintptr_t* value) {
     if (ImpactInvalidPtr(registers) || ImpactInvalidPtr(value)) {
+        ImpactDebugLog("[Log:WARN] %s pointer argument invalid\n", __func__);
         return ImpactResultPointerInvalid;
     }
     
@@ -71,6 +72,7 @@ ImpactResult ImpactCPUGetRegister(const ImpactCPURegisters* registers, ImpactCPU
         case ImpactCPURegister_X86_64_R15: *value = registers->__ss.__r15; break;
         case ImpactCPURegister_X86_64_RIP: *value = registers->__ss.__rip; break;
         default:
+            ImpactDebugLog("[Log:WARN] %s register number unsupported %d\n", __func__, num);
             return ImpactResultArgumentInvalid;
     }
 #endif
@@ -80,6 +82,7 @@ ImpactResult ImpactCPUGetRegister(const ImpactCPURegisters* registers, ImpactCPU
 
 ImpactResult ImpactCPUSetRegister(ImpactCPURegisters* registers, ImpactCPURegister num, uintptr_t value) {
     if (ImpactInvalidPtr(registers)) {
+        ImpactDebugLog("[Log:WARN] %s pointer argument invalid\n", __func__);
         return ImpactResultPointerInvalid;
     }
 
@@ -102,7 +105,9 @@ ImpactResult ImpactCPUSetRegister(ImpactCPURegisters* registers, ImpactCPURegist
         case ImpactCPURegister_X86_64_R14: registers->__ss.__r14 = value; break;
         case ImpactCPURegister_X86_64_R15: registers->__ss.__r15 = value; break;
         case ImpactCPURegister_X86_64_RIP: registers->__ss.__rip = value; break;
+        case ImpactCPURegister_X86_64_RA: registers->__ss.__rip = value; break;
         default:
+            ImpactDebugLog("[Log:WARN] %s register number unsupported %d\n", __func__, num);
             return ImpactResultArgumentInvalid;
     }
 #endif

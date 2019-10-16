@@ -32,3 +32,17 @@ bool ImpactDebuggerAttached(void) {
 
     return ( (info.kp_proc.p_flag & P_TRACED) != 0 );
 }
+
+ImpactResult ImpactReadMemory(uintptr_t address, size_t size, void* buffer) {
+    if (ImpactInvalidPtr((void*)address)) {
+        return ImpactResultPointerInvalid;
+    }
+
+    if (ImpactInvalidPtr(buffer)) {
+        return ImpactResultPointerInvalid;
+    }
+
+    *(uintptr_t *)buffer = *(uintptr_t*)address;
+
+    return ImpactResultSuccess;
+}

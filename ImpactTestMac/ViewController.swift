@@ -19,6 +19,7 @@ class ViewController: NSViewController {
             NullDereference(),
             UncaughtNSException(),
             NonMainThreadUncaughtNSException(),
+            CPPException(),
         ]
 
         super.init(nibName: nil, bundle: nil)

@@ -21,6 +21,8 @@ typedef enum {
     ImpactResultEndOfData,
     ImpactResultStateInvalid,
     ImpactResultUnexpectedData,
+    ImpactResultEndOfStack,
+    ImpactResultMissingUnwindInfo,
 } ImpactResult;
 
 #endif /* ImpactResult_h */

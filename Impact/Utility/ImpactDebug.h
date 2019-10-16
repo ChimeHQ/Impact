@@ -13,15 +13,17 @@
 
 #include <stdio.h>
 
+#define VA_ARGS(...) , ##__VA_ARGS__
+
 #if 1
 
 #define ImpactDebugLog(format, ...) do { \
-dprintf(GlobalImpactState->constantState.log.fd, format, __VA_ARGS__); \
+dprintf(GlobalImpactState->constantState.log.fd, format VA_ARGS(__VA_ARGS__)); \
 } while(0)
 
 #else
 
-#define ImpactDebugLog(format, ...) ImpactLog(format, __VA_ARGS__)
+#define ImpactDebugLog(format, ...) ImpactLog(format VA_ARGS(__VA_ARGS__))
 
 #endif
 

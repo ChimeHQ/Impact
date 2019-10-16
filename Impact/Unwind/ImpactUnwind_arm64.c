@@ -15,7 +15,7 @@
 
 #if defined(__arm64__)
 
-ImpactResult ImpactCompactUnwindStepArchRegisters(ImpactCompactUnwindTarget target, ImpactCPURegisters* registers, compact_unwind_encoding_t encoding, bool* finished) {
+ImpactResult ImpactCompactUnwindStepArchRegisters(ImpactCompactUnwindTarget target, ImpactCPURegisters* registers, compact_unwind_encoding_t encoding, uint32_t* dwarfFDEOffset) {
     return ImpactResultFailure;
 }
 

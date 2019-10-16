@@ -16,6 +16,14 @@
 #include "ImpactCPU.h"
 #include "ImpactResult.h"
 
+#if defined(__x86_64__) || defined(__i386__) || defined(__arm64__)
+#define IMPACT_DWARF_CFI_SUPPORTED 1
+#else
+#define IMPACT_DWARF_CFI_SUPPORTED 0
+#endif
+
+#if IMPACT_DWARF_CFI_SUPPORTED
+
 typedef struct {
     uint32_t length32;
     uint64_t length64;
@@ -67,10 +75,10 @@ typedef struct {
 
 typedef struct {
     ImpactDWARFCFIHeader header;
-    uint32_t initial_location;
-    uint32_t segment_selector;
-    uint32_t target_address;
-    uint32_t address_range;
+    uintptr_t initial_location;
+    uintptr_t segment_selector;
+    uint64_t target_address;
+    uint64_t address_range;
     ImpactDWARFCFIInstructions instructions;
 } ImpactDWARFFDE;
 
@@ -78,7 +86,7 @@ typedef struct {
     uleb128 length;
     bool fdesHaveAugmentationData;
     uint8_t personalityEncoding;
-    uintptr_t personality;
+    uint64_t personality;
     uint8_t lsdaEncoding;
     uint8_t pointerEncoding;
     bool isSignalFrame;
@@ -102,37 +110,52 @@ typedef struct {
     ImpactDWARFFDE fde;
 } ImpactDWARFCFIData;
 
-typedef struct {
-    ImpactMachODataRegion cfiRegion;
-    uintptr_t address;
-} ImpactDWARFTarget;
+typedef enum {
+    ImpactDWARFCFADefinitionRuleUndefined = 0,
+    ImpactDWARFCFADefinitionRuleRegisterOffset = 1,
+    ImpactDWARFCFADefinitionRuleExpressiom = 2
+} ImpactDWARFCFARegisterRule;
 
 typedef enum {
-    ImpactDWARFRegsterUndefined = 0,
-    ImpactDWARFRegsterUnused = 1,
-    ImpactDWARFRegsterInCFA = 2,
-    ImpactDWARFRegsterFromCFA = 3,
-    ImpactDWARFRegsterInRegister = 4,
-    ImpactDWARFRegsterAtExpression = 5,
-    ImpactDWARFRegsterIsExpresssion = 6
-} ImpactDWARFRegsterLocation;
+    ImpactDWARFCFIRegisterRuleUnused = 0,
+    ImpactDWARFCFIRegisterRuleOffsetFromCFA = 1
+} ImpactDWARFCFIRegisterRule;
 
 typedef struct {
-    ImpactDWARFRegsterLocation location;
+    ImpactDWARFCFIRegisterRule rule;
     int64_t value;
 } ImpactDWARFRegister;
 
-enum { ImpactDWARFRegisterCount = 10 };
+typedef struct {
+    ImpactDWARFCFARegisterRule rule;
+    uint32_t registerNum;
+    int64_t value;
+} ImpactDWARFCFADefinition;
 
 typedef struct {
-    uint64_t cfaRegister;
-    int64_t cfaRegisterOffset;
-    ImpactDWARFRegister registers[ImpactDWARFRegisterCount];
+    ImpactDWARFCFADefinition cfaDefinition;
+    ImpactDWARFRegister registerRules[ImpactCPUDWARFRegisterCount];
 } ImpactDWARFCFIState;
 
-ImpactResult ImpactDWARFRunInstructions(const ImpactDWARFCFIData* data, ImpactDWARFCFIState* state);
-ImpactResult ImpactDWARFReadData(ImpactMachODataRegion cfiRegion, uint32_t offset, ImpactDWARFCFIData* data);
+typedef struct {
+    uint8_t pointerWidth;
+} ImpactDWARFEnvironment;
+
+typedef struct {
+    uintptr_t pc;
+    ImpactMachODataRegion ehFrameRegion;
+    ImpactDWARFEnvironment environment;
+} ImpactDWARFTarget;
+
+ImpactResult ImpactDWARFRunInstructions(const ImpactDWARFCFIData* data, ImpactDWARFTarget target, ImpactDWARFCFIState* state);
+ImpactResult ImpactDWARFReadData(ImpactMachODataRegion cfiRegion, ImpactDWARFEnvironment env, uint32_t offset, ImpactDWARFCFIData* data);
+ImpactResult ImpactDWARFResolveEncodedPointer(uint8_t encoding, uint64_t value, uint64_t *resolvedValue);
 
 ImpactResult ImpactDWARFGetCFAValue(const ImpactDWARFCFIState* state, const ImpactCPURegisters* registers, uintptr_t *value);
+ImpactResult ImpactDWARFGetRegisterValue(const ImpactDWARFCFIState* state, uintptr_t cfa, ImpactDWARFRegister dwarfRegister, uintptr_t* value);
+
+ImpactResult ImpactDWARFStepRegisters(const ImpactDWARFCFIData* cfiData, ImpactDWARFTarget target, ImpactCPURegisters* registers);
+
+#endif
 
 #endif /* ImpactDWARF_h */

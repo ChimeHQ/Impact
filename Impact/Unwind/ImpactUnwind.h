@@ -13,7 +13,7 @@
 #include "ImpactCPU.h"
 #include "ImpactState.h"
 
-ImpactResult ImpactUnwindStepRegistersWithFramePointer(ImpactCPURegisters* registers, bool* finished);
-ImpactResult ImpactUnwindStepRegisters(const ImpactState* state, ImpactCPURegisters* registers, bool* finished);
+ImpactResult ImpactUnwindStepRegistersWithFramePointer(ImpactCPURegisters* registers);
+ImpactResult ImpactUnwindStepRegisters(const ImpactState* state, ImpactCPURegisters* registers);
 
 #endif /* ImpactUnwind_h */

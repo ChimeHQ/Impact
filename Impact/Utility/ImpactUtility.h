@@ -11,9 +11,11 @@
 
 #include "ImpactPointer.h"
 #include "ImpactDebug.h"
+#include "ImpactResult.h"
 
 #include <stdbool.h>
 
 bool ImpactDebuggerAttached(void);
+ImpactResult ImpactReadMemory(uintptr_t address, size_t size, void* buffer);
 
 #endif /* ImpactUtility_h */

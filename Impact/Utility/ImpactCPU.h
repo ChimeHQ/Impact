@@ -23,10 +23,10 @@ typedef _STRUCT_MCONTEXT ImpactCPURegisters;
 // System V Application Binary Interface AMD64 Architecture Processor Supplement Draft Version 0.3
 //
 // DWARF uses abstract numbers to name registers. That document has a table labelled
-// "DWARF Register Number Mapping" which defines them.
+// "DWARF Register Number Mapping" which defines them. There are 130.
 //
-// Apple's libunwind uses a negative number to represent rip. I'm not yet sure if DWARF ever uses
-// that value. For now, we'll just do the same thing.
+// Apple's libunwind uses a negative number to represent rip. DWARF defines the CFA in terms
+// of a uleb, (ie unsigned), so I believe this is a safe sentinel.
 typedef enum {
     ImpactCPURegister_X86_64_RIP = -1,
 
@@ -46,7 +46,15 @@ typedef enum {
     ImpactCPURegister_X86_64_R13 = 13,
     ImpactCPURegister_X86_64_R14 = 14,
     ImpactCPURegister_X86_64_R15 = 15,
+
+    ImpactCPURegister_X86_64_RA = 16
+
+    // there are 130 of these defined, I haven't found a need to define them all yet
 } ImpactCPURegister;
+
+enum {
+    ImpactCPUDWARFRegisterCount = 17
+};
 
 static const ImpactCPURegister ImpactCPURegisterStackPointer = ImpactCPURegister_X86_64_RSP;
 static const ImpactCPURegister ImpactCPURegisterInstructionPointer = ImpactCPURegister_X86_64_RIP;
@@ -61,6 +69,10 @@ typedef enum {
     ImpactCPURegister_i386_RIP = -1
 } ImpactCPURegister;
 
+enum {
+    ImpactCPUDWARFRegisterCount = 0
+};
+
 static const ImpactCPURegister ImpactCPURegisterStackPointer = ImpactCPURegister_i386_RIP;
 static const ImpactCPURegister ImpactCPURegisterInstructionPointer = ImpactCPURegister_i386_RIP;
 static const ImpactCPURegister ImpactCPURegisterFramePointer = ImpactCPURegister_i386_RIP;
@@ -73,6 +85,10 @@ static const char* ImpactCPUArchitectureName = "i386";
 typedef enum {
     ImpactCPURegister_ARM64_RIP = -1
 } ImpactCPURegister;
+
+enum {
+    ImpactCPUDWARFRegisterCount = 0
+};
 
 static const ImpactCPURegister ImpactCPURegisterStackPointer = ImpactCPURegister_ARM64_RIP;
 static const ImpactCPURegister ImpactCPURegisterInstructionPointer = ImpactCPURegister_ARM64_RIP;

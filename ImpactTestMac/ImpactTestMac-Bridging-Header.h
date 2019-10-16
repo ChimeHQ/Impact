@@ -6,3 +6,4 @@
 #import "NullDereference.h"
 #import "UncaughtNSException.h"
 #import "NonMainThreadUncaughtNSException.h"
+#import "CPPException.h"

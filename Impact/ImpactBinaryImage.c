@@ -19,22 +19,6 @@
 
 #include <string.h>
 
-#if __LP64__
-typedef struct mach_header_64 ImpactMachOHeader;
-typedef struct section_64 ImpactMachOSection;
-typedef struct segment_command_64 ImpactSegmentCommand;
-typedef struct section_64 ImpactSection;
-
-#define Impact_LC_SEGMENT LC_SEGMENT_64
-#else
-typedef struct mach_header ImpactMachOHeader;
-typedef struct section ImpactMachOSection;
-typedef struct segment_command ImpactSegmentCommand;
-typedef struct section ImpactSection;
-
-#define Impact_LC_SEGMENT LC_SEGMENT
-#endif
-
 static void ImpactBinaryImageAdded(const struct mach_header* mh, intptr_t vmaddr_slide);
 static void ImpactBinaryImageRemoved(const struct mach_header* mh, intptr_t vmaddr_slide);
 
@@ -60,11 +44,13 @@ ImpactResult ImpactBinaryImageGetSectionData(const ImpactSegmentCommand* segComm
 
         if (strncmp(section->sectname, "__unwind_info", 13) == 0) {
             data->unwindInfoRegion.address = section->addr + slide;
+            data->unwindInfoRegion.loadAddress = section->addr;
             data->unwindInfoRegion.length = section->size;
 
             foundSections++;
         } else if (strncmp(section->sectname, "__eh_frame", 10) == 0) {
             data->ehFrameRegion.address = section->addr + slide;
+            data->ehFrameRegion.loadAddress = section->addr;
             data->ehFrameRegion.length = section->size;
 
             foundSections++;
