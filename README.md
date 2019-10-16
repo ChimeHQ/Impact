@@ -17,8 +17,8 @@ Current feature set:
 * UNIX signals
 * NSException within an AppKit app
 * Frame pointer-based stack unwinding
-* Scaffolding for compact unwind, but no compact unwind-based unwinding
-* Scaffolding for DWARF CFI, but no CFI-based unwinding
+* Partial compact unwind support for x86_64
+* Partial DWARF CFI support for x86_64
 
 Impact uses a text-based log format, which is currently **unstable**. It is designed to be simple, while still making both debugging and parsing possible in the face of crash-time failure.
 
