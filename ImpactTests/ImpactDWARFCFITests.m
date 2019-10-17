@@ -12,7 +12,6 @@
 #import "ImpactDWARFParser.h"
 #import "ImpactState.h"
 #import "ImpactCrashHelper.h"
-#import "ImpactBinaryImage.h"
 
 #import <stdio.h>
 
@@ -101,6 +100,87 @@
     // yet certain how decode this successfully. However, since we don't need pesonality functions,
     // it isn't critical.
     XCTAssertEqual(cie.augmentationData.personality, 0x00789040 + (region.address - region.loadAddress));
+}
+
+- (void)testDWARFCFIRunInstructions {
+    const ImpactMachODataRegion region = [ImpactCrashHelper regionWithName:@"unwind/libobjc_10_14_4_18E226.eh_frame.x86_64.bin"
+                                                               loadAddress:0x785ee0];
+    const ImpactDWARFEnvironment env = {
+        .pointerWidth = 8
+    };
+
+    ImpactDWARFCFIData cfiData = {0};
+
+    // first compact unwind entry with a dwarf offset "_tls_init"
+    ImpactResult result = ImpactDWARFReadData(region, env, 0x00000C88, &cfiData);
+    XCTAssertEqual(result, ImpactResultSuccess);
+
+//    00000bc8 0000001c ffffffff CIE
+//      Version:               1
+//      Augmentation:          "zPLR"
+//      Code alignment factor: 1
+//      Data alignment factor: -8
+//      Return address column: 16
+//      Personality Address: 0000258d
+//      Augmentation data:     9B 8D 25 00 00 10 10
+//
+//      DW_CFA_def_cfa: reg7 +8
+//      DW_CFA_offset: reg16 -8
+//      DW_CFA_nop:
+//      DW_CFA_nop:
+//
+//    00000c88 0000001c 0000017c FDE cie=0000017c pc=ff88fcb0...ff88fcbb
+//      DW_CFA_advance_loc: 1
+//      DW_CFA_def_cfa_offset: +16
+//      DW_CFA_nop:
+//      DW_CFA_nop:
+//      DW_CFA_nop:
+//      DW_CFA_nop:
+
+    const uint64_t stack[] = {
+        0x0,
+        0x11223344, // RIP (-8)
+        0x0, // CFA (RSP + 16)
+        0x0
+    };
+    const uint64_t rip = 0x0;
+    const uint64_t rbp = 0xccaabb;
+    const uint64_t rsp = (uint64_t)stack;
+
+    const ImpactDWARFTarget target = {
+        .pc = rip,
+        .ehFrameRegion = region,
+        .environment = env
+    };
+
+    ImpactCPURegisters registers = {0};
+
+    result = ImpactCPUSetRegister(&registers, ImpactCPURegister_X86_64_RIP, rip);
+    XCTAssertEqual(result, ImpactResultSuccess);
+
+    result = ImpactCPUSetRegister(&registers, ImpactCPURegister_X86_64_RBP, rbp);
+    XCTAssertEqual(result, ImpactResultSuccess);
+
+    result = ImpactCPUSetRegister(&registers, ImpactCPURegister_X86_64_RSP, rsp);
+    XCTAssertEqual(result, ImpactResultSuccess);
+
+    result = ImpactDWARFStepRegisters(&cfiData, target, &registers);
+    XCTAssertEqual(result, ImpactResultSuccess);
+
+    // now, verify that all the registers are mutated as expected
+    uintptr_t value = 0;
+
+    result = ImpactCPUGetRegister(&registers, ImpactCPURegister_X86_64_RIP, &value);
+    XCTAssertEqual(result, ImpactResultSuccess);
+    XCTAssertEqual(value, 0x11223344);
+
+    result = ImpactCPUGetRegister(&registers, ImpactCPURegister_X86_64_RBP, &value);
+    XCTAssertEqual(result, ImpactResultSuccess);
+    XCTAssertEqual(value, 0xccaabb);
+
+    result = ImpactCPUGetRegister(&registers, ImpactCPURegister_X86_64_RSP, &value);
+    XCTAssertEqual(result, ImpactResultSuccess);
+    XCTAssertEqual(value, (uint64_t)stack + 16);
 }
 
 @end
