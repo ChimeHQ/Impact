@@ -15,7 +15,7 @@ Current feature set:
 
 * Mach Exceptions
 * UNIX signals
-* NSException within an AppKit app
+* NSExceptions (including from within AppKit)
 * Frame pointer-based stack unwinding
 * Partial compact unwind support for x86_64
 * Partial DWARF CFI support for x86_64
