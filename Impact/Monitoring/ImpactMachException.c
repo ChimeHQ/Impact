@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <assert.h>
+#include <dispatch/dispatch.h>
 
 #if IMPACT_MACH_EXCEPTION_SUPPORTED
 
@@ -79,6 +80,8 @@ typedef union {
 
 static const exception_behavior_t ImpactMachExceptionBehavior = (EXCEPTION_DEFAULT | MACH_EXCEPTION_CODES);
 
+static dispatch_semaphore_t ImpactMachExceptionInitSemaphore = NULL;
+
 typedef struct {
     exception_mask_t mask;
     exception_handler_t handlerPort;
@@ -92,7 +95,7 @@ static ImpactResult ImpactMachExceptionSetupThread(void* ctx) {
     pthread_t thread;
     pthread_attr_t attrs;
 
-    int result = pthread_attr_init(&attrs);
+    long result = pthread_attr_init(&attrs);
     if (result != 0) {
         return ImpactResultFailure;
     }
@@ -102,9 +105,19 @@ static ImpactResult ImpactMachExceptionSetupThread(void* ctx) {
         return ImpactResultFailure;
     }
 
+    ImpactMachExceptionInitSemaphore = dispatch_semaphore_create(0);
+
     result = pthread_create(&thread, &attrs, ImpactMachExceptionServer, ctx);
+    if (result != 0) {
+        ImpactDebugLog("[Log:WARN] unable to create pthread %ld\n", result);
+        return ImpactResultFailure;
+    }
 
     pthread_attr_destroy(&attrs);
+
+    result = dispatch_semaphore_wait(ImpactMachExceptionInitSemaphore, dispatch_time(DISPATCH_TIME_NOW, 200 * NSEC_PER_MSEC));
+
+    ImpactMachExceptionInitSemaphore = NULL;
 
     return result == 0 ? ImpactResultSuccess : ImpactResultFailure;
 }
@@ -136,7 +149,7 @@ ImpactResult ImpactMachExceptionLogPreexistingHandlers(const ImpactState* state)
 
         const ImpactResult result = ImpactMachExceptionGetHandler(state, i, &handler);
         if (result != ImpactResultSuccess) {
-            ImpactDebugLog("[Log:WARN:%s] unable to read preexisting handler %d\n", __func__, result);
+            ImpactDebugLog("[Log:WARN] unable to read preexisting mach handler %d\n", result);
             continue;
         }
 
@@ -144,7 +157,7 @@ ImpactResult ImpactMachExceptionLogPreexistingHandlers(const ImpactState* state)
             continue;
         }
 
-        ImpactDebugLog("[Log:INFO:%s] preexisting handler %d - %x, %x\n", __func__, i, handler.mask, handler.behavior);
+        ImpactDebugLog("[Log:INFO] preexisting mach exception handler %d - %x, %x\n", i, handler.mask, handler.behavior);
     }
 
     return ImpactResultSuccess;
@@ -321,7 +334,11 @@ static ImpactResult ImpactMachExceptionReadException(ImpactMachExceptionAllRaise
         return ImpactResultArgumentInvalid;
     }
 
-    ImpactDebugLog("[Log:INFO:%s] waiting on exception %x\n", __func__, request->raise.Head.msgh_size);
+    ImpactDebugLog("[Log:INFO] waiting on mach exception %x\n", request->raise.Head.msgh_size);
+
+    if (ImpactMachExceptionInitSemaphore != NULL) {
+        dispatch_semaphore_signal(ImpactMachExceptionInitSemaphore);
+    }
 
     const mach_msg_return_t mr = mach_msg(&request->raise.Head,
                                           MACH_RCV_MSG | MACH_RCV_LARGE,
@@ -341,17 +358,20 @@ static ImpactResult ImpactMachExceptionReadException(ImpactMachExceptionAllRaise
 static ImpactResult ImpactMachExceptionProcess(ImpactState* state, const ImpactMachExceptionRaiseRequest* request, bool* forwarded) {
     ImpactResult result = ImpactMachExceptionLog(state, request);
     if (result != ImpactResultSuccess) {
-        ImpactDebugLog("[Log:ERROR:%s] unable to log exception %d\n", __func__, result);
+        ImpactDebugLog("[Log:ERROR] unable to log mach exception %d\n", result);
         return result;
     }
 
     const thread_act_t thread = request->thread.name;
 
     result = ImpactCrashHandler(state, thread, NULL);
+    if (result != ImpactResultSuccess) {
+        ImpactDebugLog("[Log:ERROR] crash handler failed %d\n", result);
+    }
 
     result = ImpactMachExceptionForward(state, request, forwarded);
     if (result != ImpactResultSuccess) {
-        ImpactDebugLog("[Log:WARN:%s] failed to forward exception %d\n", __func__, result);
+        ImpactDebugLog("[Log:WARN] failed to forward exception %d\n", result);
     }
 
     return result;

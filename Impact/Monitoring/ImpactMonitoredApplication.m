@@ -26,6 +26,7 @@
 }
 
 - (void)reportException:(NSException *)exception {
+    ImpactDebugLog("[Log:INFO] ImpactMonitoredApplication reporting exception\n");
     ImpactRuntimeExceptionLogNSException(exception);
 
     [super reportException:exception];

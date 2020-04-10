@@ -14,6 +14,7 @@
 #include "ImpactBinaryImage.h"
 #include "ImpactUtility.h"
 #include "ImpactCPU.h"
+#include "ImpactRuntimeException.h"
 
 #include <sys/sysctl.h>
 #import <sys/utsname.h>
@@ -95,9 +96,14 @@ const char* ImpactPlatformName = "watchOS";
         return;
     }
 
+    result = ImpactRuntimeExceptionInitialize(GlobalImpactState);
+    if (result != ImpactResultSuccess) {
+        NSLog(@"[Impact] Unable to initialize run time exceptions %d", result);
+    }
+
     atomic_store(&GlobalImpactState->mutableState.crashState, ImpactCrashStateInitialized);
 
-    ImpactDebugLog("[Log:INFO:%s] finished initialization\n", __func__);
+    ImpactDebugLog("[Log:INFO] finished initialization\n");
 }
 
 - (NSString *)OSVersionString {
@@ -176,7 +182,9 @@ const char* ImpactPlatformName = "watchOS";
 
     ImpactLogWriteKeyStringObject(log, "model", self.hardwareModel , false);
 
-    ImpactLogWriteKeyString(log, "os_version", [self OSVersionString].UTF8String, true);
+    ImpactLogWriteKeyString(log, "os_version", [self OSVersionString].UTF8String, false);
+
+    ImpactLogWriteKeyInteger(log, "impact_version", CURRENT_PROJECT_VERSION, true);
 }
 
 @end

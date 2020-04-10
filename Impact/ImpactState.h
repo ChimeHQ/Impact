@@ -65,10 +65,13 @@ typedef struct {
 
     // general configuration
     bool suppressReportCrash;
+
+    void* preexistingNSExceptionHandler;
 } ImpactConstantState;
 
 typedef struct {
     _Atomic ImpactCrashState crashState;
+    _Atomic uint32_t exceptionCount;
 } ImpactMutableState;
 
 typedef struct {
