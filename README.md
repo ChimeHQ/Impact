@@ -17,8 +17,8 @@ Current feature set:
 * UNIX signals
 * NSExceptions (including from within AppKit)
 * Frame pointer-based stack unwinding
-* Partial compact unwind support for x86_64
-* Partial DWARF CFI support for x86_64
+* Partial compact unwind support for x86_64 and arm64
+* Partial DWARF CFI support for x86_64 and arm64
 
 Impact uses a text-based log format, which is currently **unstable**. It is designed to be simple, while still making both debugging and parsing possible in the face of crash-time failure.
 
@@ -36,11 +36,9 @@ Also, crash reporting is just a fun and fascinating problem. It tends to be very
 
 ## Can I Use Impact in my App?
 
-Probably a little early at this point.
+Probably a little early at this point. Impact is very much still a work-in-progress. But, it has been working great in a real macOS application.
 
-First, you must keep in mind that it **only** captures information about crash events. It does not have any facilities for transmitting those events back to you or translating them into human-readable versions.
-
-Second, Impact is very much still a work-in-progress. At the moment, it only supports macOS. While it builds for other platforms, there's major functionality missing.
+However, you must keep in mind that it **only** captures information about crash events. It does not have any facilities for transmitting those events back to you or translating them into human-readable versions.
 
 ## Relationship to Crashlytics
 

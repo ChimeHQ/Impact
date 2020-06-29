@@ -12,6 +12,8 @@
 #include "ImpactCompactUnwind.h"
 #include "ImpactDWARF.h"
 
+#include <ptrauth.h>
+
 // this structure is only intended for use with x86_64. However, it should work in practice for any ABI that follows similar conventions
 #pragma pack(push, 8)
 typedef struct {

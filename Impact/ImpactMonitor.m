@@ -135,6 +135,23 @@ const char* ImpactPlatformName = "watchOS";
 #endif
 }
 
+- (const char *)targetTranslated {
+    int ret = 0;
+    size_t size = sizeof(ret);
+
+    if (sysctlbyname("sysctl.proc_translated", &ret, &size, NULL, 0) == -1) {
+        if (errno == ENOENT) {
+            return "false";
+        }
+
+        ImpactDebugLog("[Log:WARN] failed to determine if process is being translated\n");
+
+        return "<unknown>";
+    }
+
+    return ret == 1 ? "true" : "false";
+}
+
 - (void)logExecutableData:(ImpactState *)state {
     ImpactLogger* log = &state->constantState.log;
 
@@ -183,6 +200,8 @@ const char* ImpactPlatformName = "watchOS";
     ImpactLogWriteKeyStringObject(log, "model", self.hardwareModel , false);
 
     ImpactLogWriteKeyString(log, "os_version", [self OSVersionString].UTF8String, false);
+
+    ImpactLogWriteKeyString(log, "translated", self.targetTranslated, false);
 
     ImpactLogWriteKeyInteger(log, "impact_version", CURRENT_PROJECT_VERSION, true);
 }

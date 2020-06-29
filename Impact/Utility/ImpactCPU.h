@@ -82,22 +82,68 @@ static const thread_state_flavor_t ImpactCPUThreadStateFlavor = x86_THREAD_STATE
 
 static const char* ImpactCPUArchitectureName = "i386";
 #elif defined(__arm64__)
+// Aarch64 is documented here:
+// https://developer.arm.com/docs/ihi0057/c/dwarf-for-the-arm-64-bit-architecture-aarch64-abi-2018q4
+
 typedef enum {
-    ImpactCPURegister_ARM64_RIP = -1
+    ImpactCPURegister_ARM64_RIP = -1,
+
+    ImpactCPURegister_ARM64_X0  = 0,
+    ImpactCPURegister_ARM64_X1  = 1,
+    ImpactCPURegister_ARM64_X2  = 2,
+    ImpactCPURegister_ARM64_X3  = 3,
+    ImpactCPURegister_ARM64_X4  = 4,
+    ImpactCPURegister_ARM64_X5  = 5,
+    ImpactCPURegister_ARM64_X6  = 6,
+    ImpactCPURegister_ARM64_X7  = 7,
+    ImpactCPURegister_ARM64_X8  = 8,
+    ImpactCPURegister_ARM64_X9  = 9,
+    ImpactCPURegister_ARM64_X10 = 10,
+    ImpactCPURegister_ARM64_X11 = 11,
+    ImpactCPURegister_ARM64_X12 = 12,
+    ImpactCPURegister_ARM64_X13 = 13,
+    ImpactCPURegister_ARM64_X14 = 14,
+    ImpactCPURegister_ARM64_X15 = 15,
+    ImpactCPURegister_ARM64_X16 = 16,
+    ImpactCPURegister_ARM64_X17 = 17,
+    ImpactCPURegister_ARM64_X18 = 18,
+    ImpactCPURegister_ARM64_X19 = 19,
+    ImpactCPURegister_ARM64_X20 = 20,
+    ImpactCPURegister_ARM64_X21 = 21,
+    ImpactCPURegister_ARM64_X22 = 22,
+    ImpactCPURegister_ARM64_X23 = 23,
+    ImpactCPURegister_ARM64_X24 = 24,
+    ImpactCPURegister_ARM64_X25 = 25,
+    ImpactCPURegister_ARM64_X26 = 26,
+    ImpactCPURegister_ARM64_X27 = 27,
+    ImpactCPURegister_ARM64_X28 = 28,
+    ImpactCPURegister_ARM64_X29 = 29,
+    ImpactCPURegister_ARM64_X30 = 30,
+    ImpactCPURegister_ARM64_X31 = 31,
+
+    ImpactCPURegister_ARM64_ELR_mode = 33,
+    ImpactCPURegister_ARM64_RA_SIGN_STATE = 34,
+
+    // lots more vector stuff here
 } ImpactCPURegister;
 
 enum {
     ImpactCPUDWARFRegisterCount = 0
 };
 
-static const ImpactCPURegister ImpactCPURegisterStackPointer = ImpactCPURegister_ARM64_RIP;
+static const ImpactCPURegister ImpactCPURegisterStackPointer = ImpactCPURegister_ARM64_X31;
 static const ImpactCPURegister ImpactCPURegisterInstructionPointer = ImpactCPURegister_ARM64_RIP;
-static const ImpactCPURegister ImpactCPURegisterFramePointer = ImpactCPURegister_ARM64_RIP;
+static const ImpactCPURegister ImpactCPURegisterFramePointer = ImpactCPURegister_ARM64_X29;
+static const ImpactCPURegister ImpactCPURegisterLinkRegister = ImpactCPURegister_ARM64_X30;
 
 static const mach_msg_type_number_t ImpactCPUThreadStateCount = ARM_THREAD_STATE64_COUNT;
-static const thread_state_flavor_t ImpactCPUThreadStateFlavor = ARM_THREAD_STATE;
+static const thread_state_flavor_t ImpactCPUThreadStateFlavor = ARM_THREAD_STATE64;
 
+#if defined(__arm64e__)
+static const char* ImpactCPUArchitectureName = "arm64e";
+#else
 static const char* ImpactCPUArchitectureName = "arm64";
+#endif
 
 #elif defined(__arm__) && !defined(__arm64__)
 typedef enum {

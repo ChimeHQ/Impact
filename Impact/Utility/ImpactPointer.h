@@ -11,6 +11,7 @@
 
 #include <sys/types.h>
 #include <stdbool.h>
+#include <stddef.h>
 #include <mach/machine/vm_types.h>
 #include <mach/vm_page_size.h>
 

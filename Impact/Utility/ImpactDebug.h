@@ -10,6 +10,7 @@
 #define ImpactDebug_h
 
 #include "ImpactState.h"
+#include "ImpactPointer.h"
 
 #include <stdio.h>
 
@@ -18,6 +19,9 @@
 #if 1
 
 #define ImpactDebugLog(format, ...) do { \
+if (ImpactInvalidPtr(GlobalImpactState)) { \
+    break; \
+} \
 dprintf(GlobalImpactState->constantState.log.fd, format VA_ARGS(__VA_ARGS__)); \
 } while(0)
 
