@@ -116,10 +116,15 @@ static ImpactResult ImpactMachExceptionSetupThread(void* ctx) {
     pthread_attr_destroy(&attrs);
 
     result = dispatch_semaphore_wait(ImpactMachExceptionInitSemaphore, dispatch_time(DISPATCH_TIME_NOW, 200 * NSEC_PER_MSEC));
+    if (result != 0) {
+        // this is a leak in this case, but better safe than a crash
+        return ImpactResultFailure;
+    }
 
+    dispatch_release(ImpactMachExceptionInitSemaphore);
     ImpactMachExceptionInitSemaphore = NULL;
 
-    return result == 0 ? ImpactResultSuccess : ImpactResultFailure;
+    return ImpactResultSuccess;
 }
 
 static ImpactResult ImpactMachExceptionGetHandler(const ImpactState* state, uint i, ImpactMachExceptionHandler* handler) {
