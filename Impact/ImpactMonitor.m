@@ -44,6 +44,10 @@ const char* ImpactPlatformName = "watchOS";
     return sharedMyManager;
 }
 
++ (NSInteger)buildNumber {
+    return CURRENT_PROJECT_VERSION;
+}
+
 - (instancetype)init {
     self = [super init];
     if (self) {
@@ -203,7 +207,7 @@ const char* ImpactPlatformName = "watchOS";
 
     ImpactLogWriteKeyString(log, "translated", self.targetTranslated, false);
 
-    ImpactLogWriteKeyInteger(log, "impact_version", CURRENT_PROJECT_VERSION, true);
+    ImpactLogWriteKeyInteger(log, "impact_version", [self.class buildNumber], true);
 }
 
 @end

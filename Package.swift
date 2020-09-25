@@ -10,14 +10,30 @@ let package = Package(
     ],
     dependencies: [],
     targets: [
-        .target(name: "Impact", dependencies: [], path: "Impact/", cSettings: [
-          .headerSearchPath(""),
-          .headerSearchPath("Utility"),
-          .headerSearchPath("DWARF"),
-          .headerSearchPath("Unwind"),
-          .headerSearchPath("Monitoring"),
-          .define("CURRENT_PROJECT_VERSION", to: "4")]
+        .target(name: "Impact",
+                dependencies: [],
+                path: "Impact/",
+                cSettings: [
+                  .headerSearchPath(""),
+                  .headerSearchPath("Utility"),
+                  .headerSearchPath("DWARF"),
+                  .headerSearchPath("Unwind"),
+                  .headerSearchPath("Monitoring"),
+                  .define("CURRENT_PROJECT_VERSION", to: "4")
+                ]
         ),
-        // .testTarget(name: "ImpactTests", dependencies: ["Impact"], path: "ImpactTests/"),
+        .testTarget(name: "ImpactTests",
+                    dependencies: ["Impact"],
+                    path: "ImpactTests/",
+                    exclude: ["ImpactCrashTests.swift", "ImpactCrashHelper.m"],
+                    cSettings: [
+                      .headerSearchPath("Impact"),
+                      .headerSearchPath("Utility"),
+                      .headerSearchPath("DWARF"),
+                      .headerSearchPath("Unwind"),
+                      .headerSearchPath("Monitoring"),
+                      .define("CURRENT_PROJECT_VERSION", to: "4")
+                    ]
+        ),
     ]
 )
