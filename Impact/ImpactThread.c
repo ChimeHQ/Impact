@@ -24,7 +24,7 @@ ImpactResult ImpactThreadListInitialize(ImpactThreadList* list, thread_act_t cra
 
     const kern_return_t kr = task_threads(mach_task_self(), &list->threads, &list->count);
     if (kr != KERN_SUCCESS) {
-        ImpactDebugLog("[Log:%s] unable to get threads %d\n", __func__, kr);
+        ImpactDebugLog("[Log:ERROR] unable to get threads %d\n", kr);
         return ImpactResultFailure;
     }
 
@@ -34,6 +34,10 @@ ImpactResult ImpactThreadListInitialize(ImpactThreadList* list, thread_act_t cra
         list->crashedThread = list->threadSelf;
     } else {
         list->crashedThread = crashedThread;
+    }
+
+    if (!MACH_PORT_VALID(list->crashedThread)) {
+        ImpactDebugLog("[Log:WARN] crashed thread is invalid\n");
     }
 
     list->crashedThreadRegisters = crashedThreadRegisters;
