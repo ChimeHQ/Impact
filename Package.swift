@@ -19,7 +19,7 @@ let package = Package(
                   .headerSearchPath("DWARF"),
                   .headerSearchPath("Unwind"),
                   .headerSearchPath("Monitoring"),
-                  .define("CURRENT_PROJECT_VERSION", to: "4")
+                  .define("CURRENT_PROJECT_VERSION", to: "5")
                 ]
         ),
         .testTarget(name: "ImpactTests",
@@ -32,7 +32,7 @@ let package = Package(
                       .headerSearchPath("DWARF"),
                       .headerSearchPath("Unwind"),
                       .headerSearchPath("Monitoring"),
-                      .define("CURRENT_PROJECT_VERSION", to: "4")
+                      .define("CURRENT_PROJECT_VERSION", to: "5")
                     ]
         ),
     ]
