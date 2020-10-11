@@ -20,7 +20,7 @@ Current feature set:
 * Partial compact unwind support for x86_64 and arm64
 * Partial DWARF CFI support for x86_64 and arm64
 
-Impact uses a text-based log format, which is currently **unstable**. It is designed to be simple, while still making both debugging and parsing possible in the face of crash-time failure.
+Impact uses a text-based log format. While the format itself is stable, the contents are still **unstable**. It is designed to be simple, while still making both debugging and parsing possible in the face of crash-time failure.
 
 ## Isn't Crash Reporting a Solved Problem?
 
@@ -36,9 +36,11 @@ Also, crash reporting is just a fun and fascinating problem. It tends to be very
 
 ## Can I Use Impact in my App?
 
-Probably a little early at this point. Impact is very much still a work-in-progress. But, it has been working great in a real macOS application.
+You must keep in mind that Impact **only** captures information about crash events. It does not have any facilities for transmitting those events back to you or translating them into human-readable versions. A full reporting system requires a little more work. Here are a few options:
 
-However, you must keep in mind that it **only** captures information about crash events. It does not have any facilities for transmitting those events back to you or translating them into human-readable versions.
+ - Impact on its own, with full control over how you produce and consume reports
+ - Integrate with [Wells](https://github.com/ChimeHQ/Wells) for report transmission and management
+ - MetricKit crash reporting with graceful fallback via [Meter](https://github.com/ChimeHQ/Meter) and [ImpactMeterAdapter](https://github.com/ChimeHQ/ImpactMeterAdapter)
 
 ## Relationship to Crashlytics
 
