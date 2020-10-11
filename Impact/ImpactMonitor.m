@@ -48,6 +48,10 @@ const char* ImpactPlatformName = "watchOS";
     return CURRENT_PROJECT_VERSION;
 }
 
++(NSString *)platform {
+    return [NSString stringWithUTF8String:ImpactPlatformName];
+}
+
 - (instancetype)init {
     self = [super init];
     if (self) {

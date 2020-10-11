@@ -17,6 +17,7 @@ FOUNDATION_EXTERN const char* ImpactPlatformName;
 + (ImpactMonitor *)shared;
 
 @property (class, nonatomic, assign, readonly) NSInteger buildNumber;
+@property (class, nonatomic, assign, readonly) NSString *platform;
 
 - (void)startWithURL:(NSURL *)url identifier:(NSUUID *)uuid;
 
