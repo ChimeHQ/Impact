@@ -68,7 +68,7 @@ class ImpactCrashTests: XCTestCase {
 
         let lines = readCrashData(at: url)
 
-        XCTAssertFalse(lines.contains("hello from the mach exception handler"))
+        XCTAssertFalse(lines.contains(where: { $0.hasPrefix("[MachException]") }))
         XCTAssertFalse(lines.contains("[Thread:Crashed]"))
         XCTAssertTrue(lines.contains(where: { $0.hasPrefix("[Application] id: Y29tLmNoaW1laHEuSW1wYWN0VGVzdE1hYw==") }))
         XCTAssertTrue(lines.contains(where: { $0.hasPrefix("[Environment] platform: macOS") }))
@@ -88,7 +88,7 @@ class ImpactCrashTests: XCTestCase {
         let url = try launchAppAndExecute(crash: "nullDereference")
         let lines = readCrashData(at: url)
 
-        XCTAssertTrue(lines.contains("hello from the mach exception handler"))
+        XCTAssertTrue(lines.contains(where: { $0.hasPrefix("[MachException]") }))
         XCTAssertTrue(lines.contains("[Thread:Crashed]"))
         
         try? FileManager.default.removeItem(at: url)
@@ -98,7 +98,7 @@ class ImpactCrashTests: XCTestCase {
         let url = try launchAppAndExecute(crash: "uncaughtNSException")
         let lines = readCrashData(at: url)
 
-        XCTAssertTrue(lines.contains("hello from the mach exception handler"))
+        XCTAssertTrue(lines.contains(where: { $0.hasPrefix("[MachException]") }))
         XCTAssertTrue(lines.contains("[Exception] type: objc, name: QW5FeGNlcHRpb24=, message: c29tZXRoaW5nIGJhZCBoYXBwZW5lZA=="))
 
         try? FileManager.default.removeItem(at: url)
@@ -108,7 +108,7 @@ class ImpactCrashTests: XCTestCase {
         let url = try launchAppAndExecute(crash: "nonMainThreadUncaughtNSException")
         let lines = readCrashData(at: url)
 
-        XCTAssertTrue(lines.contains("hello from the mach exception handler"))
+        XCTAssertTrue(lines.contains(where: { $0.hasPrefix("[MachException]") }))
         XCTAssertTrue(lines.contains("[Exception] type: objc, name: QW5FeGNlcHRpb24=, message: c29tZXRoaW5nIGJhZCBoYXBwZW5lZA=="))
 
         try? FileManager.default.removeItem(at: url)

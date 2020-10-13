@@ -247,11 +247,16 @@ ImpactResult ImpactMachExceptionRestorePreexisting(const ImpactState* state) {
 static ImpactResult ImpactMachExceptionLog(ImpactState* state, const ImpactMachExceptionRaiseRequest* request) {
     ImpactLogger* log = &state->constantState.log;
 
-    ImpactLogWriteString(log, "hello from the mach exception handler\n");
+    ImpactLogWriteString(log, "[MachException] ");
+    
+    ImpactLogWriteKeyInteger(log, "number", request->exception, false);
+    ImpactLogWriteKeyInteger(log, "code", request->code[0], false);
+    ImpactLogWriteKeyInteger(log, "subcode", request->code[1], false);
+    ImpactLogWriteTime(log, "time", true);
 
     thread_t thread = request->thread.name;
 
-    ImpactDebugLog("[Log:%s] request %d %x %llx %llx %x\n", __func__, request->Head.msgh_id, request->exception, request->code[0], request->code[1], thread);
+    ImpactDebugLog("[Log:%s] request %d, thread %x\n", __func__, request->Head.msgh_id, thread);
     
     return ImpactResultSuccess;
 }
