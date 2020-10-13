@@ -12,6 +12,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <string.h>
+#include <time.h>
 
 ImpactResult ImpactLogInitialize(ImpactState* state, const char* _Nonnull path) {
     if (ImpactInvalidPtr(state) || ImpactInvalidPtr(path)) {
@@ -153,5 +154,10 @@ ImpactResult ImpactLogWriteKeyHexData(const ImpactLogger* log, const char* key, 
     ImpactLogWriteString(log, last ? "\n" : ", ");
 
     return ImpactResultSuccess;
+}
 
+ImpactResult ImpactLogWriteTime(const ImpactLogger* log, const char* key, bool last) {
+    const uint64_t epochTimeMS = time(NULL) * 1000;
+
+    return ImpactLogWriteKeyInteger(log, key, epochTimeMS, last);
 }

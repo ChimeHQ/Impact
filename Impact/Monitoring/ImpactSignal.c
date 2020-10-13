@@ -128,6 +128,7 @@ static ImpactResult ImpactSignalLog(ImpactState* state, int signal, siginfo_t* i
         ImpactLogWriteKeyInteger(log, "signal", signal, false);
         ImpactLogWriteKeyInteger(log, "code", info->si_code, false);
         ImpactLogWriteKeyPointer(log, "address", info->si_addr, false);
+        ImpactLogWriteTime(log, "time", false);
         ImpactLogWriteKeyInteger(log, "errno", info->si_errno, true);
     }
 

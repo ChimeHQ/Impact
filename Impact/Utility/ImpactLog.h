@@ -41,6 +41,7 @@ ImpactResult ImpactLogWriteKeyStringObject(const ImpactLogger* log, const char* 
 #endif
 
 ImpactResult ImpactLogWriteKeyHexData(const ImpactLogger* log, const char* key, const uint8_t* _Nullable data, size_t length, bool last);
+ImpactResult ImpactLogWriteTime(const ImpactLogger* log, const char* key, bool last);
 
 __END_DECLS
 _Pragma("clang assume_nonnull end")
