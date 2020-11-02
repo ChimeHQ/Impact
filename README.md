@@ -46,7 +46,7 @@ You must keep in mind that Impact **only** captures information about crash even
 
 I worked at [Crashlytics](https://firebase.google.com/products/crashlytics) for many years. During my time there, I briefly worked with [PLCrashReporter](https://www.plcrashreporter.org) before starting from scratch and building a completely custom system. I spent a considerable amount of time there analyzing and understanding the failure modes of in-process crash reporting. That work shaped most of the design of the Crashlytics SDK, though things might have changed since I left.
 
-Impact does share many of those design philosophies. Primarily because I believe those core design concepts are the best approach. It's also hard to unsee solutions, sometimes. However, they have chosen to keep their SDK closed source, and I want to respect that. While I haven't had direct access the code for years, I'll still do my best to keep non-public information that way.
+Impact does share many of those design philosophies. It's hard to unsee solutions, sometimes. But, it's primarily because I believe those core design concepts are the best approach.
 
 ## Incorporating Impact
 
