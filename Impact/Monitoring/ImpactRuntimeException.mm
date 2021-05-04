@@ -64,7 +64,8 @@ void ImpactRuntimeExceptionLogNSException(NSException* exception) {
     ImpactLogWriteString(log, "[Exception] ");
     ImpactLogWriteKeyString(log, "type", "objc", false);
     ImpactLogWriteKeyStringObject(log, "name", exception.name, false);
-    ImpactLogWriteKeyStringObject(log, "message", exception.reason, true);
+    ImpactLogWriteKeyStringObject(log, "message", exception.reason, false);
+    ImpactLogWriteTime(log, "time", true);
 
     for (NSNumber *address in exception.callStackReturnAddresses) {
         ImpactLogWriteString(log, "[Exception:Frame] ");
