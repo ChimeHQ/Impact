@@ -938,6 +938,7 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 7;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -947,6 +948,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.3.2;
 				ONLY_ACTIVE_ARCH = NO;
 				SKIP_INSTALL = YES;
 			};
@@ -959,6 +961,7 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 7;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -968,6 +971,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.3.2;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
