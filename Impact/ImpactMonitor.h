@@ -14,7 +14,7 @@ FOUNDATION_EXTERN const char* ImpactPlatformName;
 
 @interface ImpactMonitor : NSObject
 
-+ (ImpactMonitor *)shared;
+@property (class, nonatomic, assign, readonly) ImpactMonitor *shared;
 
 @property (class, nonatomic, assign, readonly) NSInteger buildNumber;
 @property (class, nonatomic, assign, readonly) NSString *platform;

@@ -143,6 +143,10 @@ const char* ImpactPlatformName = "watchOS";
 #endif
 }
 
+- (NSString *)simulatorModel {
+    return NSProcessInfo.processInfo.environment[@"SIMULATOR_MODEL_IDENTIFIER"];
+}
+
 - (const char *)targetTranslated {
     int ret = 0;
     size_t size = sizeof(ret);
@@ -206,6 +210,8 @@ const char* ImpactPlatformName = "watchOS";
     }
 
     ImpactLogWriteKeyStringObject(log, "model", self.hardwareModel , false);
+
+    ImpactLogWriteKeyStringObject(log, "simulated_model", self.simulatorModel, false);
 
     ImpactLogWriteKeyString(log, "os_version", [self OSVersionString].UTF8String, false);
 

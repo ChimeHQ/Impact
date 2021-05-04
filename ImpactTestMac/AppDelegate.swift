@@ -22,8 +22,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let path = UserDefaults.standard.string(forKey: "output_path") ?? "/tmp/impact";
         let url = URL(fileURLWithPath: path, isDirectory: false)
 
-        ImpactMonitor.shared().suppressReportCrash = UserDefaults.standard.bool(forKey: "suppressReportCrash")
-        ImpactMonitor.shared().start(with: url, identifier: UUID())
+        ImpactMonitor.shared.suppressReportCrash = UserDefaults.standard.bool(forKey: "suppressReportCrash")
+        ImpactMonitor.shared.start(with: url, identifier: UUID())
 
         self.viewController = ViewController()
         self.window = NSWindow(contentViewController: viewController)
