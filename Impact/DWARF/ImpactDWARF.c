@@ -83,8 +83,8 @@ ImpactResult ImpactDWARFRunCFIInstructions(const ImpactDWARFCFIInstructions* ins
         // DW_CFA_restore
         // DW_CFA_restore_state
         //
-        // I have yet to see arm64 DWARF in the wild, except for the hand-written CFI code in CrashProbe. And,
-        // interestingly, that code also contains the only use of DW_CFA_register so far encountered.
+        // libc++abi.dylib contains DWARF instructions for ARM64. Interestingly, the only time DW_CFA_register
+        // has come up so for is in the hand-written CFI code in CrashProbe.
 
         if (result != ImpactResultSuccess) {
             return result;
@@ -223,7 +223,7 @@ ImpactResult ImpactDWARFStepRegisters(const ImpactDWARFCFIData* cfiData, ImpactD
         return result;
     }
 
-    ImpactDebugLog("[Log:INFO] CFA=%lx\n", cfaValue);
+    ImpactDebugLog("[Log:INFO] CFA=%lx, RA=%lld\n", cfaValue, cfiData->cie.return_address_register);
     
     if (ImpactInvalidPtr((void*)cfaValue)) {
         ImpactDebugLog("[Log:WARN] CFA invalid\n");
@@ -231,6 +231,10 @@ ImpactResult ImpactDWARFStepRegisters(const ImpactDWARFCFIData* cfiData, ImpactD
     }
 
     ImpactCPURegisters updatedRegisters = *registers;
+
+    if (cfiData->cie.augmentationData.signedWithBKey) {
+        ImpactDebugLog("[Log:WARN] addresses are signed\n");
+    }
 
     for (uint32_t i = 0; i < ImpactCPUDWARFRegisterCount; ++i) {
         const ImpactDWARFRegister reg = state.registerRules[i];
@@ -246,6 +250,14 @@ ImpactResult ImpactDWARFStepRegisters(const ImpactDWARFCFIData* cfiData, ImpactD
         }
 
         ImpactDebugLog("[Log:INFO] restoring register %d with 0x%lx\n", i, regValue);
+
+        if (i == cfiData->cie.return_address_register) {
+            result = ImpactCPUSetRegister(&updatedRegisters, ImpactCPURegisterInstructionPointer, regValue);
+
+            if (result != ImpactResultSuccess) {
+                return result;
+            }
+        }
 
         result = ImpactCPUSetRegister(&updatedRegisters, i, regValue);
         if (result != ImpactResultSuccess) {

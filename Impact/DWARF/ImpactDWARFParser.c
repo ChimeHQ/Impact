@@ -182,6 +182,11 @@ ImpactResult ImpactDWARFReadCIEAugmentation(ImpactDataCursor* cursor, ImpactDWAR
         case 'S':
             data->isSignalFrame = true;
             break;
+#if defined(__arm64__)
+        case 'B':
+            data->signedWithBKey = true;
+            break;
+#endif
         default:
             return ImpactResultUnexpectedData;
         }

@@ -128,7 +128,7 @@ typedef enum {
 } ImpactCPURegister;
 
 enum {
-    ImpactCPUDWARFRegisterCount = 0
+    ImpactCPUDWARFRegisterCount = 35
 };
 
 static const ImpactCPURegister ImpactCPURegisterStackPointer = ImpactCPURegister_ARM64_X31;

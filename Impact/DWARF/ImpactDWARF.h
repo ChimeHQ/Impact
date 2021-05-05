@@ -90,6 +90,7 @@ typedef struct {
     uint8_t lsdaEncoding;
     uint8_t pointerEncoding;
     bool isSignalFrame;
+    bool signedWithBKey;
 } ImpactDWARFCIEAppleAugmentationData;
 
 typedef struct {
