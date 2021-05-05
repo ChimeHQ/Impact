@@ -99,7 +99,7 @@ class ImpactCrashTests: XCTestCase {
         let lines = readCrashData(at: url)
 
         XCTAssertTrue(lines.contains(where: { $0.hasPrefix("[MachException]") }))
-        XCTAssertTrue(lines.contains("[Exception] type: objc, name: QW5FeGNlcHRpb24=, message: c29tZXRoaW5nIGJhZCBoYXBwZW5lZA=="))
+        XCTAssertTrue(lines.contains(where: { $0.hasPrefix("[Exception] type: objc, name: QW5FeGNlcHRpb24=, message: c29tZXRoaW5nIGJhZCBoYXBwZW5lZA==") }))
 
         try? FileManager.default.removeItem(at: url)
     }
@@ -109,7 +109,7 @@ class ImpactCrashTests: XCTestCase {
         let lines = readCrashData(at: url)
 
         XCTAssertTrue(lines.contains(where: { $0.hasPrefix("[MachException]") }))
-        XCTAssertTrue(lines.contains("[Exception] type: objc, name: QW5FeGNlcHRpb24=, message: c29tZXRoaW5nIGJhZCBoYXBwZW5lZA=="))
+        XCTAssertTrue(lines.contains(where: { $0.hasPrefix("[Exception] type: objc, name: QW5FeGNlcHRpb24=, message: c29tZXRoaW5nIGJhZCBoYXBwZW5lZA==") }))
 
         try? FileManager.default.removeItem(at: url)
     }

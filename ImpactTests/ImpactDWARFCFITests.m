@@ -103,6 +103,7 @@
 }
 
 - (void)testDWARFCFIRunInstructions {
+#if defined(__x86_64__)
     const ImpactMachODataRegion region = [ImpactCrashHelper regionWithName:@"unwind/libobjc_10_14_4_18E226.eh_frame.x86_64.bin"
                                                                loadAddress:0x785ee0];
     const ImpactDWARFEnvironment env = {
@@ -181,6 +182,7 @@
     result = ImpactCPUGetRegister(&registers, ImpactCPURegister_X86_64_RSP, &value);
     XCTAssertEqual(result, ImpactResultSuccess);
     XCTAssertEqual(value, (uint64_t)stack + 16);
+#endif
 }
 
 @end
