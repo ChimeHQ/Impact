@@ -1,4 +1,4 @@
-[![Github CI](https://github.com/ChimeHQ/Impact/workflows/CI/badge.svg)](https://github.com/ChimeHQ/Impact/actions)
+[![Github CI](https://github.com/stacksift/Impact/workflows/CI/badge.svg)](https://github.com/ChimeHQ/Impact/actions)
 
 # Impact
 
@@ -39,18 +39,15 @@ Also, crash reporting is just a fun and fascinating problem. It tends to be very
 You must keep in mind that Impact **only** captures information about crash events. It does not have any facilities for transmitting those events back to you or translating them into human-readable versions. A full reporting system requires a little more work. Here are a few options:
 
  - Impact on its own, with full control over how you produce and consume reports
- - Integrate with [Wells](https://github.com/ChimeHQ/Wells) for report transmission and management
- - MetricKit crash reporting with graceful fallback via [Meter](https://github.com/ChimeHQ/Meter) and [ImpactMeterAdapter](https://github.com/ChimeHQ/ImpactMeterAdapter)
+ - Integrate with [Wells](https://github.com/stacksift/Wells) for report transmission and management
+ - MetricKit crash reporting with graceful fallback via [Meter](https://github.com/stacksift/Meter) and [ImpactMeterAdapter](https://github.com/stacksift/ImpactMeterAdapter)
+ - Via [Stacksift](https://www.stacksift.io)
 
 ## Relationship to Crashlytics
 
 I worked at [Crashlytics](https://firebase.google.com/products/crashlytics) for many years. During my time there, I briefly worked with [PLCrashReporter](https://www.plcrashreporter.org) before starting from scratch and building a completely custom system. I spent a considerable amount of time there analyzing and understanding the failure modes of in-process crash reporting. That work shaped most of the design of the Crashlytics SDK, though things might have changed since I left.
 
 Impact does share many of those design philosophies. It's hard to unsee solutions, sometimes. But, it's primarily because I believe those core design concepts are the best approach.
-
-## Incorporating Impact
-
-If you want to use the project as part of a crash reporting service (i.e. accept data from apps you do not write yourself), you are more than welcome. However, you **must** let the maintainers of this project know before you ship. If you just want to use Impact for your own app, go for it! You don't have to get in touch. But, it would be cool :)
 
 ## Contributing
 
@@ -60,6 +57,6 @@ There is absolutely no experience/knowledge requirement. Interest is all you nee
 
 ## Suggestions or Feedback
 
-We'd love to hear from you! Get in touch via [twitter](https://twitter.com/chimehq), an issue, or a pull request.
+We'd love to hear from you! Get in touch via [twitter](https://twitter.com/stacksift), an issue, or a pull request.
 
 Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
