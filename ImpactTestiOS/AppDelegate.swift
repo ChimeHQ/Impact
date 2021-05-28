@@ -16,8 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let path = UserDefaults.standard.string(forKey: "output_path") ?? backupPath;
         let url = URL(fileURLWithPath: path, isDirectory: false)
 
-        ImpactMonitor.shared().suppressReportCrash = UserDefaults.standard.bool(forKey: "suppressReportCrash")
-        ImpactMonitor.shared().start(with: url, identifier: UUID())
+        ImpactMonitor.shared.suppressReportCrash = UserDefaults.standard.bool(forKey: "suppressReportCrash")
+        ImpactMonitor.shared.start(with: url, identifier: UUID())
 
         return true
     }

@@ -11,11 +11,12 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         List {
-            Text("Hello World").onTapGesture {
-                fatalError()
+            Text("Precondition Failure").onTapGesture {
+                precondition(false)
             }
-            Text("Hello World")
-            Text("Hello World")
+            Text("Uncaught Exception").onTapGesture {
+                _ = NSArray()[0]
+            }
         }
     }
 }
