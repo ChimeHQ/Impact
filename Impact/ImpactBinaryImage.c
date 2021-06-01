@@ -16,6 +16,7 @@
 #include <mach-o/dyld_images.h>
 #include <dlfcn.h>
 #include <mach-o/loader.h>
+#include <TargetConditionals.h>
 
 #include <string.h>
 
@@ -102,6 +103,28 @@ ImpactResult ImpactBinaryImageGetData(const ImpactMachOHeader* header, ImpactMac
     return ImpactResultSuccess;
 }
 
+static ImpactResult ImpactBinaryImageLogPath(ImpactLogger* log, const char* path, bool last) {
+#if TARGET_OS_OSX
+    // This strips out the username, should it be present in the path
+    if (strncmp(path, "/Users/", 7) == 0) {
+        const char *sanitizedPath = path + 7; // advance the string past the initial "/Users/" path component
+
+        sanitizedPath = strchr(sanitizedPath, '/');
+        if (sanitizedPath != NULL) {
+            ImpactLogWriteString(log, "path");
+            ImpactLogWriteString(log, ": ");
+            ImpactLogWriteData(log, "/Users/USER", 11);
+
+            ImpactLogWriteString(log, sanitizedPath);
+
+            return ImpactLogWriteString(log, last ? "\n" : ", ");
+        }
+    }
+#endif
+
+    return ImpactLogWriteKeyString(log, "path", path, last);
+}
+
 static ImpactResult ImpactBinaryImageLog(ImpactState* state, const ImpactMachOData* imageData, const char* path) {
     if (ImpactInvalidPtr(state) || ImpactInvalidPtr(imageData) || ImpactInvalidPtr(path)) {
         return ImpactResultPointerInvalid;
@@ -111,7 +134,7 @@ static ImpactResult ImpactBinaryImageLog(ImpactState* state, const ImpactMachODa
 
     ImpactLogWriteString(log, "[Binary:Load] ");
 
-    ImpactLogWriteKeyString(log, "path", path, false);
+    ImpactBinaryImageLogPath(log, path, false);
     ImpactLogWriteKeyInteger(log, "address", imageData->loadAddress, false);
     ImpactLogWriteKeyInteger(log, "size", imageData->textSize, false);
     ImpactLogWriteKeyInteger(log, "slide", imageData->slide, false);
