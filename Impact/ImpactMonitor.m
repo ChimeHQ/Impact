@@ -219,6 +219,9 @@ const char* ImpactPlatformName = "watchOS";
 
     ImpactLogWriteKeyString(log, "region", [NSLocale currentLocale].countryCode.UTF8String, false);
 
+    ImpactLogWriteKeyInteger(log, "pid", getpid(), false);
+    ImpactLogWriteKeyInteger(log, "ppid", getppid(), false);
+
     ImpactLogWriteTime(log, "time", false);
 
     ImpactLogWriteKeyInteger(log, "impact_version", [self.class buildNumber], true);
