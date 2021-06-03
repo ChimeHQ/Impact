@@ -16,3 +16,9 @@ jobs:
       run: |
         git submodule update --init
         xcodebuild test -scheme Impact -destination "${{ matrix.destination }}"
+    - name: SPM
+      run: swift build
+    - name: Carthage
+      run: carthage build --no-skip-current --use-xcframeworks
+    - name: CocoaPods
+      run: pod lib lint
