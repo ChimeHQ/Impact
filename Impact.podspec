@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'Impact'
-  s.version      = '0.3.5'
+  s.version      = '0.3.6'
   s.summary      = 'crash capturing library for Apple platforms'
 
   s.homepage     = 'https://github.com/stacksift/Impact'
