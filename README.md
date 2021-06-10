@@ -1,4 +1,4 @@
-[![Github CI](https://github.com/stacksift/Impact/workflows/CI/badge.svg)](https://github.com/ChimeHQ/Impact/actions)
+[![Github CI](https://github.com/stacksift/Impact/workflows/CI/badge.svg)](https://github.com/stacksift/Impact/actions)
 
 # Impact
 
