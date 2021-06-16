@@ -70,7 +70,7 @@ class ImpactCrashTests: XCTestCase {
 
         XCTAssertFalse(lines.contains(where: { $0.hasPrefix("[MachException]") }))
         XCTAssertFalse(lines.contains("[Thread:Crashed]"))
-        XCTAssertTrue(lines.contains(where: { $0.hasPrefix("[Application] id: Y29tLmNoaW1laHEuSW1wYWN0VGVzdE1hYw==") }))
+        XCTAssertTrue(lines.contains(where: { $0.hasPrefix("[Application] id: Y29tLnN0YWNrc2lmdC5JbXBhY3RUZXN0TWFj") }))
         XCTAssertTrue(lines.contains(where: { $0.hasPrefix("[Environment] platform: macOS") }))
     }
 
