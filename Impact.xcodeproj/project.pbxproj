@@ -48,6 +48,7 @@
 		C9636F8E24A3D00D00631A74 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9636F8D24A3D00D00631A74 /* Assets.xcassets */; };
 		C9636F9124A3D00D00631A74 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9636F9024A3D00D00631A74 /* Preview Assets.xcassets */; };
 		C9636F9424A3D00D00631A74 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9636F9224A3D00D00631A74 /* LaunchScreen.storyboard */; };
+		C990306C267B996600EB1623 /* libc++abi.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C990306B267B996600EB1623 /* libc++abi.tbd */; };
 		C99FB1D3234A642700FFABD0 /* ImpactUtility.c in Sources */ = {isa = PBXBuildFile; fileRef = C99FB1D2234A642700FFABD0 /* ImpactUtility.c */; };
 		C9A4138E2331007600059F5D /* Impact.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9A413842331007600059F5D /* Impact.framework */; };
 		C9A413952331007600059F5D /* Impact.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A413872331007600059F5D /* Impact.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -184,6 +185,8 @@
 		C9636F9024A3D00D00631A74 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C9636F9324A3D00D00631A74 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C9636F9524A3D00D00631A74 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C990306B267B996600EB1623 /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
+		C990306D267B9A3400EB1623 /* ImpactTestMac.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ImpactTestMac.xcconfig; sourceTree = "<group>"; };
 		C99FB1D2234A642700FFABD0 /* ImpactUtility.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ImpactUtility.c; sourceTree = "<group>"; };
 		C9A413842331007600059F5D /* Impact.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Impact.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9A413872331007600059F5D /* Impact.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Impact.h; sourceTree = "<group>"; };
@@ -244,6 +247,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C990306C267B996600EB1623 /* libc++abi.tbd in Frameworks */,
 				C9A4138E2331007600059F5D /* Impact.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -393,6 +397,7 @@
 				C9A413AD233103A600059F5D /* ImpactTestMac.entitlements */,
 				C9A413C12331045600059F5D /* ViewController.swift */,
 				C9A413C9233243CF00059F5D /* ImpactTestMac-Bridging-Header.h */,
+				C990306D267B9A3400EB1623 /* ImpactTestMac.xcconfig */,
 			);
 			path = ImpactTestMac;
 			sourceTree = "<group>";
@@ -452,6 +457,7 @@
 		C9A413E42333061F00059F5D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C990306B267B996600EB1623 /* libc++abi.tbd */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -937,16 +943,10 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/Frameworks",
-				);
 				ONLY_ACTIVE_ARCH = NO;
 				SKIP_INSTALL = YES;
 			};
@@ -958,16 +958,10 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/Frameworks",
-				);
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -1015,6 +1009,7 @@
 		};
 		C9A413BA233103A700059F5D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C990306D267B9A3400EB1623 /* ImpactTestMac.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1038,6 +1033,7 @@
 		};
 		C9A413BB233103A700059F5D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C990306D267B9A3400EB1623 /* ImpactTestMac.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

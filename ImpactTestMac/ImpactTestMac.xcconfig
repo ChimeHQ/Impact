@@ -1,0 +1,12 @@
+//
+//  ImpactTestMac.xcconfig
+//  Impact
+//
+//  Created by Matthew Massicotte on 2021-06-17.
+//  Copyright © 2021 Chime Systems Inc. All rights reserved.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+OTHER_LDFLAGS = -ObjC
