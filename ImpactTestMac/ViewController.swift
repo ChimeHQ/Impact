@@ -20,6 +20,7 @@ class ViewController: NSViewController {
             UncaughtNSException(),
             NonMainThreadUncaughtNSException(),
             CPPException(),
+            SubprocessCrash(),
         ]
 
         super.init(nibName: nil, bundle: nil)

@@ -198,7 +198,7 @@ ImpactResult ImpactMachExceptionInitialize(ImpactState* state) {
 
     // on input, max size of thees arrays, on output, actual array count
     prexistingHandlers->count = EXC_TYPES_COUNT;
-
+    
     kr = task_swap_exception_ports(task,
                                    mask,
                                    *port,
@@ -449,6 +449,11 @@ static ImpactResult ImpactMachExceptionHandle(ImpactState* state) {
     ImpactResult result = ImpactMachExceptionReadException(&request);
     if (result != ImpactResultSuccess) {
         return result;
+    }
+
+    if (request.raise.task.name != mach_task_self()) {
+        ImpactDebugLog("[Log:INFO:%s] exception from non-self task, ignoring\n", __func__);
+        return ImpactMachExceptionReply(&request.raise, KERN_FAILURE);
     }
 
     ImpactCrashState currentState = ImpactCrashStateUninitialized;

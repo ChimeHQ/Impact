@@ -36,7 +36,7 @@ class ImpactCrashTests: XCTestCase {
 
         // There appear to be a races around launching, waiting for app.isFinishedLaunching,
         // and then waiting for app.isTerminated
-        
+
         let terminationExpectation = keyValueObservingExpectation(for: app, keyPath: "isTerminated", expectedValue: true)
 
         wait(for: [terminationExpectation], timeout: 2.0)
@@ -58,7 +58,6 @@ class ImpactCrashTests: XCTestCase {
         let app = try NSWorkspace.shared.launchApplication(at: testAppURL,
                                                            options: [.withoutActivation, .withoutAddingToRecents],
                                                            configuration: [.arguments: args])
-
 
         app.terminate()
 
@@ -112,5 +111,30 @@ class ImpactCrashTests: XCTestCase {
         XCTAssertTrue(lines.contains(where: { $0.hasPrefix("[Exception] type: objc, name: QW5FeGNlcHRpb24=, message: c29tZXRoaW5nIGJhZCBoYXBwZW5lZA==") }))
 
         try? FileManager.default.removeItem(at: url)
+    }
+
+    func testSubprocessCrash() throws {
+        let tempURL = newOutputURL()
+
+        let args = ["-output_path", tempURL.path, "-run", "subprocessCrash", "-suppressReportCrash", "YES"]
+
+        let app = try NSWorkspace.shared.launchApplication(at: testAppURL,
+                                                           options: [.withoutActivation, .withoutAddingToRecents],
+                                                           configuration: [.arguments: args])
+
+        let launchExpectation = keyValueObservingExpectation(for: app, keyPath: "isFinishedLaunching", expectedValue: true)
+
+        wait(for: [launchExpectation], timeout: 2.0)
+
+        // there is a race here, and I'm not sure how to avoid it
+        sleep(2)
+
+        let lines = readCrashData(at: tempURL)
+
+        XCTAssertFalse(lines.contains(where: { $0.hasPrefix("[MachException]") }))
+
+        try? FileManager.default.removeItem(at: tempURL)
+
+        app.terminate()
     }
 }

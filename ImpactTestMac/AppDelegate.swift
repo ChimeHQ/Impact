@@ -57,6 +57,8 @@ extension AppDelegate {
             return UncaughtNSException()
         case "nonMainThreadUncaughtNSException"?:
             return NonMainThreadUncaughtNSException()
+        case "subprocessCrash"?:
+            return SubprocessCrash()
         default:
             return nil
         }

@@ -7,3 +7,4 @@
 #import "UncaughtNSException.h"
 #import "NonMainThreadUncaughtNSException.h"
 #import "CPPException.h"
+#import "SubprocessCrash.h"
