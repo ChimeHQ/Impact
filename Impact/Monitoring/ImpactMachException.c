@@ -245,7 +245,7 @@ ImpactResult ImpactMachExceptionRestorePreexisting(const ImpactState* state) {
 }
 
 static ImpactResult ImpactMachExceptionLog(ImpactState* state, const ImpactMachExceptionRaiseRequest* request) {
-    ImpactLogger* log = &state->constantState.log;
+    ImpactLogger* log = ImpactStateGetLog(state);
 
     ImpactLogWriteString(log, "[MachException] ");
     
@@ -256,7 +256,7 @@ static ImpactResult ImpactMachExceptionLog(ImpactState* state, const ImpactMachE
 
     thread_t thread = request->thread.name;
 
-    ImpactDebugLog("[Log:%s] request %d, thread %x\n", __func__, request->Head.msgh_id, thread);
+    ImpactDebugLog("[Log:INFO] mach exc request %d, thread %x\n", request->Head.msgh_id, thread);
     
     return ImpactResultSuccess;
 }

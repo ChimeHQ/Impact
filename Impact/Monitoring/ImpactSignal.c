@@ -118,7 +118,7 @@ ImpactResult ImpactSignalUninstallHandlers(const ImpactState* state) {
 }
 
 static ImpactResult ImpactSignalLog(ImpactState* state, int signal, siginfo_t* info) {
-    ImpactLogger* log = &state->constantState.log;
+    ImpactLogger* log = ImpactStateGetLog(state);
 
     ImpactLogWriteString(log, "[Signal] ");
 

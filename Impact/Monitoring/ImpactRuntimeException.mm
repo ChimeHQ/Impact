@@ -55,7 +55,7 @@ void ImpactRuntimeExceptionLogNSException(NSException* exception) {
         return;
     }
 
-    ImpactLogger* log = &state->constantState.log;
+    ImpactLogger* log = ImpactStateGetLog(state);
 
     if (!ImpactLogIsValid(log)) {
         return;

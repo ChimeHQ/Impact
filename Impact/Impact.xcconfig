@@ -1,11 +1,3 @@
-//
-//  Impact.xcconfig
-//  Impact
-//
-//  Created by Matt Massicotte on 2019-09-17.
-//  Copyright © 2019 Chime Systems Inc. All rights reserved.
-//
-
 // Configuration settings file format documentation can be found at:
 // https://help.apple.com/xcode/#/dev745c5c974
 
@@ -16,11 +8,11 @@ MACH_O_TYPE = staticlib
 SWIFT_VERSION = 5.0
 
 PRODUCT_NAME = Impact
-PRODUCT_BUNDLE_IDENTIFIER = com.stacksift.Impact
+PRODUCT_BUNDLE_IDENTIFIER = io.stacksift.Impact
 PRODUCT_MODULE_NAME = Impact
-CURRENT_PROJECT_VERSION = 12
+CURRENT_PROJECT_VERSION = 13
 DYLIB_CURRENT_VERSION = $(CURRENT_PROJECT_VERSION)
-MARKETING_VERSION = 0.3.8
+MARKETING_VERSION = 0.4.0
 
 INFOPLIST_FILE = Impact/Info.plist
 

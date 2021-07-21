@@ -89,7 +89,7 @@ ImpactResult ImpactCPURegistersLog(ImpactState* state, const ImpactCPURegisters*
         return ImpactResultPointerInvalid;
     }
 
-    ImpactLogger* log = &state->constantState.log;
+    ImpactLogger* log = ImpactStateGetLog(state);
 
     ImpactLogWriteString(log, "[Thread:State] ");
 

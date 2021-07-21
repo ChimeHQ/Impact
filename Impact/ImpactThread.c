@@ -147,7 +147,7 @@ static ImpactResult ImpactThreadLogFrame(ImpactState* state, const ImpactCPURegi
         return ImpactResultArgumentInvalid;
     }
 
-    ImpactLogger* log = &state->constantState.log;
+    ImpactLogger* log = ImpactStateGetLog(state);
 
     ImpactLogWriteString(log, "[Thread:Frame] ");
 
@@ -228,9 +228,10 @@ ImpactResult ImpactThreadLog(ImpactState* state, const ImpactThreadList* list, t
     }
 
     if (thread == list->crashedThread && MACH_PORT_VALID(thread)) {
-        ImpactLogger* log = &state->constantState.log;
+        ImpactLogger* log = ImpactStateGetLog(state);
 
         ImpactLogWriteString(log, "[Thread:Crashed]\n");
+        ImpactLogFlush(log);
     }
 
     result = ImpactThreadLogStacktrace(state, &registers);

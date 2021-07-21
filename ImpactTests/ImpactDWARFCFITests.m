@@ -24,7 +24,7 @@
 - (void)setUp {
     GlobalImpactState = malloc(sizeof(ImpactState));
 
-    GlobalImpactState->constantState.log.fd = STDERR_FILENO;
+    GlobalImpactState->mutableState.log.fd = STDERR_FILENO;
 }
 
 - (void)tearDown {

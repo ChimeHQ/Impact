@@ -28,20 +28,21 @@ bool ImpactLogIsValid(const ImpactLogger* log);
 
 ImpactResult ImpactLog(const char * __restrict format, ...) __printflike(1, 2);
 
-ImpactResult ImpactLogWriteData(const ImpactLogger* log, const char* data, size_t length);
-ImpactResult ImpactLogWriteString(const ImpactLogger* log, const char* string);
-ImpactResult ImpactLogWriteInteger(const ImpactLogger* log, uintptr_t number);
+ImpactResult ImpactLogFlush(ImpactLogger* log);
+ImpactResult ImpactLogWriteData(ImpactLogger* log, const char* data, size_t length);
+ImpactResult ImpactLogWriteString(ImpactLogger* log, const char* string);
+ImpactResult ImpactLogWriteInteger(ImpactLogger* log, uintptr_t number);
 
-ImpactResult ImpactLogWriteKeyInteger(const ImpactLogger* log, const char* key, uintptr_t number, bool last);
-ImpactResult ImpactLogWriteKeyPointer(const ImpactLogger* log, const char* key, const void* _Nullable ptr, bool last);
-ImpactResult ImpactLogWriteKeyString(const ImpactLogger* log, const char* key, const char* string, bool last);
+ImpactResult ImpactLogWriteKeyInteger(ImpactLogger* log, const char* key, uintptr_t number, bool last);
+ImpactResult ImpactLogWriteKeyPointer(ImpactLogger* log, const char* key, const void* _Nullable ptr, bool last);
+ImpactResult ImpactLogWriteKeyString(ImpactLogger* log, const char* key, const char* string, bool last);
 
 #if __OBJC__
-ImpactResult ImpactLogWriteKeyStringObject(const ImpactLogger* log, const char* key, NSString* string, bool last);
+ImpactResult ImpactLogWriteKeyStringObject(ImpactLogger* log, const char* key, NSString* string, bool last);
 #endif
 
-ImpactResult ImpactLogWriteKeyHexData(const ImpactLogger* log, const char* key, const uint8_t* _Nullable data, size_t length, bool last);
-ImpactResult ImpactLogWriteTime(const ImpactLogger* log, const char* key, bool last);
+ImpactResult ImpactLogWriteKeyHexData(ImpactLogger* log, const char* key, const uint8_t* _Nullable data, size_t length, bool last);
+ImpactResult ImpactLogWriteTime(ImpactLogger* log, const char* key, bool last);
 
 __END_DECLS
 _Pragma("clang assume_nonnull end")

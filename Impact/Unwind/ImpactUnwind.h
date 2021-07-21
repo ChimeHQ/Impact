@@ -14,6 +14,6 @@
 #include "ImpactState.h"
 
 ImpactResult ImpactUnwindStepRegistersWithFramePointer(ImpactCPURegisters* registers);
-ImpactResult ImpactUnwindStepRegisters(const ImpactState* state, ImpactCPURegisters* registers);
+ImpactResult ImpactUnwindStepRegisters(ImpactState* state, ImpactCPURegisters* registers);
 
 #endif /* ImpactUnwind_h */

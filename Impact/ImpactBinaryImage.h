@@ -25,6 +25,7 @@ typedef struct {
     ImpactMachODataRegion unwindInfoRegion;
     uintptr_t loadAddress;
     uintptr_t textSize;
+    const char* path;
 } ImpactMachOData;
 
 #if __LP64__
@@ -45,9 +46,10 @@ typedef struct section ImpactSection;
 
 ImpactResult ImpactBinaryImageInitialize(ImpactState* state);
 
-ImpactResult ImpactBinaryImageGetData(const ImpactMachOHeader* header, ImpactMachOData* data);
+ImpactResult ImpactBinaryImageGetData(const ImpactMachOHeader* header, const char* path, ImpactMachOData* data);
 
-ImpactResult ImpactBinaryImageFind(const ImpactState* state, uintptr_t address, ImpactMachOData* data);
+ImpactResult ImpactBinaryImageFind(ImpactState* state, uintptr_t address, ImpactMachOData* data);
 
+ImpactResult ImpactBinaryImageLogRemainingImages(ImpactState* state);
 
 #endif /* ImpactBinaryImage_h */

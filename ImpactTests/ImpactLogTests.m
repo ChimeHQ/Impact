@@ -25,7 +25,10 @@
         return nil;
     }
 
-    block(&state.constantState.log);
+    ImpactLogger* log = ImpactStateGetLog(&state);
+    block(log);
+
+    ImpactLogFlush(log);
 
     return [NSString stringWithContentsOfFile:path
                                      encoding:NSUTF8StringEncoding
@@ -62,6 +65,20 @@
     }];
 
     XCTAssertEqualObjects(contents, @"0xffffffffffffffff");
+}
+
+- (void)testLogPastBufferSize {
+    const size_t length = ImpactLogBufferSize + 1;
+
+    NSString* contents = [self logContentsWithBlock:^(ImpactLogger* log) {
+        for (int i = 0; i < length; ++i) {
+            ImpactLogWriteString(log, "a");
+        }
+    }];
+
+    NSString *matchingString = [@"" stringByPaddingToLength:length withString: @"a" startingAtIndex:0];
+
+    XCTAssertEqualObjects(contents, matchingString);
 }
 
 @end

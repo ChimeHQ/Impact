@@ -22,7 +22,7 @@
 if (ImpactInvalidPtr(GlobalImpactState)) { \
     break; \
 } \
-dprintf(GlobalImpactState->constantState.log.fd, format VA_ARGS(__VA_ARGS__)); \
+dprintf(GlobalImpactState->mutableState.log.fd, format VA_ARGS(__VA_ARGS__)); \
 } while(0)
 
 #else

@@ -1,11 +1,3 @@
-//
-//  ImpactState.h
-//  Impact
-//
-//  Created by Matt Massicotte on 2019-09-18.
-//  Copyright © 2019 Chime Systems Inc. All rights reserved.
-//
-
 #ifndef ImpactState_h
 #define ImpactState_h
 
@@ -17,8 +9,12 @@
 #include <mach-o/dyld_images.h>
 #include <stdbool.h>
 
+enum { ImpactLogBufferSize = 256 };
+
 typedef struct {
     int fd;
+    uint32_t bufferCount;
+    char buffer[ImpactLogBufferSize];
 } ImpactLogger;
 
 enum { ImpactSignalCount = 5 };
@@ -51,17 +47,18 @@ typedef enum {
 } ImpactCrashState;
 
 typedef struct {
-    ImpactLogger log;
+    struct task_dyld_info dyldInfo;
+    uint32_t writtenIndex;
+    uint32_t lastFoundIndex;
+} ImpactBinaryImages;
 
+typedef struct {
     // signals
     struct sigaction preexistingActions[ImpactSignalCount];
 
     // mach exception
     ImpactMachExceptionHandlers preexistingMachExceptionHandlers;
     mach_port_t machExceptionPort;
-
-    // binary images
-    struct task_dyld_info dyldInfo;
 
     // general configuration
     bool suppressReportCrash;
@@ -70,6 +67,9 @@ typedef struct {
 } ImpactConstantState;
 
 typedef struct {
+    ImpactLogger log;
+    ImpactBinaryImages images;
+
     _Atomic ImpactCrashState crashState;
     _Atomic uint32_t exceptionCount;
 } ImpactMutableState;
@@ -80,6 +80,10 @@ typedef struct {
 } ImpactState;
 
 extern ImpactState* GlobalImpactState;
+
+static inline ImpactLogger* ImpactStateGetLog(ImpactState* state) {
+    return &state->mutableState.log;
+}
 
 #include <unistd.h>
 

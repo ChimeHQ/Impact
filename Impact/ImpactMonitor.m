@@ -91,13 +91,6 @@ const char* ImpactPlatformName = "watchOS";
         NSLog(@"[Impact] Unable to initialize signal %d", result);
     }
 
-#if IMPACT_MACH_EXCEPTION_SUPPORTED
-    result = ImpactMachExceptionInitialize(GlobalImpactState);
-    if (result != ImpactResultSuccess) {
-        NSLog(@"[Impact] Unable to initialize mach exceptions %d", result);
-    }
-#endif
-
     result = ImpactBinaryImageInitialize(GlobalImpactState);
     if (result != ImpactResultSuccess) {
         NSLog(@"[Impact] Unable to initialize binary images %d", result);
@@ -109,6 +102,13 @@ const char* ImpactPlatformName = "watchOS";
         NSLog(@"[Impact] Unable to initialize run time exceptions %d", result);
     }
 
+#if IMPACT_MACH_EXCEPTION_SUPPORTED
+    result = ImpactMachExceptionInitialize(GlobalImpactState);
+    if (result != ImpactResultSuccess) {
+        NSLog(@"[Impact] Unable to initialize mach exceptions %d", result);
+    }
+#endif
+    
     atomic_store(&GlobalImpactState->mutableState.crashState, ImpactCrashStateInitialized);
 
     ImpactDebugLog("[Log:INFO] finished initialization\n");
@@ -165,7 +165,7 @@ const char* ImpactPlatformName = "watchOS";
 }
 
 - (void)logExecutableData:(ImpactState *)state {
-    ImpactLogger* log = &state->constantState.log;
+    ImpactLogger* log = ImpactStateGetLog(state);
 
     NSBundle *mainBundle = [NSBundle mainBundle];
 
@@ -184,7 +184,7 @@ const char* ImpactPlatformName = "watchOS";
 }
 
 - (void)logEnvironmentDataWithId:(NSUUID *)identifier state:(ImpactState *)state {
-    ImpactLogger* log = &state->constantState.log;
+    ImpactLogger* log = ImpactStateGetLog(state);
 
     ImpactLogWriteString(log, "[Environment] ");
 

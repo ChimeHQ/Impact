@@ -51,6 +51,7 @@
 		C98C6B1426A74B13000AF8B8 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98C6B1326A74B13000AF8B8 /* main.swift */; };
 		C98C6B1B26A74B7D000AF8B8 /* crasher in Embed Executables */ = {isa = PBXBuildFile; fileRef = C98C6B1126A74B13000AF8B8 /* crasher */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		C98C6B1E26A74BD1000AF8B8 /* SubprocessCrash.m in Sources */ = {isa = PBXBuildFile; fileRef = C98C6B1D26A74BD1000AF8B8 /* SubprocessCrash.m */; };
+		C98C6B2026A8923E000AF8B8 /* libc++abi.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C98C6B1F26A8923E000AF8B8 /* libc++abi.tbd */; };
 		C990307E267BD24900EB1623 /* libc++abi.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C990306B267B996600EB1623 /* libc++abi.tbd */; };
 		C99FB1D3234A642700FFABD0 /* ImpactUtility.c in Sources */ = {isa = PBXBuildFile; fileRef = C99FB1D2234A642700FFABD0 /* ImpactUtility.c */; };
 		C9A4138E2331007600059F5D /* Impact.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9A413842331007600059F5D /* Impact.framework */; };
@@ -79,7 +80,6 @@
 		C9A413F92333983500059F5D /* ImpactMachException.c in Sources */ = {isa = PBXBuildFile; fileRef = C9A413F72333983500059F5D /* ImpactMachException.c */; };
 		C9A414012333C4D800059F5D /* NullDereference.m in Sources */ = {isa = PBXBuildFile; fileRef = C9A413FE2333C4AD00059F5D /* NullDereference.m */; };
 		C9F58D4524A3D1A900255453 /* Impact.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9A413842331007600059F5D /* Impact.framework */; };
-		C9F58D4624A3D1A900255453 /* Impact.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C9A413842331007600059F5D /* Impact.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -152,17 +152,6 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C9F58D4724A3D1A900255453 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				C9F58D4624A3D1A900255453 /* Impact.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -219,6 +208,7 @@
 		C98C6B1326A74B13000AF8B8 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		C98C6B1C26A74BD1000AF8B8 /* SubprocessCrash.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SubprocessCrash.h; sourceTree = "<group>"; };
 		C98C6B1D26A74BD1000AF8B8 /* SubprocessCrash.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SubprocessCrash.m; sourceTree = "<group>"; };
+		C98C6B1F26A8923E000AF8B8 /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.5.sdk/usr/lib/libc++abi.tbd"; sourceTree = DEVELOPER_DIR; };
 		C990306B267B996600EB1623 /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
 		C990306D267B9A3400EB1623 /* ImpactTestMac.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ImpactTestMac.xcconfig; sourceTree = "<group>"; };
 		C99FB1D2234A642700FFABD0 /* ImpactUtility.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ImpactUtility.c; sourceTree = "<group>"; };
@@ -266,6 +256,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C98C6B2026A8923E000AF8B8 /* libc++abi.tbd in Frameworks */,
 				C9F58D4524A3D1A900255453 /* Impact.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -510,6 +501,7 @@
 		C9A413E42333061F00059F5D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C98C6B1F26A8923E000AF8B8 /* libc++abi.tbd */,
 				C990306B267B996600EB1623 /* libc++abi.tbd */,
 			);
 			name = Frameworks;
@@ -555,7 +547,6 @@
 				C9636F8124A3D00B00631A74 /* Sources */,
 				C9636F8224A3D00B00631A74 /* Frameworks */,
 				C9636F8324A3D00B00631A74 /* Resources */,
-				C9F58D4724A3D1A900255453 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -864,7 +855,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"ImpactTestiOS/Preview Content\"";
-				DEVELOPMENT_TEAM = 5GXRS83U4Z;
+				DEVELOPMENT_TEAM = 77X93NZ3G2;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ImpactTestiOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -891,7 +882,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"ImpactTestiOS/Preview Content\"";
-				DEVELOPMENT_TEAM = 5GXRS83U4Z;
+				DEVELOPMENT_TEAM = 77X93NZ3G2;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ImpactTestiOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;

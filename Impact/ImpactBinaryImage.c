@@ -20,16 +20,21 @@
 
 #include <string.h>
 
-static void ImpactBinaryImageAdded(const struct mach_header* mh, intptr_t vmaddr_slide);
-static void ImpactBinaryImageRemoved(const struct mach_header* mh, intptr_t vmaddr_slide);
+//static void ImpactBinaryImageAdded(const struct mach_header* mh, intptr_t vmaddr_slide);
+//static void ImpactBinaryImageRemoved(const struct mach_header* mh, intptr_t vmaddr_slide);
+
+static uint32_t ImpactBinaryImageNotFoundFlag = ~0;
 
 static ImpactResult ImpactBinaryImageFindDyldInfo(struct task_dyld_info* info);
 
 ImpactResult ImpactBinaryImageInitialize(ImpactState* state) {
-    _dyld_register_func_for_add_image(ImpactBinaryImageAdded);
-    _dyld_register_func_for_remove_image(ImpactBinaryImageRemoved);
+//    _dyld_register_func_for_add_image(ImpactBinaryImageAdded);
+//    _dyld_register_func_for_remove_image(ImpactBinaryImageRemoved);
 
-    return ImpactBinaryImageFindDyldInfo(&state->constantState.dyldInfo);
+    state->mutableState.images.lastFoundIndex = ImpactBinaryImageNotFoundFlag;
+    state->mutableState.images.writtenIndex = ImpactBinaryImageNotFoundFlag;
+
+    return ImpactBinaryImageFindDyldInfo(&state->mutableState.images.dyldInfo);
 }
 
 ImpactResult ImpactBinaryImageGetSectionData(const ImpactSegmentCommand* segCommand, ImpactMachOData* data, intptr_t slide) {
@@ -63,7 +68,7 @@ ImpactResult ImpactBinaryImageGetSectionData(const ImpactSegmentCommand* segComm
     return ImpactResultSuccess;
 }
 
-ImpactResult ImpactBinaryImageGetData(const ImpactMachOHeader* header, ImpactMachOData* data) {
+ImpactResult ImpactBinaryImageGetData(const ImpactMachOHeader* header, const char* path, ImpactMachOData* data) {
     if (ImpactInvalidPtr(header) || ImpactInvalidPtr(data)) {
         return ImpactResultPointerInvalid;
     }
@@ -71,6 +76,7 @@ ImpactResult ImpactBinaryImageGetData(const ImpactMachOHeader* header, ImpactMac
     const uint8_t *ptr = (uint8_t *)header + sizeof(ImpactMachOHeader);
 
     data->loadAddress = (uintptr_t)header;
+    data->path = path;
 
     for (uint32_t i = 0; i < header->ncmds; ++i) {
         const struct load_command* const lcmd = (struct load_command*)ptr;
@@ -111,10 +117,7 @@ static ImpactResult ImpactBinaryImageLogPath(ImpactLogger* log, const char* path
 
         sanitizedPath = strchr(sanitizedPath, '/');
         if (sanitizedPath != NULL) {
-            ImpactLogWriteString(log, "path");
-            ImpactLogWriteString(log, ": ");
-            ImpactLogWriteData(log, "/Users/USER", 11);
-
+            ImpactLogWriteString(log, "path: /Users/USER");
             ImpactLogWriteString(log, sanitizedPath);
 
             return ImpactLogWriteString(log, last ? "\n" : ", ");
@@ -125,48 +128,19 @@ static ImpactResult ImpactBinaryImageLogPath(ImpactLogger* log, const char* path
     return ImpactLogWriteKeyString(log, "path", path, last);
 }
 
-static ImpactResult ImpactBinaryImageLog(ImpactState* state, const ImpactMachOData* imageData, const char* path) {
-    if (ImpactInvalidPtr(state) || ImpactInvalidPtr(imageData) || ImpactInvalidPtr(path)) {
+static ImpactResult ImpactBinaryImageLog(ImpactLogger* log, const ImpactMachOData* imageData) {
+    if (ImpactInvalidPtr(log) || ImpactInvalidPtr(imageData)) {
         return ImpactResultPointerInvalid;
     }
 
-    ImpactLogger* log = &state->constantState.log;
+    ImpactLogWriteString(log, "[Binary:Found] ");
 
-    ImpactLogWriteString(log, "[Binary:Load] ");
-
-    ImpactBinaryImageLogPath(log, path, false);
+    ImpactBinaryImageLogPath(log, imageData->path, false);
     ImpactLogWriteKeyInteger(log, "address", imageData->loadAddress, false);
     ImpactLogWriteKeyInteger(log, "size", imageData->textSize, false);
-    ImpactLogWriteKeyInteger(log, "slide", imageData->slide, false);
     ImpactLogWriteKeyHexData(log, "uuid", imageData->uuid, 16, true);
 
     return ImpactResultSuccess;
-}
-
-static void ImpactBinaryImageAdded(const struct mach_header* mh, intptr_t vmaddr_slide) {
-    const ImpactMachOHeader* const header = (void *)mh;
-
-    Dl_info info;
-
-    int result = dladdr(mh, &info);
-    if (result == 0) {
-        ImpactDebugLog("[Log:ERROR:%s] unable to lookup %p\n", __func__, mh);
-        return;
-    }
-
-    ImpactMachOData imageData = {0};
-
-    ImpactBinaryImageGetData(header, &imageData);
-
-    if (vmaddr_slide != imageData.slide) {
-        ImpactDebugLog("[Log:WARN:%s] slides unequal\n", __func__);
-    }
-
-    ImpactBinaryImageLog(GlobalImpactState, &imageData, info.dli_fname);
-}
-
-static void ImpactBinaryImageRemoved(const struct mach_header* mh, intptr_t vmaddr_slide) {
-
 }
 
 static ImpactResult ImpactBinaryImageFindDyldInfo(struct task_dyld_info* info) {
@@ -181,28 +155,75 @@ static ImpactResult ImpactBinaryImageFindDyldInfo(struct task_dyld_info* info) {
     return ImpactResultSuccess;
 }
 
-ImpactResult ImpactBinaryImageFind(const ImpactState* state, uintptr_t address, ImpactMachOData* data) {
+ImpactResult ImpactBinaryImageGetDyldImageData(const struct dyld_all_image_infos* imagesInfo, const int index, ImpactMachOData* data) {
+    if (index > imagesInfo->infoArrayCount) {
+        return ImpactResultArgumentInvalid;
+    }
+
+    const struct dyld_image_info* imageInfo = imagesInfo->infoArray + index;
+    const ImpactMachOHeader* const header = (ImpactMachOHeader*)imageInfo->imageLoadAddress;
+    const char* path = imageInfo->imageFilePath;
+
+    return ImpactBinaryImageGetData(header, path, data);
+}
+
+static bool ImpactMachODataContainsAddress(const ImpactMachOData* data, uintptr_t address) {
+    if (ImpactInvalidPtr(data)) {
+        return false;
+    }
+
+    const uintptr_t upperAddress = data->loadAddress + data->textSize;
+
+    return address >= data->loadAddress && address < upperAddress;
+}
+
+ImpactResult ImpactBinaryImageFind(ImpactState* state, uintptr_t address, ImpactMachOData* data) {
     if (ImpactInvalidPtr(state) || ImpactInvalidPtr(data)) {
         return ImpactResultPointerInvalid;
     }
 
-    const struct dyld_all_image_infos* imagesInfo = (void *)state->constantState.dyldInfo.all_image_info_addr;
+    if (ImpactInvalidPtr((const void*)address)) {
+        return ImpactResultArgumentInvalid;
+    }
+
+    ImpactLogger* logger = ImpactStateGetLog(state);
+
+    ImpactBinaryImages* images = &state->mutableState.images;
+    const struct dyld_all_image_infos* imagesInfo = (void *)images->dyldInfo.all_image_info_addr;
     const size_t imageCount = imagesInfo->infoArrayCount;
 
-    for (int i = 0; i < imageCount; ++i) {
-        const struct dyld_image_info* imageInfo = imagesInfo->infoArray + i;
-        const ImpactMachOHeader* const header = (ImpactMachOHeader*)imageInfo->imageLoadAddress;
+    // first, check the last match, as it's likely these repeat
+    ImpactMachOData imageData = {0};
 
-        ImpactMachOData imageData = {0};
-
-        if (ImpactBinaryImageGetData(header, &imageData) != ImpactResultSuccess) {
-            continue;
+    if (images->lastFoundIndex != ImpactBinaryImageNotFoundFlag) {
+        const ImpactResult result = ImpactBinaryImageGetDyldImageData(imagesInfo, images->lastFoundIndex, &imageData);
+        if (result != ImpactResultSuccess) {
+            return result;
         }
 
-        const uintptr_t upperAddress = imageData.loadAddress + imageData.textSize;
-
-        if (address >= imageData.loadAddress && address < upperAddress) {
+        if (ImpactMachODataContainsAddress(&imageData, address)) {
             *data = imageData;
+            return ImpactResultSuccess;
+        }
+    }
+
+    for (int i = 0; i < imageCount; ++i) {
+        const ImpactResult result = ImpactBinaryImageGetDyldImageData(imagesInfo, i, &imageData);
+        if (result != ImpactResultSuccess) {
+            return result;
+        }
+
+        if (i > images->writtenIndex || images->writtenIndex == ImpactBinaryImageNotFoundFlag) {
+            // There isn't an obvious action to take on error here, so we can just ignore
+            // for now.
+            ImpactBinaryImageLog(logger, &imageData);
+
+            images->writtenIndex = i;
+        }
+
+        if (ImpactMachODataContainsAddress(&imageData, address)) {
+            *data = imageData;
+            images->lastFoundIndex = i;
             return ImpactResultSuccess;
         }
     }
@@ -210,3 +231,30 @@ ImpactResult ImpactBinaryImageFind(const ImpactState* state, uintptr_t address, 
     return ImpactResultFailure;
 }
 
+ImpactResult ImpactBinaryImageLogRemainingImages(ImpactState* state) {
+    if (ImpactInvalidPtr(state)) {
+        return ImpactResultPointerInvalid;
+    }
+
+    ImpactLogger* logger = ImpactStateGetLog(state);
+
+    ImpactBinaryImages* images = &state->mutableState.images;
+    const struct dyld_all_image_infos* imagesInfo = (void *)images->dyldInfo.all_image_info_addr;
+    const size_t imageCount = imagesInfo->infoArrayCount;
+
+    ImpactMachOData imageData = {0};
+
+    for (int i = images->writtenIndex + 1; i < imageCount; ++i) {
+        ImpactResult result = ImpactBinaryImageGetDyldImageData(imagesInfo, i, &imageData);
+        if (result != ImpactResultSuccess) {
+            return result;
+        }
+
+        result = ImpactBinaryImageLog(logger, &imageData);
+        if (result != ImpactResultSuccess) {
+            return result;
+        }
+    }
+
+    return ImpactResultSuccess;
+}

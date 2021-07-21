@@ -98,7 +98,7 @@ static ImpactResult ImpactUnwindCompactUnwindStepRegisters(ImpactMachOData* imag
     return ImpactCompactUnwindStepRegisters(target, registers, dwarfFDEOFfset);
 }
 
-ImpactResult ImpactUnwindStepRegisters(const ImpactState* state, ImpactCPURegisters* registers) {
+ImpactResult ImpactUnwindStepRegisters(ImpactState* state, ImpactCPURegisters* registers) {
     uintptr_t pc = 0;
 
     ImpactResult result = ImpactCPUGetRegister(registers, ImpactCPURegisterInstructionPointer, &pc);

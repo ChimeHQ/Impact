@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'Impact'
-  s.version      = '0.3.8'
+  s.version      = '0.4.0'
   s.summary      = 'crash capturing library for Apple platforms'
 
   s.homepage     = 'https://github.com/stacksift/Impact'
@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.source_files  = 'Impact/**/*.{c,h,mm,m}'
   s.public_header_files = 'Impact/Impact.h', 'Impact/ImpactMonitor.h', 'Impact/Monitoring/ImpactMonitoredApplication.h'
   
-  s.compiler_flags = '-DCURRENT_PROJECT_VERSION=9', '-I Impact', '-I Impact/Utility', '-I Impact/DWARF', '-I Impact/Unwind', '-I Impact/Monitoring'
+  s.compiler_flags = '-DCURRENT_PROJECT_VERSION=13', '-I Impact', '-I Impact/Utility', '-I Impact/DWARF', '-I Impact/Unwind', '-I Impact/Monitoring'
 
   s.libraries = 'c++abi'
 
