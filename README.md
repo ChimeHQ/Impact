@@ -1,4 +1,4 @@
-[![Github CI](https://github.com/stacksift/Impact/workflows/CI/badge.svg)](https://github.com/stacksift/Impact/actions)
+[![Github CI](https://github.com/ChimeHQ/Impact/workflows/CI/badge.svg)](https://github.com/ChimeHQ/Impact/actions)
 
 # Impact
 
@@ -39,9 +39,8 @@ Also, crash reporting is just a fun and fascinating problem. It tends to be very
 You must keep in mind that Impact **only** captures information about crash events. It does not have any facilities for transmitting those events back to you or translating them into human-readable versions. A full reporting system requires a little more work. Here are a few options:
 
  - Impact on its own, with full control over how you produce and consume reports
- - Integrate with [Wells](https://github.com/stacksift/Wells) for report transmission and management
- - MetricKit crash reporting with graceful fallback via [Meter](https://github.com/stacksift/Meter) and [ImpactMeterAdapter](https://github.com/stacksift/ImpactMeterAdapter)
- - Via [Stacksift](https://www.stacksift.io)
+ - Integrate with [Wells](https://github.com/ChimeHQ/Wells) for report transmission and management
+ - MetricKit crash reporting with graceful fallback via [Meter](https://github.com/ChimeHQ/Meter) and [ImpactMeterAdapter](https://github.com/ChimeHQ/ImpactMeterAdapter)
 
 ## Relationship to Crashlytics
 
@@ -57,6 +56,6 @@ There is absolutely no experience/knowledge requirement. Interest is all you nee
 
 ## Suggestions or Feedback
 
-We'd love to hear from you! Get in touch via [twitter](https://twitter.com/stacksift), an issue, or a pull request.
+We'd love to hear from you! Get in touch via [twitter](https://twitter.com/ChimeHQ), an issue, or a pull request.
 
 Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
