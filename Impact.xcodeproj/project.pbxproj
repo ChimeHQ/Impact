@@ -864,7 +864,7 @@
 					"@executable_path/Frameworks",
 				);
 				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.stacksift.ImpactTestiOS;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chimehq.ImpactTestiOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -890,7 +890,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.stacksift.ImpactTestiOS;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chimehq.ImpactTestiOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -1083,7 +1083,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.stacksift.ImpactTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chimehq.ImpactTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "ImpactTests/ImpactTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1104,7 +1104,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.stacksift.ImpactTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chimehq.ImpactTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "ImpactTests/ImpactTests-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -1126,7 +1126,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.stacksift.ImpactTestMac;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chimehq.ImpactTestMac;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OBJC_BRIDGING_HEADER = "ImpactTestMac/ImpactTestMac-Bridging-Header.h";
@@ -1150,7 +1150,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.stacksift.ImpactTestMac;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chimehq.ImpactTestMac;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OBJC_BRIDGING_HEADER = "ImpactTestMac/ImpactTestMac-Bridging-Header.h";

@@ -1,15 +1,8 @@
-//
-//  ImpactRuntimeException.c
-//  Impact
-//
-//  Created by Matt Massicotte on 2019-09-30.
-//  Copyright © 2019 Chime Systems Inc. All rights reserved.
-//
-
 #include "ImpactRuntimeException.h"
 #include "ImpactLog.h"
 #include "ImpactUtility.h"
 #include "ImpactSignal.h"
+#include "ImpactBinaryImage.h"
 
 #import <Foundation/Foundation.h>
 
@@ -67,8 +60,14 @@ void ImpactRuntimeExceptionLogNSException(NSException* exception) {
     ImpactLogWriteKeyStringObject(log, "message", exception.reason, false);
     ImpactLogWriteTime(log, "time", true);
 
+    ImpactMachOData imageData = {0};
+
     for (NSNumber *address in exception.callStackReturnAddresses) {
+        const uintptr_t addr = address.unsignedIntegerValue;
+
         ImpactLogWriteString(log, "[Exception:Frame] ");
-        ImpactLogWriteKeyInteger(log, "ip", address.unsignedIntegerValue, true);
+        ImpactLogWriteKeyInteger(log, "ip", addr, true);
+
+        ImpactBinaryImageFind(state, addr - 1, &imageData);
     }
 }

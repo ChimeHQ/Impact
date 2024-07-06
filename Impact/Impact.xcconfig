@@ -1,18 +1,18 @@
 // Configuration settings file format documentation can be found at:
 // https://help.apple.com/xcode/#/dev745c5c974
 
-#include "xcconfigs/UniversalFramework_Framework.xcconfig"
+#include "../xcconfigs/UniversalFramework_Framework.xcconfig"
 
 APPLICATION_EXTENSION_API_ONLY = YES
 MACH_O_TYPE = staticlib
 SWIFT_VERSION = 5.0
 
 PRODUCT_NAME = Impact
-PRODUCT_BUNDLE_IDENTIFIER = io.stacksift.Impact
+PRODUCT_BUNDLE_IDENTIFIER = io.chimehq.Impact
 PRODUCT_MODULE_NAME = Impact
-CURRENT_PROJECT_VERSION = 13
+CURRENT_PROJECT_VERSION = 14
 DYLIB_CURRENT_VERSION = $(CURRENT_PROJECT_VERSION)
-MARKETING_VERSION = 0.4.0
+MARKETING_VERSION = 0.4.1
 
 INFOPLIST_FILE = Impact/Info.plist
 

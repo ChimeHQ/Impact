@@ -62,7 +62,7 @@ ImpactResult ImpactSignalInitialize(ImpactState* state) {
     return someFailed ? ImpactResultFailure : ImpactResultSuccess;
 }
 
-static ImpactResult ImpactSignalInstallDefaultHandlers() {
+static ImpactResult ImpactSignalInstallDefaultHandlers(void) {
     bool someFailed = false;
 
     struct sigaction action = {0};

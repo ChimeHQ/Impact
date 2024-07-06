@@ -12,6 +12,8 @@
 #include "ImpactState.h"
 #include "ImpactResult.h"
 
+__BEGIN_DECLS
+
 typedef struct {
     uintptr_t address;
     intptr_t loadAddress;
@@ -51,5 +53,7 @@ ImpactResult ImpactBinaryImageGetData(const ImpactMachOHeader* header, const cha
 ImpactResult ImpactBinaryImageFind(ImpactState* state, uintptr_t address, ImpactMachOData* data);
 
 ImpactResult ImpactBinaryImageLogRemainingImages(ImpactState* state);
+
+__END_DECLS
 
 #endif /* ImpactBinaryImage_h */
